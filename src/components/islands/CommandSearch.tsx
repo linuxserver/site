@@ -82,6 +82,18 @@ export default function CommandSearch({ indexUrl, searchUrl, trigger = 'input', 
     if (open && !index) loadIndex(indexUrl).then(setIndex).catch(() => {});
   }, [open, index, indexUrl]);
 
+  // Fetch the index once the page is idle, so results are there the moment someone starts typing.
+  React.useEffect(() => {
+    if (!isOwner) return;
+    const load = () => loadIndex(indexUrl).then(setIndex).catch(() => {});
+    if ('requestIdleCallback' in window) {
+      const id = requestIdleCallback(load, { timeout: 3000 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = setTimeout(load, 1500);
+    return () => clearTimeout(t);
+  }, [isOwner, indexUrl]);
+
   const go = (url: string) => {
     setOpen(false);
     window.location.href = url;
