@@ -1,11 +1,9 @@
-# Hand-picked spotlights, one per ISO week. Weeks without an entry rotate automatically through
-# recently added images. Find this week's number with: date +%G-W%V
+# Hand-picked spotlights, one per ISO week. Weeks without an entry rotate automatically (see
+# spotlight-rotation.yaml). Find this week's number with: date +%G-W%V
 #
 # - id: 2026-W44
 #   image: pelorus
-#   note: A sentence or two on why it is worth a look.
-#   by: thespad
-# Example entry (replace with the team's own words):
+#   note: A sentence or two on why it is worth a look.   (optional)
+#   by: thespad                                           (optional)
 - id: 2026-W43
-  image: pelorus
-  note: Pelorus hands an LLM agent the mouse, keyboard and windows of a Selkies-powered Linux desktop. It made its debut in the Webtop 5.0 release post.
+  image: webtop

@@ -50,7 +50,7 @@ const authors = defineCollection({
 
 /**
  * Optional hand-written spotlights, keyed by ISO week ("2026-W44"). Weeks without an entry fall back
- * to the automatic rotation through recently added images (src/lib/images.ts).
+ * to the automatic rotation (src/lib/images.ts): spotlight-rotation.yaml plus recently added images.
  */
 const spotlights = defineCollection({
   loader: file('./src/content/spotlights.yaml'),
@@ -62,4 +62,13 @@ const spotlights = defineCollection({
   }),
 });
 
-export const collections = { posts, authors, spotlights };
+/** Images always included in the automatic weekly rotation, on top of the newest additions. */
+const rotation = defineCollection({
+  loader: file('./src/content/spotlight-rotation.yaml'),
+  schema: z.object({
+    note: z.string().optional(),
+    by: z.string().optional(),
+  }),
+});
+
+export const collections = { posts, authors, spotlights, rotation };

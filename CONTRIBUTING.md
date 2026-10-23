@@ -80,8 +80,10 @@ that names the file and field. You'll know before anything goes live.
 
 ## The weekly spotlight
 
-The home page features one recently added image each week, chosen automatically. To write the
-spotlight yourself, add an entry to `src/content/spotlights.yaml` with the ISO week (`date +%G-W%V`):
+The home page features one image each week, chosen automatically from the 24 most recently added images
+plus any listed in `src/content/spotlight-rotation.yaml` (add `- id: <image>` to keep an image in the
+rotation permanently). To pick the spotlight yourself, add an entry to `src/content/spotlights.yaml` with
+the ISO week (`date +%G-W%V`):
 
 ```yaml
 - id: 2026-W44

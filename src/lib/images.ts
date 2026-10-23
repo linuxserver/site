@@ -160,21 +160,24 @@ export interface Spotlight {
 }
 
 /**
- * The weekly spotlight. A hand-written entry for the current ISO week wins; otherwise we rotate through
- * the 24 most recently added images that have a logo, one per week, so every new image gets its turn.
- * Built daily by CI, so it changes on Monday without anyone touching anything.
+ * The weekly spotlight. A hand-written entry for the current ISO week (spotlights.yaml) wins; otherwise we
+ * rotate, one image per week, through the images listed in spotlight-rotation.yaml plus the 24 most recently
+ * added images that have a logo, so every new image gets its turn. Built daily by CI, so it changes on
+ * Monday without anyone touching anything.
  */
 export async function getSpotlight(now = new Date()): Promise<Spotlight> {
   const { year, week } = isoWeek(now);
   const id = `${year}-W${String(week).padStart(2, '0')}`;
-  const pool = newest(24).filter((i) => i.logo);
+  const pinned = (await getCollection('rotation')).filter((r) => getImage(r.id) && !getImage(r.id)!.deprecated);
+  const pool = [...new Set([...pinned.map((r) => getImage(r.id)!), ...newest(24).filter((i) => i.logo)])];
   const manual = (await getCollection('spotlights')).find((s) => s.id === id);
   const image = (manual && getImage(manual.data.image)) || pool[(year * 53 + week) % pool.length];
+  const rotationNote = pinned.find((r) => r.id === image.name)?.data;
   return {
     week: id,
     image,
-    note: manual?.data.note,
-    by: manual?.data.by,
+    note: manual ? manual.data.note : rotationNote?.note,
+    by: manual ? manual.data.by : rotationNote?.by,
     alsoNew: newest(7).filter((i) => i.name !== image.name).slice(0, 6),
   };
 }
