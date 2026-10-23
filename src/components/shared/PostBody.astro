@@ -1,0 +1,28 @@
+---
+/**
+ * Wraps a rendered post body with the shared article typography (.post-body in globals.css) and the
+ * click-to-enlarge behaviour for images written as ![alt](./shot.png?link).
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<div class:list={['post-body prose max-w-none dark:prose-invert', className]} data-pagefind-body>
+  <slot />
+</div>
+
+<script>
+  // The optimised image URL only exists after the build, so the link is attached here from the <img> itself.
+  for (const img of document.querySelectorAll<HTMLImageElement>('.post-body img[data-link]')) {
+    if (img.closest('a')) continue;
+    const a = document.createElement('a');
+    a.href = img.currentSrc || img.src;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.title = img.title || 'Open full size (new tab)';
+    img.replaceWith(a);
+    a.append(img);
+  }
+</script>

@@ -1,0 +1,266 @@
+/*
+ * Raft: the control plane for the fleet. (A raft is a group of otters floating together.)
+ * Dark-first, data-rich and precise: Geist for UI, Geist Mono for every number, version and date,
+ * hairline panels and the logo gradient used as light, never as text.
+ *
+ * Contrast (WCAG): dark text #eeecf5 on #0b0913 16.9:1, muted #aaa5be ≥ 7.3:1 on every surface up to
+ * #1b1829, primary #ff79b2 ≥ 7.1:1 on the same; light text #0e0b18 19.5:1, muted #4d4960 ≥ 7.5:1,
+ * primary #8f1457 ≥ 8.0:1. Logo pinks/violets/blues are decoration only.
+ */
+@import '../../styles/globals.css';
+@import '@fontsource-variable/geist/wght.css';
+@import '@fontsource-variable/geist-mono/wght.css';
+
+:root {
+  --ff-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --ff-heading: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --ff-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --background: #ffffff;
+  --foreground: #0e0b18;
+  --card: #ffffff;
+  --card-foreground: #0e0b18;
+  --popover: #ffffff;
+  --popover-foreground: #0e0b18;
+  --primary: #8f1457;
+  --primary-foreground: #ffffff;
+  --secondary: #f2f0f7;
+  --secondary-foreground: #1d1830;
+  --muted: #f6f5f9;
+  --muted-foreground: #4d4960;
+  --accent: #f3eaf6;
+  --accent-foreground: #5c0f3a;
+  --destructive: #b42318;
+  --border: #e6e3ee;
+  --input: #dcd8e6;
+  --ring: #c42a7c;
+  --link: #8f1457;
+  --chart-1: #d93b92;
+  --chart-2: #7142b7;
+  --chart-3: #4179d4;
+  --chart-4: #ff4f97;
+  --chart-5: #450284;
+  --radius: 0.625rem;
+
+  /* Raft only */
+  --raft-surface: #f6f5f9;
+  --raft-raised: #ffffff;
+  --raft-hair: rgb(20 10 40 / 0.09);
+  --raft-hair-strong: rgb(20 10 40 / 0.16);
+  --raft-grid: rgb(30 10 60 / 0.07);
+  --raft-violet: #52309a;
+  --raft-blue: #2353a8;
+  --raft-ok: #17603d;
+  --raft-ok-dot: #1f9d5c;
+  --raft-glow-a: rgb(255 79 151 / 0.16);
+  --raft-glow-b: rgb(113 66 183 / 0.14);
+  --raft-glow-c: rgb(65 121 212 / 0.12);
+  --raft-bar: #c42a7c;
+  --raft-bar-track: #f1e6ef;
+  --raft-code-bg: #faf9fc;
+  --raft-shadow: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 1px 2px rgb(20 10 40 / 0.06), 0 12px 32px -16px rgb(20 10 40 / 0.18);
+}
+
+.dark {
+  --background: #0b0913;
+  --foreground: #eeecf5;
+  --card: #13111e;
+  --card-foreground: #eeecf5;
+  --popover: #171425;
+  --popover-foreground: #eeecf5;
+  --primary: #ff79b2;
+  --primary-foreground: #0b0913;
+  --secondary: #1b1829;
+  --secondary-foreground: #eeecf5;
+  --muted: #171425;
+  --muted-foreground: #aaa5be;
+  --accent: #241a35;
+  --accent-foreground: #ffd0e5;
+  --destructive: #ff8a80;
+  --border: rgb(255 255 255 / 0.08);
+  --input: rgb(255 255 255 / 0.12);
+  --ring: #ff79b2;
+  --link: #ff8cc0;
+
+  --raft-surface: #100e1a;
+  --raft-raised: #13111e;
+  --raft-hair: rgb(255 255 255 / 0.08);
+  --raft-hair-strong: rgb(255 255 255 / 0.14);
+  --raft-grid: rgb(255 255 255 / 0.055);
+  --raft-violet: #c7b3f7;
+  --raft-blue: #9cc0ff;
+  --raft-ok: #5fd39a;
+  --raft-ok-dot: #3fcf8a;
+  --raft-glow-a: rgb(255 79 151 / 0.22);
+  --raft-glow-b: rgb(113 66 183 / 0.26);
+  --raft-glow-c: rgb(65 121 212 / 0.18);
+  --raft-bar: #ff6ba9;
+  --raft-bar-track: #1f1a2e;
+  --raft-code-bg: #0e0c17;
+  --raft-shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 20px 50px -24px rgb(0 0 0 / 0.8);
+}
+
+@layer base {
+  body {
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@utility raft-container {
+  width: 100%;
+  max-width: 78rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+}
+
+/* A hairline panel; the building block of the whole design. */
+@utility raft-panel {
+  background: var(--raft-raised);
+  border: 1px solid var(--raft-hair);
+  border-radius: var(--radius);
+  box-shadow: var(--raft-shadow);
+}
+
+/* Glowing 1px gradient edge that fades in on hover/focus. */
+@utility raft-glow-edge {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #ff4f97, #7142b7 50%, #4179d4);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 180ms;
+    pointer-events: none;
+    z-index: 1;
+  }
+  &:hover::before,
+  &:focus-within::before {
+    opacity: 1;
+  }
+}
+
+/* Mono label above a section: "// fleet" */
+@utility raft-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+@utility raft-num {
+  font-family: var(--font-mono);
+  font-feature-settings: 'zero', 'ss01';
+  letter-spacing: -0.03em;
+}
+
+@utility raft-gradient-text {
+  background: linear-gradient(95deg, #c42a7c, #7142b7 55%, #2f63c4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  .dark & {
+    background: linear-gradient(95deg, #ff79b2, #c7b3f7 55%, #9cc0ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+/* Faded dot grid behind heroes. */
+.raft-grid {
+  background-image: radial-gradient(var(--raft-grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
+}
+
+.raft-aurora {
+  background:
+    radial-gradient(36rem 22rem at 18% 0%, var(--raft-glow-a), transparent 70%),
+    radial-gradient(34rem 24rem at 82% 8%, var(--raft-glow-b), transparent 70%),
+    radial-gradient(40rem 20rem at 50% 100%, var(--raft-glow-c), transparent 70%);
+}
+
+/* Live status dot */
+.raft-pulse {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--raft-ok-dot);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .raft-pulse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: raft-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+}
+@keyframes raft-ping {
+  75%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* Terminal lines reveal one by one. Without the animation (reduced motion, no CSS animations) they are simply visible. */
+@media (prefers-reduced-motion: no-preference) {
+  .raft-type > span {
+    animation: raft-line 380ms ease-out both;
+    animation-delay: calc(var(--i, 0) * 70ms + 150ms);
+  }
+  .raft-caret {
+    animation: raft-blink 1.1s steps(1) infinite;
+  }
+}
+@keyframes raft-line {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+}
+@keyframes raft-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Article body tweaks for Raft */
+.post-body :where(pre):not(:where(.not-prose *)) {
+  border-radius: var(--radius);
+  background-color: var(--raft-code-bg);
+}
+.post-body :where(h2):not(:where(.not-prose *)) {
+  letter-spacing: -0.02em;
+}
+.post-body :where(code):not(:where(pre *)) {
+  overflow-wrap: anywhere;
+}

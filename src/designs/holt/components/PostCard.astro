@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import type { PostView } from '@/lib/views';
+import { formatDate, isoDate } from '@/lib/format';
+
+interface Props {
+  post: PostView;
+  size?: 'default' | 'feature';
+  headingLevel?: 'h2' | 'h3';
+  eager?: boolean;
+}
+const { post, size = 'default', headingLevel: H = 'h3', eager = false } = Astro.props;
+const feature = size === 'feature';
+---
+
+<article class:list={['holt-card holt-lift group relative flex h-full overflow-hidden', feature ? 'flex-col md:flex-row' : 'flex-col']}>
+  <div class:list={['relative overflow-hidden bg-muted', feature ? 'aspect-[16/9] md:aspect-auto md:w-[55%]' : 'aspect-[16/9]']}>
+    <Image
+      src={post.hero}
+      alt=""
+      widths={feature ? [480, 800, 1200] : [400, 640, 800]}
+      sizes={feature ? '(min-width: 768px) 640px, 100vw' : '(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw'}
+      class:list={['size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]', post.heroIsDefault && 'opacity-90 saturate-50']}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : undefined}
+    />
+  </div>
+  <div class:list={['flex flex-1 flex-col gap-3', feature ? 'p-6 md:p-10 md:justify-center' : 'p-6']}>
+    {
+      post.tags.length > 0 && (
+        <p class="flex flex-wrap gap-1.5">
+          {post.tags.slice(0, feature ? 3 : 2).map((t) => (
+            <span class="rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-accent-foreground">{t.name}</span>
+          ))}
+        </p>
+      )
+    }
+    <H class:list={['font-heading font-bold tracking-tight text-foreground', feature ? 'text-2xl md:text-4xl md:leading-tight' : 'text-xl leading-snug']}>
+      <a href={post.url} class="after:absolute after:inset-0 focus-visible:outline-none">{post.title}</a>
+    </H>
+    <p class:list={['text-muted-foreground', feature ? 'text-lg line-clamp-3' : 'line-clamp-3 text-[0.9375rem]']}>{post.excerpt}</p>
+    <p class="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 pt-2 text-sm text-muted-foreground">
+      {post.byline && <span class="font-medium text-foreground">{post.byline.name}</span>}
+      {post.byline && <span aria-hidden="true">·</span>}
+      <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time>
+      <span aria-hidden="true">·</span>
+      <span>{post.readingTime} min read</span>
+    </p>
+  </div>
+</article>
+
+<style>
+  article:has(a:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+</style>

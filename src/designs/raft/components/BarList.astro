@@ -1,0 +1,54 @@
+---
+/**
+ * Horizontal bar chart, single series, built in HTML so labels stay legible at every width.
+ * Mark spec: ≤ 24px bars, 4px rounded data-end, square at the baseline, value at the tip,
+ * exact value in a hover/focus tooltip. Each row is a link, and the <ol> doubles as the table view.
+ */
+import { withBase } from '@/lib/base';
+import { compact, grouped } from '@/lib/format';
+
+interface Props {
+  title: string;
+  /** Unit for the tooltip, e.g. "pulls in the last month". */
+  unit: string;
+  items: { label: string; value: number; href: string }[];
+}
+const { title, unit, items } = Astro.props;
+const max = Math.max(...items.map((i) => i.value));
+---
+
+<figure class="m-0">
+  <figcaption class="sr-only">{title}</figcaption>
+  <ol class="space-y-1.5">
+    {
+      items.map((it, i) => (
+        <li>
+          <a
+            href={withBase(it.href)}
+            class="group/bar relative grid grid-cols-[6.5rem_1fr] items-center gap-3 rounded-md py-1 pr-1 outline-offset-2 sm:grid-cols-[8rem_1fr]"
+          >
+            <span class="truncate text-right font-mono text-xs text-muted-foreground group-hover/bar:text-foreground group-focus-visible/bar:text-foreground">
+              {it.label}
+            </span>
+            <span class="flex items-center gap-2">
+              <span
+                class="h-[18px] rounded-r-[4px] bg-[var(--raft-bar)] opacity-85 transition-opacity group-hover/bar:opacity-100 group-focus-visible/bar:opacity-100"
+                style={`width: max(4px, calc((100% - 3.5rem) * ${(it.value / max).toFixed(4)}))`}
+                aria-hidden="true"
+              />
+              <span class="font-mono text-xs text-foreground tabular-nums">{compact(it.value)}</span>
+              <span class="sr-only">{unit}</span>
+            </span>
+            <span
+              role="presentation"
+              class="pointer-events-none absolute -top-8 left-[7rem] z-10 hidden rounded-md border border-[var(--raft-hair-strong)] bg-popover px-2 py-1 font-mono text-[0.6875rem] whitespace-nowrap text-popover-foreground shadow-lg group-hover/bar:block group-focus-visible/bar:block sm:left-[8.5rem]"
+              aria-hidden="true"
+            >
+              #{i + 1} {it.label} · {grouped(it.value)} {unit}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</figure>

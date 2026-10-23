@@ -1,0 +1,105 @@
+---
+import Icon from '@/components/shared/Icon.astro';
+import type { SupportProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { LINKS } from '@/lib/site';
+import { ArrowUpRight, BookOpen, Bug, MessagesSquare } from 'lucide-react';
+import Layout from '../Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+type Props = SupportProps;
+const { channels, stats } = Astro.props;
+const icons = { docs: BookOpen, discussions: MessagesSquare } as const;
+const checklist = [
+  { t: 'Read the image’s documentation', b: 'Every image has a setup guide with its parameters, application setup and known caveats.' },
+  { t: 'Check your parameters', b: 'Most problems are a PUID/PGID mismatch, a volume path or a port. Compare against the generated compose file on the image page.' },
+  { t: 'Search before you ask', b: 'Someone has often hit the same thing. Search Discussions and the image’s GitHub issues.' },
+  { t: 'Ask, with logs', b: 'Share your compose file or docker run command, the image tag and the output of docker logs for the container. It gets you a faster, better answer.' },
+];
+---
+
+<Layout
+  title="Support"
+  section="support"
+  description="How to get help with LinuxServer.io images: documentation, Discord, the Discussions forum and GitHub."
+  breadcrumbs={[{ name: 'Support', href: '/support/' }]}
+>
+  <div class="cur-container pt-10">
+    <Breadcrumbs items={[]} current="Support" />
+    <div class="mt-5 max-w-3xl">
+      <h1 class="font-heading text-4xl font-semibold tracking-tight md:text-5xl">Get help</h1>
+      <p class="mt-4 text-lg leading-relaxed text-muted-foreground">
+        We strive to make easy-to-use, well-documented images. Start with the documentation; if you need a hand, the team and the community chat on Discord and
+        our forum. Found something that does not work as documented? Open an issue on the image’s GitHub repository.
+      </p>
+    </div>
+
+    <ol class="mt-12 grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2 xl:grid-cols-4" aria-label="Support channels, in the order to try them">
+      {
+        channels.map((c, n) => {
+          const I = c.icon in icons ? icons[c.icon as keyof typeof icons] : null;
+          return (
+            <li class="cur-card cur-hover group relative flex flex-col p-6">
+              <div class="flex items-center justify-between">
+                <span class="grid size-11 place-items-center rounded-lg bg-accent text-accent-foreground">
+                  {I ? <I className="size-5" aria-hidden="true" /> : <Icon name={c.icon as 'discord' | 'github'} class="size-5" />}
+                </span>
+                <span class="font-heading text-sm font-semibold text-muted-foreground tabular">Step {n + 1}</span>
+              </div>
+              <h2 class="mt-5 font-heading text-xl font-semibold">
+                <a href={c.href} target="_blank" rel="noopener" class="cur-stretch outline-none group-focus-within:underline">
+                  {c.name}
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              </h2>
+              <p class="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{c.summary}</p>
+              <p class="mt-5 border-t border-border pt-4 text-sm">
+                <span class="font-semibold">Best for:</span> {c.bestFor}
+              </p>
+              <ArrowUpRight className="absolute top-6 right-16 size-4 text-muted-foreground opacity-0 transition group-hover:opacity-100" aria-hidden="true" />
+            </li>
+          );
+        })
+      }
+    </ol>
+
+    <section class="mt-20 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]" aria-labelledby="checklist">
+      <div>
+        <h2 id="checklist" class="font-heading text-3xl font-semibold">Before you ask</h2>
+        <p class="mt-3 text-muted-foreground">
+          A volunteer team supports {stats.images.value} images used by millions. These four steps get you an answer fastest, and help the next person too.
+        </p>
+        <a href={withBase('/images/')} class="cur-link mt-5 inline-block font-medium">Find your image’s page</a>
+      </div>
+      <ol class="space-y-3">
+        {
+          checklist.map((s, n) => (
+            <li class="flex gap-4 rounded-xl border border-border bg-card p-5">
+              <span class="grid size-8 shrink-0 place-items-center rounded-full bg-foreground font-heading text-sm font-semibold text-background tabular" aria-hidden="true">
+                {n + 1}
+              </span>
+              <div>
+                <h3 class="font-heading font-semibold">{s.t}</h3>
+                <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{s.b}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mt-20 flex flex-col items-start gap-4 rounded-xl border border-border bg-[var(--cur-subtle)] p-6 sm:flex-row sm:items-center sm:justify-between" aria-labelledby="bugs">
+      <div class="flex gap-4">
+        <Bug className="mt-1 size-6 shrink-0 text-primary" aria-hidden="true" />
+        <div>
+          <h2 id="bugs" class="font-heading text-lg font-semibold">Found a bug?</h2>
+          <p class="mt-1 text-sm text-muted-foreground">If an image does not behave as documented, open an issue on its repository. Pull requests are welcome too.</p>
+        </div>
+      </div>
+      <div class="flex shrink-0 gap-5 text-sm font-medium">
+        <a href={LINKS.github} target="_blank" rel="noopener" class="cur-link">Our repositories<span class="sr-only"> (opens in a new tab)</span></a>
+        <a href={LINKS.status} target="_blank" rel="noopener" class="cur-link">Service status<span class="sr-only"> (opens in a new tab)</span></a>
+      </div>
+    </section>
+  </div>
+</Layout>

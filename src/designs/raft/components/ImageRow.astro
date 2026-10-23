@@ -1,0 +1,36 @@
+---
+/** Dense row: logo, name, one-line summary and a right-aligned mono metric. */
+import ImageLogo from '@/components/shared/ImageLogo.astro';
+import type { Image } from '@/lib/images';
+import { withBase } from '@/lib/base';
+
+interface Props {
+  image: Image;
+  metric?: string;
+  metricLabel?: string;
+  rank?: number;
+}
+const { image, metric, metricLabel, rank } = Astro.props;
+---
+
+<a
+  href={withBase(image.url)}
+  class="group flex items-center gap-3.5 rounded-md px-3 py-2.5 transition-colors hover:bg-muted focus-visible:bg-muted"
+>
+  {rank !== undefined && <span class="w-5 shrink-0 text-right font-mono text-xs text-muted-foreground tabular-nums">{rank}</span>}
+  <span class="grid size-9 shrink-0 place-items-center rounded-md border border-[var(--raft-hair)] bg-[var(--raft-surface)] p-1">
+    <ImageLogo image={image} size={28} class="size-7" />
+  </span>
+  <span class="min-w-0 flex-1">
+    <span class="block truncate font-medium text-foreground group-hover:text-primary">{image.name}</span>
+    <span class="block truncate text-[0.8125rem] text-muted-foreground">{image.summary}</span>
+  </span>
+  {
+    metric && (
+      <span class="shrink-0 text-right font-mono text-sm text-foreground tabular-nums">
+        {metric}
+        {metricLabel && <span class="block text-[0.6875rem] text-muted-foreground">{metricLabel}</span>}
+      </span>
+    )
+  }
+</a>

@@ -1,0 +1,16 @@
+---
+import BlogList from '@design/pages/BlogList.astro';
+import { getPosts } from '@/lib/posts';
+import { listing, topTags } from './_list';
+
+const posts = await getPosts();
+const props = {
+  kind: 'all' as const,
+  heading: 'Blog',
+  description: 'News, guides and release notes from the LinuxServer.io team.',
+  page: await listing(posts, 1, '/blog/'),
+  topTags: await topTags(),
+};
+---
+
+<BlogList {...props} />

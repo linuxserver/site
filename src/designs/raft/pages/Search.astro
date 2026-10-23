@@ -1,0 +1,25 @@
+---
+import Layout from '../Layout.astro';
+import ImageRow from '../components/ImageRow.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SearchResults from '../islands/SearchResults';
+import type { SearchProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { compact } from '@/lib/format';
+
+type Props = SearchProps;
+const { suggestions } = Astro.props;
+---
+
+<Layout section="search" title="Search" description="Search every LinuxServer.io blog post and image page." noindex>
+  <PageHeader eyebrow="Search" title="Search the site" lede="Full-text search across every blog post and image page." crumbs={[{ name: 'Search', href: '/search/' }]} />
+  <div class="raft-container grid grid-cols-1 gap-12 pt-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <SearchResults client:load action={withBase('/search/')} />
+    <aside aria-labelledby="popular-title" class="raft-panel self-start p-2">
+      <h2 id="popular-title" class="raft-eyebrow px-3 pt-2 pb-1">Popular images</h2>
+      <ul>
+        {suggestions.map((i) => <li><ImageRow image={i} metric={compact(i.monthly_pulls)} metricLabel="pulls / mo" /></li>)}
+      </ul>
+    </aside>
+  </div>
+</Layout>

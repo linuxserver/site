@@ -1,0 +1,8 @@
+---
+import Donate from '@design/pages/Donate.astro';
+import backers from '@/data/backers.json';
+import { SUPPORTERS } from '@/lib/site';
+import { stat } from '@/lib/stats';
+---
+
+<Donate stats={stat} supporters={SUPPORTERS} backers={backers} />

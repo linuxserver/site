@@ -1,0 +1,188 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '@/components/shared/Icon.astro';
+import Otter from '@/components/shared/Otter.astro';
+import type { AboutProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { LINKS, MISSION, PILLARS } from '@/lib/site';
+import { ArrowUpRight, BookOpen, Layers, LifeBuoy, RefreshCw } from 'lucide-react';
+import Layout from '../Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import StatStrip from '../components/StatStrip.astro';
+
+type Props = AboutProps;
+const { stats, team, supporters, growth, categories } = Astro.props;
+
+const pillarIcons = { standardised: Layers, updates: RefreshCw, docs: BookOpen, support: LifeBuoy } as const;
+const maxAdded = Math.max(...growth.map((g) => g.added));
+const peak = growth.reduce((a, b) => (b.added > a.added ? b : a));
+const last = growth[growth.length - 1];
+const cats = categories.slice(0, 12);
+const maxCat = cats[0]?.count ?? 1;
+---
+
+<Layout
+  title="About"
+  section="about"
+  description={`Who LinuxServer.io are: ${stats.team.value} volunteers building ${stats.images.value} community Docker images since ${growth[0]?.year}.`}
+  breadcrumbs={[{ name: 'About', href: '/about/' }]}
+>
+  <div class="cur-container pt-10">
+    <Breadcrumbs items={[]} current="About" />
+    <div class="mt-6 grid grid-cols-[minmax(0,1fr)] items-end gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+      <div>
+        <p class="cur-eyebrow">About LinuxServer.io</p>
+        <h1 class="mt-3 font-heading text-4xl leading-[1.05] font-semibold tracking-tight md:text-6xl">Building and maintaining community images</h1>
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">{MISSION}</p>
+        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          Our commitment is to the community and our users. Our images are for everyone, and always will be. Thank you to everyone who has used them and helped
+          us get here.
+        </p>
+      </div>
+      <Otter pose="float" class="mx-auto w-full max-w-sm" />
+    </div>
+
+    <StatStrip class="mt-14" stats={[stats.hubPulls, stats.monthlyPulls, stats.images, stats.stars, stats.team, stats.backers]} />
+
+    <section class="mt-24" aria-labelledby="how">
+      <h2 id="how" class="font-heading text-3xl font-semibold">How we work</h2>
+      <ul class="mt-8 grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
+        {
+          PILLARS.map((p) => {
+            const I = pillarIcons[p.id];
+            const external = p.link.href.startsWith('http');
+            return (
+              <li class="flex flex-col bg-card p-6">
+                <I className="size-6 text-primary" aria-hidden="true" />
+                <h3 class="mt-4 font-heading text-lg font-semibold">{p.title}</h3>
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+                <a href={external ? p.link.href : withBase(p.link.href)} {...(external ? { target: '_blank', rel: 'noopener' } : {})} class="cur-link mt-5 text-sm font-medium">
+                  {p.link.label}
+                  {external && <span class="sr-only"> (opens in a new tab)</span>}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
+
+    <div class="mt-24 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <section aria-labelledby="growth">
+        <h2 id="growth" class="font-heading text-3xl font-semibold">Growing the fleet</h2>
+        <p class="mt-2 text-muted-foreground">
+          New images by year of first build. {last.total} images have joined since {growth[0].year}, with the most ({peak.added}) in {peak.year}.
+        </p>
+        <figure class="mt-8">
+          <div class="flex h-64 items-end gap-1.5 border-b border-border sm:gap-2" role="img" aria-label={`Bar chart of new images per year from ${growth[0].year} to ${last.year}. The data is in the table below.`}>
+            {
+              growth.map((g) => (
+                <div class="group relative flex h-full flex-1 flex-col items-center justify-end" aria-hidden="true">
+                  <span
+                    class:list={[
+                      'mb-1 text-xs font-medium tabular transition',
+                      g === peak || g === last ? 'text-foreground' : 'text-muted-foreground opacity-0 group-hover:opacity-100',
+                    ]}
+                  >
+                    {g.added}
+                  </span>
+                  <span
+                    class="w-full max-w-10 rounded-t-[4px] bg-[var(--cur-bar)] transition group-hover:brightness-110"
+                    style={`height:${Math.max(2, (g.added / maxAdded) * 88)}%`}
+                  />
+                </div>
+              ))
+            }
+          </div>
+          <div class="mt-2 flex gap-1.5 sm:gap-2" aria-hidden="true">
+            {growth.map((g) => <span class="flex-1 text-center text-[0.6875rem] text-muted-foreground tabular">{String(g.year).slice(2).padStart(3, '’')}</span>)}
+          </div>
+          <figcaption class="mt-3 text-xs text-muted-foreground">Source: first-build dates in api.linuxserver.io, including images since deprecated. {last.year} is the year to date.</figcaption>
+        </figure>
+        <details class="mt-4 text-sm">
+          <summary class="cursor-pointer font-medium text-[var(--link)]">Show the data as a table</summary>
+          <table class="mt-3 w-full max-w-md text-left">
+            <thead class="text-xs text-muted-foreground"><tr><th scope="col" class="py-1.5">Year</th><th scope="col" class="py-1.5 text-right">New images</th><th scope="col" class="py-1.5 text-right">Running total</th></tr></thead>
+            <tbody class="divide-y divide-border tabular">
+              {growth.map((g) => <tr><th scope="row" class="py-1.5 font-normal">{g.year}</th><td class="py-1.5 text-right">{g.added}</td><td class="py-1.5 text-right">{g.total}</td></tr>)}
+            </tbody>
+          </table>
+        </details>
+      </section>
+
+      <section aria-labelledby="cats">
+        <h2 id="cats" class="font-heading text-3xl font-semibold">What we package</h2>
+        <p class="mt-2 text-muted-foreground">Current images in the twelve largest categories.</p>
+        <ul class="mt-8 space-y-3">
+          {
+            cats.map((c) => (
+              <li>
+                <a href={withBase(`/images/?category=${encodeURIComponent(c.name)}`)} class="group grid grid-cols-[10rem_1fr_2rem] items-center gap-3 text-sm">
+                  <span class="truncate group-hover:text-primary group-hover:underline">{c.name}</span>
+                  <span class="h-2.5 rounded-r-[4px] bg-muted" aria-hidden="true">
+                    <span class="block h-2.5 rounded-r-[4px] bg-[var(--cur-bar)]" style={`width:${(c.count / maxCat) * 100}%`} />
+                  </span>
+                  <span class="text-right font-medium tabular">{c.count}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+
+    <section class="mt-24" aria-labelledby="team" id="team-section">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h2 id="team" class="scroll-mt-24 font-heading text-3xl font-semibold">The team</h2>
+          <p class="mt-2 text-muted-foreground">{team.length} volunteers, public members of the linuxserver GitHub organisation.</p>
+        </div>
+        <a href={LINKS.team} target="_blank" rel="noopener" class="cur-link text-sm font-medium">Everyone on GitHub<span class="sr-only"> (opens in a new tab)</span></a>
+      </div>
+      <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {
+          team.map((m) => (
+            <li>
+              <a href={m.url} target="_blank" rel="noopener" class="cur-card cur-hover flex flex-col items-center p-4 text-center">
+                {m.avatar ? (
+                  <Image src={m.avatar} alt="" width={72} height={72} densities={[1, 2]} format="webp" class="size-16 rounded-full border border-border" />
+                ) : (
+                  <span class="grid size-16 place-items-center rounded-full bg-accent font-heading font-semibold" aria-hidden="true">
+                    {m.login.slice(0, 2).toUpperCase()}
+                  </span>
+                )}
+                <span class="mt-3 w-full truncate font-heading font-semibold">{m.name ?? m.login}</span>
+                <span class="w-full truncate text-xs text-muted-foreground">@{m.login}</span>
+                <span class="sr-only"> on GitHub (opens in a new tab)</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mt-24" aria-labelledby="thanks">
+      <h2 id="thanks" class="font-heading text-3xl font-semibold">With thanks to</h2>
+      <p class="mt-2 max-w-2xl text-muted-foreground">Organisations that have donated their time, credit or hardware.</p>
+      <ul class="mt-8 grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          supporters.map((s) => (
+            <li class="border-t-2 border-foreground pt-4">
+              <a href={s.href} target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-heading font-semibold hover:text-primary hover:underline">
+                {s.name} <ArrowUpRight className="size-3.5 opacity-60" aria-hidden="true" />
+                <span class="sr-only"> (opens in a new tab)</span>
+              </a>
+              <p class="mt-1.5 text-sm text-muted-foreground">{s.contribution}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-10 flex flex-wrap gap-3">
+        <a href={withBase('/donate/')} class="inline-flex h-11 items-center rounded-lg bg-primary px-5 font-heading font-semibold text-primary-foreground hover:brightness-110">Support the project</a>
+        <a href={LINKS.github} target="_blank" rel="noopener" class="inline-flex h-11 items-center gap-2 rounded-lg border border-border px-5 font-heading font-semibold hover:bg-muted">
+          <Icon name="github" class="size-4" /> Contribute on GitHub<span class="sr-only"> (opens in a new tab)</span>
+        </a>
+      </p>
+    </section>
+  </div>
+</Layout>

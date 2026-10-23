@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import { formatDate, isoDate } from '@/lib/format';
+import type { PostView } from '@/lib/views';
+
+interface Props {
+  post: PostView;
+  size?: 'lg' | 'md' | 'sm';
+  headingLevel?: 'h2' | 'h3';
+  eager?: boolean;
+}
+const { post, size = 'md', headingLevel: H = 'h3', eager = false } = Astro.props;
+---
+
+{
+  size === 'lg' ? (
+    <article class="group relative grid grid-cols-[minmax(0,1fr)] overflow-hidden rounded-xl border border-border bg-card md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
+      <div class="aspect-[16/9] overflow-hidden bg-muted md:aspect-auto md:min-h-80">
+        <Image
+          src={post.hero}
+          alt={post.heroAlt}
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 768px) 58vw, 100vw"
+          class="size-full object-cover transition duration-500 group-hover:scale-[1.02]"
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : undefined}
+        />
+      </div>
+      <div class="flex flex-col p-6 md:p-8">
+        <p class="cur-eyebrow">
+          {post.featured ? 'Featured' : 'Latest'} · <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time>
+        </p>
+        <H class="mt-3 font-heading text-2xl leading-tight font-semibold md:text-3xl">
+          <a href={post.url} class="cur-stretch outline-none group-focus-within:underline">{post.title}</a>
+        </H>
+        <p class="cur-clamp-3 mt-3 leading-relaxed text-muted-foreground">{post.excerpt}</p>
+        <p class="mt-auto pt-6 text-sm text-muted-foreground">
+          {post.byline && <span class="font-medium text-foreground">{post.byline.name}</span>}
+          {post.byline && ' · '}
+          {post.readingTime} min read
+        </p>
+      </div>
+    </article>
+  ) : (
+    <article class="group relative flex flex-col">
+      <div class:list={['overflow-hidden rounded-lg border border-border bg-muted', size === 'sm' ? 'aspect-[2/1]' : 'aspect-[16/9]']}>
+        <Image
+          src={post.hero}
+          alt={post.heroAlt}
+          widths={[400, 640, 800]}
+          sizes="(min-width: 1024px) 26rem, (min-width: 640px) 45vw, 100vw"
+          class="size-full object-cover transition duration-500 group-hover:scale-[1.03]"
+          loading="lazy"
+        />
+      </div>
+      <p class="mt-4 text-xs text-muted-foreground tabular">
+        <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time> · {post.readingTime} min read
+      </p>
+      <H class:list={['mt-1.5 font-heading leading-snug font-semibold', size === 'sm' ? 'text-base' : 'text-lg']}>
+        <a href={post.url} class="cur-stretch outline-none group-hover:text-primary group-focus-within:underline">{post.title}</a>
+      </H>
+      {size === 'md' && <p class="cur-clamp-2 mt-1.5 text-sm leading-relaxed text-muted-foreground">{post.excerpt}</p>}
+    </article>
+  )
+}

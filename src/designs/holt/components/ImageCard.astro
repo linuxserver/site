@@ -1,0 +1,54 @@
+---
+/** Rounded image card: logo, name, one-line summary, a metric. The whole card is one link. */
+import ImageLogo from '@/components/shared/ImageLogo.astro';
+import type { Image } from '@/lib/images';
+import { withBase } from '@/lib/base';
+import { compact } from '@/lib/format';
+import { Download, Star } from 'lucide-react';
+
+interface Props {
+  image: Image;
+  metric?: 'pulls' | 'stars' | 'none';
+  headingLevel?: 'h3' | 'h4';
+}
+const { image, metric = 'pulls', headingLevel: H = 'h3' } = Astro.props;
+---
+
+<article class="holt-card holt-lift group relative flex h-full flex-col gap-4 p-5">
+  <div class="flex items-start gap-4">
+    <div class="grid size-14 shrink-0 place-items-center rounded-2xl bg-muted holt-tile p-2.5">
+      <ImageLogo image={image} size={40} class="size-10" />
+    </div>
+    <div class="min-w-0">
+      <H class="font-heading text-lg leading-tight font-bold text-foreground">
+        <a href={withBase(image.url)} class="after:absolute after:inset-0 after:rounded-[inherit] focus-visible:outline-none">{image.name}</a>
+      </H>
+      {image.categories[0] && <p class="mt-0.5 text-sm text-muted-foreground">{image.categories.slice(0, 2).join(' · ')}</p>}
+    </div>
+  </div>
+  <p class="line-clamp-2 text-[0.9375rem] leading-relaxed text-muted-foreground">{image.summary}</p>
+  {
+    metric !== 'none' && (
+      <p class="mt-auto flex items-center gap-1.5 text-sm font-medium text-foreground">
+        {metric === 'pulls' ? (
+          <>
+            <Download className="size-4 text-primary" aria-hidden="true" />
+            {compact(image.monthly_pulls)} <span class="font-normal text-muted-foreground">pulls a month</span>
+          </>
+        ) : (
+          <>
+            <Star className="size-4 text-primary" aria-hidden="true" />
+            {compact(image.stars)} <span class="font-normal text-muted-foreground">stars on GitHub</span>
+          </>
+        )}
+      </p>
+    )
+  }
+</article>
+
+<style>
+  article:has(a:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+</style>

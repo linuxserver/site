@@ -1,0 +1,35 @@
+---
+/**
+ * The LinuxServer.io otter mark, or the full logo with the "linuxserver.io" wordmark.
+ * Inline SVG so it scales crisply and the wordmark follows `color` (currentColor).
+ * Gradient ids are made unique per instance, so the logo can appear more than once on a page.
+ */
+import mark from '@/assets/brand/mark.json';
+import wordmark from '@/assets/brand/wordmark.json';
+import { uid } from '@/lib/uid';
+
+interface Props {
+  variant?: 'mark' | 'full';
+  class?: string;
+  /** Accessible name. Pass "" when the logo sits inside a link that already has a name. */
+  title?: string;
+}
+
+const { variant = 'full', class: className, title = 'LinuxServer.io' } = Astro.props;
+const src = variant === 'mark' ? mark : wordmark;
+const id = uid('lg');
+const body = src.body.replaceAll('__ID__', id);
+---
+
+{
+  title ? (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox={src.viewBox} class={className} role="img" aria-labelledby={`${id}-t`}>
+      <title id={`${id}-t`}>{title}</title>
+      <Fragment set:html={body} />
+    </svg>
+  ) : (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox={src.viewBox} class={className} aria-hidden="true" focusable="false">
+      <Fragment set:html={body} />
+    </svg>
+  )
+}

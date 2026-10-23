@@ -1,0 +1,9 @@
+# Old Grav URLs → new (Cloudflare Pages / Netlify format). Post URLs (/blog/<slug>) are unchanged.
+/our-images           /images/            301
+/our-images.md        /images/            301
+/index.md             /                   301
+/blog/page:*          /blog/page/:splat/  301
+/blog/tag:*           /blog/tags/:splat/  301
+/blog.md              /blog/              301
+/donate.md            /donate/            301
+/support.md           /support/           301

@@ -1,0 +1,38 @@
+---
+import Layout from '../Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Catalog from '../islands/Catalog';
+import Otter from '@/components/shared/Otter.astro';
+import type { ImagesProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { itemListJsonLd } from '@/lib/jsonld';
+import { formatDate, isoDate } from '@/lib/format';
+
+type Props = ImagesProps;
+const { cards, categories, stats, snapshotDate } = Astro.props;
+const active = cards.filter((c) => !c.deprecated);
+---
+
+<Layout
+  section="images"
+  title="Images"
+  description={`Browse all ${stats.images.value} LinuxServer.io Docker images: media servers, downloaders, desktops in the browser, dev tools and more. Standardised, rebuilt automatically and documented.`}
+  breadcrumbs={[{ name: 'Images', href: '/images/' }]}
+  jsonLd={[itemListJsonLd('LinuxServer.io images', active.map((c) => ({ name: c.name, url: c.url })), Astro.site)]}
+>
+  <PageHero
+    eyebrow={`${stats.images.value} images · ${stats.monthlyPulls.value} pulls a month`}
+    title="Find your next container"
+    lede="Every image is built on the same base, rebuilt automatically when upstream changes, and comes with a setup guide. Pick one and you’ll be up in minutes."
+  >
+    <p class="mt-6 text-sm text-muted-foreground">
+      {stats.updatedThisWeek.value} rebuilt in the last week · data from <time datetime={isoDate(snapshotDate)}>{formatDate(snapshotDate)}</time>
+    </p>
+  </PageHero>
+
+  <div class="holt-container py-10 md:py-14">
+    <Catalog client:load cards={cards} categories={categories} base={withBase('/')}>
+      <Otter slot="emptyArt" pose="peek" ledge />
+    </Catalog>
+  </div>
+</Layout>

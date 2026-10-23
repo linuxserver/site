@@ -1,0 +1,77 @@
+---
+import Layout from '../Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Otter from '@/components/shared/Otter.astro';
+import Icon from '@/components/shared/Icon.astro';
+import type { SupportProps } from '@/designs/types';
+import { BookOpen, MessagesSquare } from 'lucide-react';
+
+type Props = SupportProps;
+const { channels } = Astro.props;
+const icons = { docs: BookOpen, discussions: MessagesSquare } as const;
+const checklist = [
+  'Read the image’s setup guide on docs.linuxserver.io; most questions are answered there.',
+  'Include how you run the container: your compose file or docker run command (remove passwords).',
+  'Include the container logs: docker logs <container-name>.',
+  'Say which image tag and version you are on, and what you expected to happen.',
+];
+---
+
+<Layout section="support" title="Support" description="Where to get help with LinuxServer.io images: documentation, Discord, our discussions forum and GitHub." breadcrumbs={[{ name: 'Support', href: '/support/' }]}>
+  <PageHero
+    eyebrow="Support"
+    title="We’re here to help"
+    lede="We work hard to make images that are easy to use and well documented. Start with the docs; if you still need help, the team and the community are on Discord and our forum."
+  >
+    <div slot="aside" class="mx-auto w-56 md:w-72" aria-hidden="true"><Otter pose="wave" /></div>
+  </PageHero>
+
+  <section aria-labelledby="channels" class="holt-container py-16 md:py-20">
+    <h2 id="channels" class="font-heading text-3xl font-bold tracking-tight text-foreground">Where to get support</h2>
+    <p class="mt-3 text-lg text-muted-foreground">In the order we suggest trying them.</p>
+    <ol class="mt-10 grid gap-5 md:grid-cols-2">
+      {
+        channels.map((c, i) => {
+          const I = c.icon in icons ? icons[c.icon as keyof typeof icons] : null;
+          return (
+            <li class="holt-card holt-lift relative flex gap-5 p-6 md:p-7">
+              <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-accent text-accent-foreground">
+                {I ? <I className="size-7" aria-hidden="true" /> : <Icon name={c.icon as 'github' | 'discord'} class="size-7" />}
+              </span>
+              <div>
+                <p class="text-sm font-semibold text-muted-foreground">Step {i + 1}</p>
+                <h3 class="font-heading text-2xl font-bold text-foreground">
+                  <a href={c.href} target="_blank" rel="noopener" class="after:absolute after:inset-0">
+                    {c.name}<span class="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </h3>
+                <p class="mt-2 text-muted-foreground">{c.summary}</p>
+                <p class="mt-3 text-sm font-medium text-foreground">{c.bestFor}</p>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </section>
+
+  <section aria-labelledby="checklist" class="holt-container">
+    <div class="rounded-[2rem] bg-muted/70 p-7 md:p-12">
+      <h2 id="checklist" class="font-heading text-3xl font-bold tracking-tight text-foreground">Before you ask</h2>
+      <p class="mt-3 text-lg text-muted-foreground">A good question gets a fast answer. These four things help the most.</p>
+      <ol class="mt-8 grid gap-4 md:grid-cols-2">
+        {
+          checklist.map((item, i) => (
+            <li class="flex gap-4 rounded-2xl bg-card p-5">
+              <span class="grid size-9 shrink-0 place-items-center rounded-full bg-primary font-bold text-primary-foreground">{i + 1}</span>
+              <span class="pt-1.5 text-foreground">{item}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="mt-8 text-muted-foreground">
+        Found something that doesn’t work as documented? Open an issue on the image’s GitHub repository. Want to contribute? Pull requests are welcome.
+      </p>
+    </div>
+  </section>
+</Layout>

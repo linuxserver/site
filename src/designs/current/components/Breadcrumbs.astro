@@ -1,0 +1,31 @@
+---
+import type { Crumb } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { ChevronRight } from 'lucide-react';
+
+interface Props {
+  items: Crumb[];
+  current: string;
+}
+const { items, current } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="text-sm text-muted-foreground">
+  <ol class="flex flex-wrap items-center gap-1.5">
+    <li><a href={withBase('/')} class="hover:text-foreground hover:underline">Home</a></li>
+    {
+      items.map((c) => (
+        <li class="flex items-center gap-1.5">
+          <ChevronRight className="size-3.5 opacity-60" aria-hidden="true" />
+          <a href={withBase(c.href)} class="hover:text-foreground hover:underline">
+            {c.name}
+          </a>
+        </li>
+      ))
+    }
+    <li class="flex min-w-0 items-center gap-1.5">
+      <ChevronRight className="size-3.5 opacity-60" aria-hidden="true" />
+      <span aria-current="page" class="max-w-[min(28rem,60vw)] truncate font-medium text-foreground">{current}</span>
+    </li>
+  </ol>
+</nav>

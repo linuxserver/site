@@ -1,0 +1,56 @@
+---
+/**
+ * Fleet size by year: one series of columns (cumulative images), built in HTML.
+ * Columns ≤ 24px with a 4px rounded cap, value on the last cap only, recessive hairline grid,
+ * exact numbers in hover/focus tooltips and a visually hidden table.
+ */
+interface Props {
+  growth: { year: number; added: number; total: number }[];
+}
+const { growth } = Astro.props;
+const max = Math.max(...growth.map((g) => g.total));
+const top = Math.ceil(max / 100) * 100;
+const ticks = [top, top / 2, 0];
+const last = growth[growth.length - 1];
+---
+
+<figure class="m-0">
+  <figcaption class="sr-only">Images in the fleet by year, including images that have since been deprecated</figcaption>
+  <div class="grid grid-cols-[2.25rem_1fr] gap-2" aria-hidden="true">
+    <div class="relative h-56 font-mono text-[0.6875rem] text-muted-foreground tabular-nums">
+      {ticks.map((t, i) => <span class="absolute right-0 -translate-y-1/2" style={`top:${(i / (ticks.length - 1)) * 100}%`}>{t}</span>)}
+    </div>
+    <div class="relative h-56">
+      {ticks.map((_, i) => <span class="absolute inset-x-0 h-px bg-[var(--raft-hair)]" style={`top:${(i / (ticks.length - 1)) * 100}%`} />)}
+      <div class="absolute inset-0 flex items-end justify-between gap-1 px-1">
+        {
+          growth.map((g) => (
+            <div class="group/col relative flex h-full flex-1 items-end justify-center">
+              <span
+                class="w-full max-w-6 rounded-t-[4px] bg-[var(--raft-bar)] opacity-80 transition-opacity group-hover/col:opacity-100"
+                style={`height:${((g.total / top) * 100).toFixed(2)}%`}
+              />
+              {g === last && (
+                <span class="absolute font-mono text-xs text-foreground tabular-nums" style={`bottom:calc(${((g.total / top) * 100).toFixed(2)}% + 4px)`}>
+                  {g.total}
+                </span>
+              )}
+              <span class="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 rounded-md border border-[var(--raft-hair-strong)] bg-popover px-2 py-1 font-mono text-[0.6875rem] whitespace-nowrap text-popover-foreground shadow-lg group-hover/col:block">
+                {g.year}: {g.total} total, +{g.added}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+    <span></span>
+    <div class="flex justify-between gap-1 px-1 font-mono text-[0.6875rem] text-muted-foreground tabular-nums">
+      {growth.map((g, i) => <span class="flex-1 text-center">{i % 2 === 0 || g === last ? `’${String(g.year).slice(2)}` : ''}</span>)}
+    </div>
+  </div>
+  <table class="sr-only">
+    <caption>Images in the fleet by year</caption>
+    <thead><tr><th scope="col">Year</th><th scope="col">Added</th><th scope="col">Total</th></tr></thead>
+    <tbody>{growth.map((g) => <tr><th scope="row">{g.year}</th><td>{g.added}</td><td>{g.total}</td></tr>)}</tbody>
+  </table>
+</figure>

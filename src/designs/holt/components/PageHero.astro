@@ -1,0 +1,28 @@
+---
+/** Inner-page header: eyebrow, h1, lede, optional slot on the right, river-light background. */
+import Breadcrumbs from './Breadcrumbs.astro';
+import type { Crumb } from '@/designs/types';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  crumbs?: Crumb[];
+  compact?: boolean;
+}
+const { eyebrow, title, lede, crumbs, compact = false } = Astro.props;
+const hasAside = Astro.slots.has('aside');
+---
+
+<section class="holt-glow relative overflow-hidden border-b border-border/60">
+  <div class:list={['holt-container relative', compact ? 'py-12 md:py-14' : 'py-14 md:py-20', hasAside && 'grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]']}>
+    <div>
+      {crumbs && <Breadcrumbs crumbs={crumbs} class="mb-6" />}
+      {eyebrow && <p class="mb-3 text-sm font-semibold tracking-wide text-primary">{eyebrow}</p>}
+      <h1 class="font-heading text-4xl font-extrabold tracking-tight text-foreground md:text-6xl md:leading-[1.02]">{title}</h1>
+      {lede && <p class="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">{lede}</p>}
+      <slot />
+    </div>
+    {hasAside && <div><slot name="aside" /></div>}
+  </div>
+</section>

@@ -1,0 +1,65 @@
+---
+import Layout from '../Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import type { TagsProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+
+type Props = TagsProps;
+const { tags, authors, totalPosts } = Astro.props;
+const max = Math.max(...tags.map((t) => t.count));
+const roleLabel = { team: 'team', alumni: 'alumni', guest: 'guest' } as const;
+---
+
+<Layout section="blog" title="Topics and authors" description={`Every topic and author across ${totalPosts} posts on the LinuxServer.io blog.`} breadcrumbs={[{ name: 'Blog', href: '/blog/' }, { name: 'Topics', href: '/blog/tags/' }]}>
+  <PageHeader
+    eyebrow="Index"
+    title="Topics and authors"
+    lede={`${tags.length} topics and ${authors.length} authors across ${totalPosts} posts since 2013.`}
+    crumbs={[{ name: 'Blog', href: '/blog/' }, { name: 'Topics', href: '/blog/tags/' }]}
+  />
+  <div class="raft-container grid grid-cols-1 gap-12 pt-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <section aria-labelledby="topics">
+      <h2 id="topics" class="text-xl font-semibold tracking-tight">Topics</h2>
+      <ul class="mt-6 grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2 xl:grid-cols-3">
+        {
+          tags.map((t) => (
+            <li>
+              <a href={withBase(`/blog/tags/${t.slug}/`)} class="group grid grid-cols-[1fr_auto] items-center gap-x-3 rounded-md px-2 py-1.5 hover:bg-muted">
+                <span class="truncate font-mono text-sm group-hover:text-primary">#{t.slug}</span>
+                <span class="font-mono text-xs text-muted-foreground tabular-nums">
+                  {t.count}<span class="sr-only"> posts</span>
+                </span>
+                <span class="col-span-2 mt-1 h-0.5 rounded-full bg-[var(--raft-bar-track)]" aria-hidden="true">
+                  <span class="block h-full rounded-full bg-[var(--raft-bar)] opacity-70" style={`width:${Math.max(4, (t.count / max) * 100)}%`} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+    <section aria-labelledby="authors" class="self-start">
+      <h2 id="authors" class="text-xl font-semibold tracking-tight">Authors</h2>
+      <ul class="raft-panel mt-6 divide-y divide-[var(--raft-hair)]">
+        {
+          authors.map((a) => (
+            <li>
+              <a href={a.url} class="flex items-center gap-3 px-4 py-3 hover:bg-muted/50">
+                <span class="grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-otter-magenta to-otter-violet font-mono text-[0.625rem] font-semibold text-white" aria-hidden="true">
+                  {a.initials}
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate font-medium">{a.name}</span>
+                  <span class="block font-mono text-xs text-muted-foreground">{roleLabel[a.role]}</span>
+                </span>
+                <span class="font-mono text-sm tabular-nums">
+                  {a.count}<span class="sr-only"> posts</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Layout>

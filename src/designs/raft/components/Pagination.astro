@@ -1,0 +1,55 @@
+---
+import type { Page } from '@/lib/posts';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+interface Props {
+  page: Page<unknown>;
+}
+const { page } = Astro.props;
+const { currentPage: cur, lastPage: last } = page;
+
+const nums: (number | '…')[] = [];
+for (let n = 1; n <= last; n++) {
+  if (n === 1 || n === last || Math.abs(n - cur) <= 1) nums.push(n);
+  else if (nums[nums.length - 1] !== '…') nums.push('…');
+}
+const base = 'grid h-9 min-w-9 place-items-center rounded-md border px-2 font-mono text-sm tabular-nums transition-colors';
+---
+
+{
+  last > 1 && (
+    <nav aria-label="Pagination" class="mt-12 flex items-center justify-center gap-1.5">
+      {cur > 1 ? (
+        <a href={page.url(cur - 1)} rel="prev" class:list={[base, 'border-[var(--raft-hair)] hover:bg-muted']} aria-label="Previous page">
+          <ChevronLeft className="size-4" aria-hidden="true" />
+        </a>
+      ) : (
+        <span class:list={[base, 'border-transparent text-muted-foreground opacity-50']} aria-hidden="true">
+          <ChevronLeft className="size-4" />
+        </span>
+      )}
+      {nums.map((n) =>
+        n === '…' ? (
+          <span class="px-1 font-mono text-muted-foreground" aria-hidden="true">…</span>
+        ) : n === cur ? (
+          <span class:list={[base, 'border-primary bg-primary text-primary-foreground']} aria-current="page">
+            <span class="sr-only">Page </span>{n}
+          </span>
+        ) : (
+          <a href={page.url(n)} class:list={[base, 'border-[var(--raft-hair)] hover:bg-muted']}>
+            <span class="sr-only">Page </span>{n}
+          </a>
+        ),
+      )}
+      {cur < last ? (
+        <a href={page.url(cur + 1)} rel="next" class:list={[base, 'border-[var(--raft-hair)] hover:bg-muted']} aria-label="Next page">
+          <ChevronRight className="size-4" aria-hidden="true" />
+        </a>
+      ) : (
+        <span class:list={[base, 'border-transparent text-muted-foreground opacity-50']} aria-hidden="true">
+          <ChevronRight className="size-4" />
+        </span>
+      )}
+    </nav>
+  )
+}

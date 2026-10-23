@@ -1,0 +1,138 @@
+---
+/**
+ * Everything in <head> that is the same for every design: title, description, canonical, Open Graph,
+ * Twitter, fediverse, feeds, icons, JSON-LD and the no-flash theme script.
+ */
+import { getImage } from 'astro:assets';
+import type { SeoProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { LINKS, SITE } from '@/lib/site';
+
+interface Props extends SeoProps {
+  /** Theme used when the visitor has not chosen one and prefers-color-scheme has no say: 'light' | 'dark' | 'system'. */
+  defaultTheme?: 'light' | 'dark' | 'system';
+  /** <meta name="theme-color"> for light and dark. */
+  themeColor?: { light: string; dark: string };
+}
+
+const {
+  title,
+  description = SITE.description,
+  image,
+  imageAlt,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  author,
+  tags = [],
+  noindex = false,
+  jsonLd = [],
+  breadcrumbs = [],
+  defaultTheme = 'system',
+  themeColor = { light: '#ffffff', dark: '#120b1f' },
+} = Astro.props;
+
+// The three-design review build must never be indexed (it is the same content three times).
+const review = import.meta.env.PUBLIC_REVIEW === '1';
+const fullTitle = title ? `${title} | ${SITE.name}` : SITE.title;
+const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/').replace(/\/index\.html\/$/, '/'), Astro.site);
+
+let ogImage: string;
+let ogWidth = 1200;
+let ogHeight = 630;
+if (image && typeof image === 'object') {
+  const opt = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+  ogImage = new URL(opt.src, Astro.site).toString();
+} else {
+  ogImage = new URL(withBase(image ?? '/og-default.png'), Astro.site).toString();
+}
+
+const home = new URL(withBase('/'), Astro.site).toString();
+const org = {
+  '@type': 'Organization',
+  '@id': `${home}#organization`,
+  name: SITE.name,
+  url: home,
+  logo: new URL(withBase('/icon-512.png'), Astro.site).toString(),
+  sameAs: [LINKS.github, LINKS.mastodon, LINKS.bluesky, LINKS.opencollective],
+};
+const graph: Record<string, unknown>[] = [...jsonLd];
+if (Astro.url.pathname === withBase('/') || Astro.url.pathname === withBase('/').replace(/\/$/, '')) {
+  graph.push(org, {
+    '@type': 'WebSite',
+    '@id': `${home}#website`,
+    url: home,
+    name: SITE.name,
+    publisher: { '@id': `${home}#organization` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: { '@type': 'EntryPoint', urlTemplate: `${home}search/?q={search_term_string}` },
+      'query-input': 'required name=search_term_string',
+    },
+  });
+}
+if (breadcrumbs.length) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: 'Home', href: '/' }, ...breadcrumbs].map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: new URL(withBase(c.href), Astro.site).toString(),
+    })),
+  });
+}
+const ld = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') : null;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{(noindex || review) && <meta name="robots" content="noindex, follow" />}
+<meta name="generator" content={Astro.generator} />
+
+<link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+<link rel="icon" href={withBase('/favicon-32.png')} type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+<link rel="manifest" href={withBase('/manifest.webmanifest')} />
+<meta name="theme-color" content={themeColor.light} media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content={themeColor.dark} media="(prefers-color-scheme: dark)" />
+
+<link rel="alternate" type="application/rss+xml" title={`${SITE.name} Blog (RSS)`} href={withBase('/blog/rss.xml')} />
+<link rel="alternate" type="application/atom+xml" title={`${SITE.name} Blog (Atom)`} href={withBase('/blog/atom.xml')} />
+<link rel="sitemap" href={withBase('/sitemap-index.xml')} />
+<link rel="search" type="application/opensearchdescription+xml" title={SITE.name} href={withBase('/opensearch.xml')} />
+
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content={SITE.locale} />
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title ?? SITE.title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content={String(ogWidth)} />
+<meta property="og:image:height" content={String(ogHeight)} />
+{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+{publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+{author && <meta property="article:author" content={author} />}
+{tags.map((t) => <meta property="article:tag" content={t} />)}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="fediverse:creator" content={SITE.fediverse} />
+{ld && <script type="application/ld+json" set:html={ld} />}
+
+<script is:inline define:vars={{ defaultTheme }}>
+  // Runs before first paint so the page never flashes the wrong theme.
+  (function () {
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    var pref = stored || defaultTheme;
+    var dark = pref === 'dark' || (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+    var root = document.documentElement;
+    root.classList.toggle('dark', dark);
+    root.style.colorScheme = dark ? 'dark' : 'light';
+    root.dataset.themePref = pref;
+  })();
+</script>

@@ -1,0 +1,50 @@
+---
+import type { Page } from '@/lib/posts';
+interface Props {
+  page: Pick<Page<unknown>, 'currentPage' | 'lastPage' | 'url'>;
+  label?: string;
+}
+const { page, label = 'Pagination' } = Astro.props;
+const { currentPage: cur, lastPage: last } = page;
+const nums: (number | '…')[] = [];
+for (let n = 1; n <= last; n++) {
+  if (n === 1 || n === last || Math.abs(n - cur) <= 1) nums.push(n);
+  else if (nums[nums.length - 1] !== '…') nums.push('…');
+}
+const btn = 'inline-grid h-11 min-w-11 place-items-center rounded-full px-3 text-sm font-semibold transition-colors';
+---
+
+{
+  last > 1 && (
+    <nav aria-label={label} class="mt-14 flex items-center justify-center gap-1.5">
+      {cur > 1 ? (
+        <a href={page.url(cur - 1)} rel="prev" class={`${btn} gap-1 px-4 text-foreground hover:bg-muted`}>
+          <span aria-hidden="true">←</span> Newer
+        </a>
+      ) : null}
+      <ul class="flex items-center gap-1">
+        {nums.map((n) =>
+          n === '…' ? (
+            <li aria-hidden="true" class="px-1 text-muted-foreground">…</li>
+          ) : (
+            <li>
+              <a
+                href={page.url(n)}
+                aria-current={n === cur ? 'page' : undefined}
+                aria-label={`Page ${n}`}
+                class={`${btn} text-foreground hover:bg-muted aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground`}
+              >
+                {n}
+              </a>
+            </li>
+          ),
+        )}
+      </ul>
+      {cur < last ? (
+        <a href={page.url(cur + 1)} rel="next" class={`${btn} gap-1 px-4 text-foreground hover:bg-muted`}>
+          Older <span aria-hidden="true">→</span>
+        </a>
+      ) : null}
+    </nav>
+  )
+}

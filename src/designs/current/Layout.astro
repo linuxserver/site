@@ -1,0 +1,230 @@
+---
+import './theme.css';
+import BaseHead from '@/components/shared/BaseHead.astro';
+import Icon from '@/components/shared/Icon.astro';
+import Logo from '@/components/shared/Logo.astro';
+import Otter from '@/components/shared/Otter.astro';
+import ReviewBar from '@/components/shared/ReviewBar.astro';
+import CommandSearch from '@/components/islands/CommandSearch';
+import MobileNav from '@/components/islands/MobileNav';
+import ThemeToggle from '@/components/islands/ThemeToggle';
+import type { LayoutProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { DONATE_URL, LINKS, NAV, NAV_SECONDARY, SOCIAL } from '@/lib/site';
+import { stat } from '@/lib/stats';
+import { ArrowUpRight, Heart } from 'lucide-react';
+
+type Props = LayoutProps & {
+  /** Hide the header search (the home page has its own big one). */
+  headerSearch?: boolean;
+  /** Hide the otter peeking over the footer (for pages that already end with one). */
+  footerOtter?: boolean;
+};
+const { section = 'none', headerSearch = true, footerOtter = true, ...seo } = Astro.props;
+
+const href = (h: string) => (h.startsWith('/') ? withBase(h) : h);
+const isCurrent = (h: string) => h.startsWith('/') && section !== 'none' && h.startsWith(`/${section}`);
+const year = new Date().getUTCFullYear();
+const ext = (h: string) => (h.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {});
+
+const cols = [
+  {
+    title: 'Images',
+    links: [
+      { label: `All ${stat.images.value} images`, href: '/images/' },
+      { label: 'Most pulled', href: '/images/?sort=popular' },
+      { label: 'Highest rated', href: '/images/?sort=stars' },
+      { label: 'New arrivals', href: '/images/?sort=newest' },
+      { label: 'Multi-arch (arm64)', href: '/images/?arch=arm64' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Documentation', href: LINKS.docs },
+      { label: 'Blog', href: '/blog/' },
+      { label: 'Topics', href: '/blog/tags/' },
+      { label: 'Fleet info', href: LINKS.info },
+      { label: 'Service status', href: LINKS.status },
+    ],
+  },
+  {
+    title: 'Community',
+    links: [
+      { label: 'Get support', href: '/support/' },
+      { label: 'Discord', href: LINKS.discord },
+      { label: 'Discussions', href: LINKS.discussions },
+      { label: 'GitHub', href: LINKS.github },
+    ],
+  },
+  {
+    title: 'Project',
+    links: [
+      { label: 'About', href: '/about/' },
+      { label: 'Team', href: '/about/#team' },
+      { label: 'Donate', href: '/donate/' },
+      { label: 'Open Collective', href: LINKS.opencollective },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="en-GB" data-design="current">
+  <head>
+    <BaseHead {...seo} defaultTheme="system" themeColor={{ light: '#ffffff', dark: '#0b1120' }} />
+  </head>
+  <body class="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <header class="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
+      <div class="cur-container flex h-14 items-center gap-3 md:h-16">
+        <a href={withBase('/')} class="flex shrink-0 items-center rounded-md text-foreground" aria-label="LinuxServer.io home">
+          <Logo variant="full" class="h-6 w-auto md:h-7" title="" />
+        </a>
+
+        <nav aria-label="Main" class="ml-4 hidden lg:block">
+          <ul class="flex items-center">
+            {
+              NAV.map((item) => (
+                <li>
+                  <a
+                    href={href(item.href)}
+                    aria-current={isCurrent(item.href) ? 'page' : undefined}
+                    {...ext(item.href)}
+                    class="relative inline-flex h-14 items-center gap-1 px-3 font-heading text-[0.9375rem] font-medium text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground aria-[current=page]:after:absolute aria-[current=page]:after:inset-x-3 aria-[current=page]:after:bottom-0 aria-[current=page]:after:h-0.5 aria-[current=page]:after:bg-primary md:h-16"
+                  >
+                    {item.label}
+                    {item.external && (
+                      <>
+                        <ArrowUpRight className="size-3.5 opacity-70" aria-hidden="true" />
+                        <span class="sr-only">(opens in a new tab)</span>
+                      </>
+                    )}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        <div class="ml-auto flex items-center gap-1">
+          {
+            headerSearch && (
+              <CommandSearch
+                client:idle
+                indexUrl={withBase('/search-index.json')}
+                searchUrl={withBase('/search/')}
+                trigger="input"
+                placeholder="Search images…"
+                className="hidden w-56 md:inline-flex xl:w-72"
+              />
+            )
+          }
+          <CommandSearch
+            client:idle
+            indexUrl={withBase('/search-index.json')}
+            searchUrl={withBase('/search/')}
+            trigger={headerSearch ? 'icon' : 'none'}
+            className="md:hidden"
+          />
+          <ThemeToggle client:idle />
+          <a
+            href={withBase('/donate/')}
+            class="ml-1 hidden h-8 items-center gap-1.5 rounded-md border border-border px-3 font-heading text-sm font-semibold text-foreground transition hover:border-primary hover:text-primary sm:inline-flex"
+          >
+            <Heart className="size-4 text-primary" aria-hidden="true" /> Donate
+          </a>
+          <MobileNav
+            client:idle
+            className="lg:hidden"
+            items={NAV.map((n) => ({ ...n, href: href(n.href), current: isCurrent(n.href) }))}
+            secondary={[...NAV_SECONDARY, { label: 'Donate', href: withBase('/donate/') }]}
+            cta={{ label: 'Support us on Open Collective', href: DONATE_URL }}
+          />
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1" class="flex-1 outline-none">
+      <slot />
+    </main>
+
+    <footer class="relative mt-24 border-t border-border bg-[var(--cur-subtle)]">
+      {
+        footerOtter && (
+          <div class="pointer-events-none absolute -top-[3.05rem] right-6 w-20 md:right-[10%]">
+            <Otter pose="peek" class="w-full" />
+          </div>
+        )
+      }
+      <div class="cur-container grid grid-cols-[minmax(0,1fr)] gap-10 py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,2fr)]">
+        <div>
+          <Logo variant="full" class="h-7 w-auto text-foreground" title="LinuxServer.io" />
+          <p class="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
+            Volunteers from around the world building and maintaining the largest collection of community Docker images. Free and open source, for everyone.
+          </p>
+          <dl class="mt-6 grid max-w-sm grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border text-center">
+            {
+              [stat.hubPulls, stat.images, stat.backers].map((s) => (
+                <div class="flex flex-col bg-card px-2 py-3">
+                  <dt class="text-xs text-muted-foreground">{s.label}</dt>
+                  <dd class="order-first font-heading text-lg font-semibold">
+                    {s.value}
+                    {s.suffix}
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+        <div class="grid grid-cols-2 gap-8 sm:grid-cols-4">
+          {
+            cols.map((col) => (
+              <div>
+                <h2 class="cur-eyebrow">{col.title}</h2>
+                <ul class="mt-4 space-y-2.5 text-sm">
+                  {col.links.map((l) => (
+                    <li>
+                      <a href={href(l.href)} {...ext(l.href)} class="text-foreground/90 underline-offset-4 hover:text-primary hover:underline">
+                        {l.label}
+                        {l.href.startsWith('http') && <span class="sr-only"> (opens in a new tab)</span>}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <div class="border-t border-border">
+        <div class="cur-container flex flex-col gap-4 py-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {year} LinuxServer.io · Infrastructure supported by <a href="https://www.digitalocean.com/" target="_blank" rel="noopener" class="cur-link"
+              >DigitalOcean<span class="sr-only"> (opens in a new tab)</span></a
+            >
+          </p>
+          <ul class="flex gap-1" aria-label="LinuxServer.io elsewhere">
+            {
+              SOCIAL.map((s) => (
+                <li>
+                  <a
+                    href={href(s.href)}
+                    aria-label={s.name}
+                    class="grid size-9 place-items-center rounded-md text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                    {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener me' } : {})}
+                  >
+                    <Icon name={s.icon === 'docs' ? 'github' : s.icon} class="size-[1.1rem]" />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <ReviewBar />
+  </body>
+</html>

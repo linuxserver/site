@@ -1,0 +1,65 @@
+---
+import Otter from '@/components/shared/Otter.astro';
+import type { ImagesProps } from '@/designs/types';
+import { formatDate } from '@/lib/format';
+import { itemListJsonLd } from '@/lib/jsonld';
+import { LINKS } from '@/lib/site';
+import Layout from '../Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Catalog from '../islands/Catalog';
+
+type Props = ImagesProps;
+const { cards, categories, stats, snapshotDate } = Astro.props;
+const active = cards.filter((c) => !c.deprecated);
+---
+
+<Layout
+  title="Images"
+  section="images"
+  description={`Browse all ${stats.images.value} LinuxServer.io Docker images: filter by category or architecture, sort by popularity, stars or freshness, and get a ready-made compose file for each.`}
+  breadcrumbs={[{ name: 'Images', href: '/images/' }]}
+  jsonLd={[itemListJsonLd('LinuxServer.io images', active.map((c) => ({ name: c.name, url: c.url })), Astro.site)]}
+>
+  <div class="border-b border-border bg-[var(--cur-subtle)]">
+    <div class="cur-container py-10 md:py-12">
+      <Breadcrumbs items={[]} current="Images" />
+      <div class="mt-5 flex flex-wrap items-end justify-between gap-6">
+        <div class="max-w-2xl">
+          <h1 class="font-heading text-4xl font-semibold tracking-tight md:text-5xl">The catalogue</h1>
+          <p class="mt-3 text-lg text-muted-foreground">
+            {stats.images.value} images on one common base, with automatic rebuilds when upstream changes. Pull any of them from
+            <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.9em] text-foreground">lscr.io/linuxserver/&lt;name&gt;</code>.
+          </p>
+        </div>
+        <dl class="flex gap-8 text-sm">
+          <div class="flex flex-col">
+            <dt class="text-muted-foreground">{stats.monthlyPulls.label}</dt>
+            <dd class="order-first font-heading text-2xl font-semibold">{stats.monthlyPulls.value}</dd>
+          </div>
+          <div class="flex flex-col">
+            <dt class="text-muted-foreground">{stats.updatedThisWeek.label}</dt>
+            <dd class="order-first font-heading text-2xl font-semibold">{stats.updatedThisWeek.value}</dd>
+          </div>
+          <div class="flex flex-col">
+            <dt class="text-muted-foreground">{stats.arm64.label}</dt>
+            <dd class="order-first font-heading text-2xl font-semibold">{stats.arm64.value}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="cur-container py-10">
+    <Catalog client:load cards={cards} categories={categories}>
+      <Otter slot="emptyArt" pose="peek" class="w-full" />
+    </Catalog>
+    <p class="mt-12 text-sm text-muted-foreground">
+      Data from api.linuxserver.io, refreshed {formatDate(snapshotDate)}. Looking for build details? See <a
+        href={LINKS.info}
+        target="_blank"
+        rel="noopener"
+        class="cur-link">Fleet info<span class="sr-only"> (opens in a new tab)</span></a
+      >.
+    </p>
+  </div>
+</Layout>

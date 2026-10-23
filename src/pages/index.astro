@@ -1,0 +1,21 @@
+---
+import Home from '@design/pages/Home.astro';
+import { getCategories, getSpotlight, mostPulled, mostStarred, newest, recentlyUpdated, SNAPSHOT_DATE } from '@/lib/images';
+import { getLatestPosts } from '@/lib/posts';
+import { stat } from '@/lib/stats';
+import { toPostViews } from '@/lib/views';
+
+const props = {
+  stats: stat,
+  spotlight: await getSpotlight(),
+  mostStarred: mostStarred(8),
+  mostPulled: mostPulled(8),
+  newest: newest(8),
+  recentlyUpdated: recentlyUpdated(8),
+  posts: await toPostViews(await getLatestPosts(6)),
+  categories: getCategories(),
+  snapshotDate: SNAPSHOT_DATE,
+};
+---
+
+<Home {...props} />

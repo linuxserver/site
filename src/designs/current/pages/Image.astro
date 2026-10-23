@@ -1,0 +1,350 @@
+---
+import ImageLogo from '@/components/shared/ImageLogo.astro';
+import Icon from '@/components/shared/Icon.astro';
+import CopyButton from '@/components/islands/CopyButton';
+import QuickStart from '@/components/islands/QuickStart';
+import type { ImageProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { compact, formatDate, grouped, isoDate, relative } from '@/lib/format';
+import { imageJsonLd } from '@/lib/jsonld';
+import { LINKS, SITE } from '@/lib/site';
+import { AlertTriangle, ArrowUpRight, BookOpen, Check, ExternalLink, Minus } from 'lucide-react';
+import Layout from '../Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ImageCard from '../components/ImageCard.astro';
+import PostCard from '../components/PostCard.astro';
+
+type Props = ImageProps;
+const { image, related, posts, snippets, snapshotDate } = Astro.props;
+const c = image.config ?? {};
+const pull = `docker pull ${SITE.registry}/${image.name}:latest`;
+const built = image.version_timestamp.replace(' ', 'T');
+const arches = image.architectures.map((a) => (a.arch === 'x86_64' ? 'x86-64' : a.arch));
+
+const stats = [
+  { label: 'Pulls last month', value: compact(image.monthly_pulls), title: grouped(image.monthly_pulls) },
+  { label: 'Docker Hub pulls', value: image.hubPulls ? compact(image.hubPulls) : '—', title: image.hubPulls ? grouped(image.hubPulls) : 'Not available' },
+  { label: 'GitHub stars', value: compact(image.stars), title: grouped(image.stars) },
+  { label: 'Architectures', value: arches.join(' · '), mono: true },
+  { label: 'Last build', value: relative(built, snapshotDate), title: formatDate(built) },
+  { label: 'First build', value: image.initial_date ? formatDate(image.initial_date) : '—' },
+];
+
+const tables = [
+  {
+    id: 'env',
+    title: 'Environment variables',
+    cols: ['Variable', 'Default', 'Description'],
+    rows: (c.env_vars ?? []).map((e) => [e.name, e.value, e.desc, e.optional] as const),
+  },
+  {
+    id: 'volumes',
+    title: 'Volumes',
+    cols: ['Container path', 'Example host path', 'Description'],
+    rows: (c.volumes ?? []).map((v) => [v.path, v.host_path, v.desc, v.optional] as const),
+  },
+  {
+    id: 'ports',
+    title: 'Ports',
+    cols: ['Container', 'Host', 'Description'],
+    rows: (c.ports ?? []).map((p) => [p.internal, p.external, p.desc, p.optional] as const),
+  },
+  {
+    id: 'devices',
+    title: 'Devices',
+    cols: ['Container path', 'Host path', 'Description'],
+    rows: (c.devices ?? []).map((d) => [d.path, d.host_path, d.desc, d.optional] as const),
+  },
+].filter((t) => t.rows.length);
+
+const support = [
+  { label: 'Read-only container', ok: !!c.readonly_supported },
+  { label: 'Non-root user', ok: !!c.nonroot_supported },
+  { label: 'arm64', ok: image.arm64 },
+];
+const changelog = (image.changelog ?? []).slice(0, 8);
+---
+
+<Layout
+  title={`${image.name} Docker image`}
+  section="images"
+  description={`${image.summary.slice(0, 150)} Docker Compose and docker run setup for lscr.io/linuxserver/${image.name}.`}
+  noindex={image.deprecated}
+  breadcrumbs={[
+    { name: 'Images', href: '/images/' },
+    { name: image.name, href: image.url },
+  ]}
+  jsonLd={[imageJsonLd(image, Astro.site)]}
+>
+  <div class="border-b border-border bg-[var(--cur-subtle)]">
+    <div class="cur-container pt-8 pb-10">
+      <Breadcrumbs items={[{ name: 'Images', href: '/images/' }]} current={image.name} />
+
+      {
+        image.deprecated && (
+          <div role="note" class="mt-6 flex gap-3 rounded-lg border border-[#e7b24a] bg-[#fff8e6] p-4 text-[#5c3d00] dark:border-[#7a5a1a] dark:bg-[#2a2210] dark:text-[#f5dfa8]">
+            <AlertTriangle className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
+            <div>
+              <p class="font-heading font-semibold">This image is deprecated</p>
+              <p class="mt-1 text-sm">
+                It no longer receives updates and may be removed. Check the <a href={image.github_url} class="font-medium underline">repository README</a> for the
+                recommended replacement, or <a href={withBase('/images/')} class="font-medium underline">browse current images</a>.
+              </p>
+            </div>
+          </div>
+        )
+      }
+
+      <div class="mt-8 flex flex-col gap-6 md:flex-row md:items-start">
+        <div class="grid size-28 shrink-0 place-items-center rounded-3xl border border-border bg-white p-4 shadow-sm md:size-32">
+          <ImageLogo image={image} size={96} class="size-20 md:size-24" loading="eager" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="flex flex-wrap gap-1.5">
+            {
+              image.categories.map((cat) => (
+                <a
+                  href={withBase(`/images/?category=${encodeURIComponent(cat)}`)}
+                  class="rounded-full border border-border bg-card px-2.5 py-0.5 text-xs font-medium text-muted-foreground hover:border-primary hover:text-primary"
+                >
+                  {cat}
+                </a>
+              ))
+            }
+            {!image.stable && <span class="rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-accent-foreground">Beta</span>}
+          </p>
+          <h1 class="mt-3 font-heading text-4xl font-semibold tracking-tight break-words md:text-5xl">{image.name}</h1>
+          <p class="mt-3 max-w-3xl text-lg leading-relaxed text-muted-foreground">{image.summary}</p>
+
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <div class="flex h-11 max-w-full min-w-0 items-center gap-1 rounded-lg border border-border bg-[#0f172a] pr-1 pl-4 font-mono text-sm text-[#e2e8f0]">
+              <span class="select-none text-[#94a3b8]" aria-hidden="true">$</span>
+              <code class="truncate">{pull}</code>
+              <CopyButton client:visible text={pull} label="Copy docker pull command" className="text-[#e2e8f0] hover:bg-white/10 hover:text-white" />
+            </div>
+            <a href={image.docsUrl} target="_blank" rel="noopener" class="inline-flex h-11 items-center gap-2 rounded-lg bg-primary px-4 font-heading font-semibold text-primary-foreground hover:brightness-110">
+              <BookOpen className="size-4" aria-hidden="true" /> Documentation<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+            <a href={image.github_url} target="_blank" rel="noopener" class="inline-flex h-11 items-center gap-2 rounded-lg border border-border bg-card px-4 font-heading font-semibold hover:bg-muted">
+              <Icon name="github" class="size-4" /> GitHub<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+            {
+              image.project_url && (
+                <a href={image.project_url} target="_blank" rel="noopener" class="inline-flex h-11 items-center gap-1.5 px-2 font-heading font-semibold text-[var(--link)] hover:underline">
+                  Project website <ArrowUpRight className="size-4" aria-hidden="true" />
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              )
+            }
+          </div>
+        </div>
+      </div>
+
+      <dl class="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3 lg:grid-cols-6">
+        {
+          stats.map((s) => (
+            <div class="flex flex-col bg-card px-4 py-4" title={s.title}>
+              <dt class="text-xs text-muted-foreground">{s.label}</dt>
+              <dd class:list={['order-first truncate font-heading text-xl font-semibold', s.mono && 'font-mono text-base leading-7']}>{s.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+
+  <div class="cur-container grid grid-cols-[minmax(0,1fr)] gap-12 py-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <div class="min-w-0 space-y-14">
+      <section aria-labelledby="quick-start">
+        <h2 id="quick-start" class="font-heading text-2xl font-semibold">Quick start</h2>
+        <p class="mt-2 text-muted-foreground">
+          Generated from the image’s configuration. Change the host paths to suit, then run it. The <a href={image.docsUrl} class="cur-link">full setup guide</a> covers
+          everything else{c.application_setup ? ', including application setup' : ''}.
+        </p>
+        <div class="mt-5 overflow-hidden rounded-xl border border-border bg-card">
+          <QuickStart client:visible name={image.name} {...snippets} preClassName="bg-[#0b1120] text-[#e2e8f0] min-h-40" />
+        </div>
+      </section>
+
+      {
+        tables.length > 0 && (
+          <section aria-labelledby="parameters">
+            <h2 id="parameters" class="font-heading text-2xl font-semibold">
+              Parameters
+            </h2>
+            <p class="mt-2 text-muted-foreground">Everything the image understands. Optional settings are marked; the rest are needed for a working container.</p>
+            <div class="mt-6 space-y-8">
+              {tables.map((t) => (
+                <div>
+                  <h3 id={t.id} class="mb-3 font-heading text-lg font-semibold">
+                    {t.title}
+                  </h3>
+                  <div class="overflow-x-auto rounded-lg border border-border" tabindex="0" role="region" aria-label={`${t.title} table`}>
+                    <table class="w-full text-left text-sm">
+                      <thead class="bg-muted text-xs text-muted-foreground">
+                        <tr>
+                          {t.cols.map((col) => (
+                            <th scope="col" class="px-4 py-2.5 font-semibold whitespace-nowrap">
+                              {col}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-border">
+                        {t.rows.map(([a, b, desc, optional]) => (
+                          <tr class="align-top">
+                            <th scope="row" class="px-4 py-3 font-mono text-[0.8125rem] font-medium whitespace-nowrap">
+                              {a}
+                              {optional && <span class="ml-2 rounded bg-secondary px-1.5 py-0.5 font-sans text-[0.6875rem] font-medium text-muted-foreground">optional</span>}
+                            </th>
+                            <td class="px-4 py-3 font-mono text-[0.8125rem] break-all text-muted-foreground">{b}</td>
+                            <td class="min-w-60 px-4 py-3">{desc}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <section aria-labelledby="tags">
+        <h2 id="tags" class="font-heading text-2xl font-semibold">Tags</h2>
+        <p class="mt-2 text-muted-foreground">Pin a tag for a specific release stream. Each one is also published per architecture.</p>
+        <div class="mt-5 overflow-x-auto rounded-lg border border-border" tabindex="0" role="region" aria-label="Tags table">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-muted text-xs text-muted-foreground">
+              <tr><th scope="col" class="px-4 py-2.5 font-semibold">Tag</th><th scope="col" class="px-4 py-2.5 font-semibold">Description</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              {
+                image.tags.map((t) => (
+                  <tr>
+                    <th scope="row" class="px-4 py-3 font-mono text-[0.8125rem] font-medium whitespace-nowrap">
+                      {t.tag}
+                    </th>
+                    <td class="px-4 py-3">{t.desc}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {
+        changelog.length > 0 && (
+          <section aria-labelledby="changelog">
+            <h2 id="changelog" class="font-heading text-2xl font-semibold">
+              Changelog
+            </h2>
+            <ol class="mt-5 border-l border-border">
+              {changelog.map((ch) => (
+                <li class="relative pb-5 pl-6 last:pb-0">
+                  <span class="absolute top-1.5 -left-[5px] size-2.5 rounded-full border-2 border-background bg-primary" aria-hidden="true" />
+                  <time datetime={isoDate(ch.date)} class="font-mono text-xs text-muted-foreground">
+                    {formatDate(ch.date)}
+                  </time>
+                  <p class="mt-0.5">{ch.desc}</p>
+                </li>
+              ))}
+            </ol>
+            <p class="mt-5 text-sm">
+              <a href={`${image.github_url}/releases`} target="_blank" rel="noopener" class="cur-link">
+                All releases on GitHub<span class="sr-only"> (opens in a new tab)</span>
+              </a>
+            </p>
+          </section>
+        )
+      }
+    </div>
+
+    <aside class="space-y-8" aria-label={`About ${image.name}`}>
+      <section class="cur-card p-5" aria-labelledby="glance">
+        <h2 id="glance" class="font-heading text-base font-semibold">At a glance</h2>
+        <dl class="mt-4 space-y-3 text-sm">
+          <div class="flex justify-between gap-4">
+            <dt class="text-muted-foreground">Version</dt>
+            <dd class="truncate font-mono text-[0.8125rem]" title={image.version}>{image.version}</dd>
+          </div>
+          {
+            support.map((s) => (
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-muted-foreground">{s.label}</dt>
+                <dd class="flex items-center gap-1.5 font-medium">
+                  {s.ok ? <Check className="size-4 text-[var(--link)]" aria-hidden="true" /> : <Minus className="size-4 text-muted-foreground" aria-hidden="true" />}
+                  {s.ok ? 'Supported' : 'No'}
+                </dd>
+              </div>
+            ))
+          }
+          <div class="flex justify-between gap-4">
+            <dt class="text-muted-foreground">Registry</dt>
+            <dd class="truncate font-mono text-[0.8125rem]">lscr.io</dd>
+          </div>
+        </dl>
+        <ul class="mt-5 space-y-2 border-t border-border pt-4 text-sm">
+          {
+            c.application_setup && (
+              <li>
+                <a href={c.application_setup} target="_blank" rel="noopener" class="cur-link inline-flex items-center gap-1.5">
+                  Application setup <ExternalLink className="size-3.5" aria-hidden="true" />
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+            )
+          }
+          <li>
+            <a href={`${image.github_url}/issues`} target="_blank" rel="noopener" class="cur-link inline-flex items-center gap-1.5">
+              Report an issue <ExternalLink className="size-3.5" aria-hidden="true" />
+              <span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href={LINKS.discord} target="_blank" rel="noopener" class="cur-link inline-flex items-center gap-1.5">
+              Ask on Discord <ExternalLink className="size-3.5" aria-hidden="true" />
+              <span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      {
+        posts.length > 0 && (
+          <section aria-labelledby="posts">
+            <h2 id="posts" class="cur-eyebrow mb-4">
+              On the blog
+            </h2>
+            <ul class="space-y-6">
+              {posts.map((p) => (
+                <li>
+                  <PostCard post={p} size="sm" />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+    </aside>
+  </div>
+
+  {
+    related.length > 0 && (
+      <section class="cur-container" aria-labelledby="related">
+        <h2 id="related" class="mb-6 font-heading text-2xl font-semibold">
+          You might also like
+        </h2>
+        <ul class="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {related.map((i) => (
+            <li>
+              <ImageCard image={i} class="h-full" />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Layout>

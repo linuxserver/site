@@ -1,0 +1,110 @@
+---
+import type { TagsProps } from '@/designs/types';
+import { tagUrl } from '@/lib/posts';
+import Layout from '../Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+type Props = TagsProps;
+const { tags, authors, totalPosts } = Astro.props;
+
+// Group by first letter for an index you can scan; the top 24 also get a weighted "popular" block.
+const popular = tags.slice(0, 24);
+const max = popular[0]?.count ?? 1;
+const groups = new Map<string, typeof tags>();
+for (const t of [...tags].sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))) {
+  const k = /^[a-z]/i.test(t.name) ? t.name[0].toUpperCase() : '#';
+  groups.set(k, [...(groups.get(k) ?? []), t]);
+}
+---
+
+<Layout
+  title="Topics and authors"
+  section="blog"
+  description={`Every topic and author on the LinuxServer.io blog: ${tags.length} tags across ${totalPosts} posts.`}
+  breadcrumbs={[{ name: 'Blog', href: '/blog/' }, { name: 'Topics', href: '/blog/tags/' }]}
+>
+  <div class="cur-container pt-10">
+    <Breadcrumbs items={[{ name: 'Blog', href: '/blog/' }]} current="Topics" />
+    <h1 class="mt-5 font-heading text-4xl font-semibold tracking-tight md:text-5xl">Topics & authors</h1>
+    <p class="mt-3 max-w-2xl text-lg text-muted-foreground">{tags.length} topics across {totalPosts} posts. Pick one to see everything we have written about it.</p>
+
+    <section class="mt-12" aria-labelledby="popular">
+      <h2 id="popular" class="cur-eyebrow mb-4">Most written about</h2>
+      <ul class="grid grid-cols-[minmax(0,1fr)] gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          popular.map((t) => (
+            <li>
+              <a href={tagUrl(t.slug)} class="group flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 hover:border-primary/50 hover:bg-muted">
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate font-heading font-semibold group-hover:text-primary">{t.name}</span>
+                  <span class="mt-1.5 block h-1 rounded-full bg-muted" aria-hidden="true">
+                    <span class="block h-1 rounded-full bg-[var(--cur-bar)]" style={`width:${Math.max(6, (t.count / max) * 100)}%`} />
+                  </span>
+                </span>
+                <span class="text-sm text-muted-foreground tabular">{t.count} posts</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mt-16" aria-labelledby="authors">
+      <h2 id="authors" class="cur-eyebrow mb-4">Authors</h2>
+      <ul class="grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          authors.map((a) => (
+            <li>
+              <a href={a.url} class="group flex items-center gap-3 rounded-lg border border-border bg-card p-3 hover:bg-muted">
+                <span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent font-heading text-sm font-semibold text-accent-foreground" aria-hidden="true">
+                  {a.initials}
+                </span>
+                <span class="min-w-0">
+                  <span class="block truncate font-heading font-semibold group-hover:text-primary">{a.name}</span>
+                  <span class="text-sm text-muted-foreground">
+                    {a.count} post{a.count === 1 ? '' : 's'}
+                    {a.role === 'alumni' ? ' · alumni' : a.role === 'guest' ? ' · guest' : ''}
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mt-16" aria-labelledby="az">
+      <h2 id="az" class="cur-eyebrow mb-4">All topics, A–Z</h2>
+      <nav aria-label="Jump to letter" class="mb-6 flex flex-wrap gap-1">
+        {
+          [...groups.keys()].map((k) => (
+            <a href={`#letter-${k}`} class="grid size-9 place-items-center rounded-md border border-border font-heading text-sm font-semibold hover:bg-muted">
+              {k}
+            </a>
+          ))
+        }
+      </nav>
+      <div class="columns-1 gap-8 sm:columns-2 lg:columns-4">
+        {
+          [...groups].map(([k, list]) => (
+            <div class="mb-6 break-inside-avoid">
+              <h3 id={`letter-${k}`} class="mb-2 border-b border-border pb-1 font-heading text-lg font-semibold">
+                {k}
+              </h3>
+              <ul class="space-y-1 text-sm">
+                {list.map((t) => (
+                  <li>
+                    <a href={tagUrl(t.slug)} class="flex justify-between gap-3 rounded px-1 py-0.5 hover:bg-muted hover:text-primary">
+                      <span>{t.name}</span>
+                      <span class="text-muted-foreground tabular">{t.count}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</Layout>

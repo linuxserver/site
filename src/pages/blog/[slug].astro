@@ -1,0 +1,29 @@
+---
+import { render } from 'astro:content';
+import Post from '@design/pages/Post.astro';
+import { getImage as getContainer, type Image } from '@/lib/images';
+import { getPosts, relatedPosts, tagSlug, type Post as PostEntry } from '@/lib/posts';
+import { LINKS } from '@/lib/site';
+import { toPostView, toPostViews } from '@/lib/views';
+
+export async function getStaticPaths() {
+  const posts = await getPosts(); // newest first
+  return posts.map((post, i) => ({ params: { slug: post.id }, props: { post, newer: posts[i - 1], older: posts[i + 1], posts } }));
+}
+
+const { post, newer, older, posts } = Astro.props as { post: PostEntry; newer?: PostEntry; older?: PostEntry; posts: PostEntry[] };
+const { Content, headings } = await render(post);
+const names = new Set([...post.data.images, ...post.data.tags.map(tagSlug)]);
+const props = {
+  post: await toPostView(post),
+  Content,
+  headings,
+  newer: newer && (await toPostView(newer)),
+  older: older && (await toPostView(older)),
+  related: await toPostViews(relatedPosts(post, posts, 3)),
+  images: [...names].map((n) => getContainer(n)).filter((i): i is Image => !!i && !i.deprecated),
+  editUrl: `${LINKS.repo}/edit/main/src/content/posts/${post.id}/index.md`,
+};
+---
+
+<Post {...props} />

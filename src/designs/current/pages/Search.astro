@@ -1,0 +1,38 @@
+---
+import ImageLogo from '@/components/shared/ImageLogo.astro';
+import type { SearchProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import Layout from '../Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import SearchResults from '../islands/SearchResults';
+
+type Props = SearchProps;
+const { suggestions } = Astro.props;
+---
+
+<Layout title="Search" section="search" description="Search every LinuxServer.io image and blog post." noindex headerSearch={false}>
+  <div class="cur-container max-w-5xl pt-10">
+    <Breadcrumbs items={[]} current="Search" />
+    <h1 class="mt-5 font-heading text-4xl font-semibold tracking-tight md:text-5xl">Search</h1>
+    <p class="mt-3 text-lg text-muted-foreground">Images by name, category or description; posts by their full text.</p>
+    <div class="mt-8">
+      <SearchResults client:load indexUrl={withBase('/search-index.json')} imagesUrl={withBase('/images/')} searchUrl={withBase('/search/')} />
+    </div>
+
+    <section class="mt-16" aria-labelledby="popular">
+      <h2 id="popular" class="cur-eyebrow mb-4">Popular right now</h2>
+      <ul class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {
+          suggestions.map((i) => (
+            <li>
+              <a href={withBase(i.url)} class="flex items-center gap-3 rounded-lg border border-border bg-card p-3 hover:bg-muted">
+                <ImageLogo image={i} size={32} class="size-8 shrink-0 rounded" />
+                <span class="truncate font-heading font-semibold">{i.name}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,28 @@
+# Every pull request: the build must pass (front matter is validated here), and accessibility is checked
+# on the key pages. Pair this with Cloudflare Pages or Netlify preview deployments so every post PR gets a
+# link reviewers can click.
+name: Check
+
+on:
+  pull_request:
+
+env:
+  DESIGN: holt
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build:one
+      - name: Accessibility (axe)
+        run: |
+          npx playwright install --with-deps chromium
+          npx astro preview --port 4321 &
+          npx wait-on http://localhost:4321/
+          node scripts/a11y.mjs http://localhost:4321

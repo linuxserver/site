@@ -1,0 +1,90 @@
+# Builds the site and publishes it to GitHub Pages: on every push to main, daily (so stats, image data
+# and the weekly spotlight stay fresh), and on demand from the Actions tab.
+#
+# DESIGN REVIEW MODE (now): builds all three designs plus the chooser to
+#   https://linuxserver.github.io/site/            chooser
+#   https://linuxserver.github.io/site/holt/ …     each design
+# The review build is marked noindex so search engines ignore it.
+#
+# Once a design is chosen, switch to production mode: set DESIGN, set SITE_URL/BASE_PATH for the final
+# domain, and replace the "Build" step with `npm run build:one` (one design at the root, plus search).
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  SITE_URL: https://linuxserver.github.io
+  REVIEW_ROOT: /site/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Refresh data snapshots
+        if: github.event_name != 'push'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run data
+
+      - name: Commit refreshed snapshots
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data src/assets/logos src/assets/team
+          if ! git diff --cached --quiet; then
+            git commit -m "Refresh data snapshots [skip ci]"
+            git push
+          fi
+
+      - name: Cache optimised images
+        uses: actions/cache@v6
+        with:
+          path: node_modules/.astro-*
+          key: astro-${{ hashFiles('src/content/**', 'src/assets/**', 'package-lock.json') }}
+          restore-keys: astro-
+
+      - name: Install Chromium (chooser screenshots)
+        run: npx playwright install --with-deps chromium
+
+      - name: Build
+        run: npm run build
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

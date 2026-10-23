@@ -1,0 +1,28 @@
+---
+import BlogList from '@design/pages/BlogList.astro';
+import { collectTags, getPosts, postsWithTag, type TagInfo } from '@/lib/posts';
+import { listing, pageCount, topTags } from '../../_list';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return collectTags(posts).flatMap((tag) => {
+    const n = pageCount(tag.count);
+    return Array.from({ length: n }, (_, i) => ({
+      params: { tag: tag.slug, page: i === 0 ? undefined : `page/${i + 1}` },
+      props: { tag, n: i + 1 },
+    }));
+  });
+}
+
+const { tag, n } = Astro.props as { tag: TagInfo; n: number };
+const props = {
+  kind: 'tag' as const,
+  heading: tag.name,
+  description: `${tag.count} post${tag.count === 1 ? '' : 's'} tagged “${tag.name}” on the LinuxServer.io blog.`,
+  page: await listing(postsWithTag(await getPosts(), tag.slug), n, `/blog/tags/${tag.slug}/`),
+  topTags: await topTags(),
+  tag,
+};
+---
+
+<BlogList {...props} />

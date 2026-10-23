@@ -1,0 +1,42 @@
+---
+/**
+ * An image's project logo, optimised to WebP at build time. Images without a logo get a monogram tile
+ * coloured from the name, so the grid never shows a broken image.
+ */
+import { Image as AstroImage } from 'astro:assets';
+import type { Image } from '@/lib/images';
+
+interface Props {
+  image: Pick<Image, 'name' | 'logo'>;
+  size?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+const { image, size = 48, class: className = '', loading = 'lazy' } = Astro.props;
+let hue = 0;
+for (const c of image.name) hue = (hue * 31 + c.charCodeAt(0)) % 360;
+---
+
+{
+  image.logo ? (
+    <AstroImage
+      src={image.logo}
+      alt=""
+      width={size}
+      height={size}
+      densities={image.logo.format === 'svg' ? undefined : [1, 2]}
+      fit="contain"
+      format={image.logo.format === 'svg' ? 'svg' : 'webp'}
+      loading={loading}
+      class:list={['object-contain', className]}
+    />
+  ) : (
+    <span
+      aria-hidden="true"
+      class:list={['grid place-items-center rounded-[22%] font-semibold uppercase text-white', className]}
+      style={`width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px;background:linear-gradient(135deg,oklch(0.62 0.17 ${hue}),oklch(0.45 0.17 ${(hue + 40) % 360}))`}
+    >
+      {image.name.slice(0, 1)}
+    </span>
+  )
+}

@@ -1,0 +1,21 @@
+---
+/** Stat tile: mono label, big proportional value, one-line context. `note` links it to its source footnote. */
+import type { Stat } from '@/lib/stats';
+
+interface Props {
+  stat: Stat;
+  hero?: boolean;
+  note?: string;
+  class?: string;
+}
+const { stat, hero = false, note, class: className } = Astro.props;
+---
+
+<div class:list={['raft-panel flex flex-col p-5', className]} aria-describedby={note}>
+  <p class="raft-eyebrow">{stat.label}</p>
+  <p class:list={['mt-3 font-sans font-semibold tracking-[-0.045em] text-foreground', hero ? 'text-5xl md:text-6xl' : 'text-3xl md:text-4xl']}>
+    <span aria-hidden="true">{stat.value}{stat.suffix && <span class="text-primary">{stat.suffix}</span>}</span>
+    <span class="sr-only">{stat.long}</span>
+  </p>
+  <slot />
+</div>

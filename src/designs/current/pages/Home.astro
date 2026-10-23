@@ -1,0 +1,278 @@
+---
+import ImageLogo from '@/components/shared/ImageLogo.astro';
+import Otter from '@/components/shared/Otter.astro';
+import type { HomeProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+import { formatDate, relative } from '@/lib/format';
+import { itemListJsonLd } from '@/lib/jsonld';
+import { DONATE_URL, LINKS, SITE } from '@/lib/site';
+import { ArrowRight, ArrowUpRight, BookOpen, Heart, LifeBuoy, Sparkles } from 'lucide-react';
+import Layout from '../Layout.astro';
+import ImageCard from '../components/ImageCard.astro';
+import PostCard from '../components/PostCard.astro';
+import RankList from '../components/RankList.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import StatStrip from '../components/StatStrip.astro';
+import { categoryIcon } from '../components/categoryIcons';
+import HeroSearch from '../islands/HeroSearch';
+
+type Props = HomeProps;
+const { stats, spotlight, mostStarred, mostPulled, newest, recentlyUpdated, posts, categories, snapshotDate } = Astro.props;
+
+const sp = spotlight.image;
+const [lead, ...morePosts] = posts;
+const weekNo = spotlight.week.split('-W')[1];
+// Decorative logo wall for the hero: the fleet's best-known faces.
+const wall = [...new Map([...mostPulled, ...mostStarred].filter((i) => i.logo).map((i) => [i.name, i])).values()].slice(0, 12);
+const suggestions = [
+  { label: 'Plex', query: 'plex' },
+  { label: 'Jellyfin', query: 'jellyfin' },
+  { label: 'A VPN', query: 'wireguard' },
+  { label: 'A web browser', query: 'browser' },
+  { label: 'code-server', query: 'code-server' },
+  { label: 'Audiobooks', query: 'audiobook' },
+];
+---
+
+<Layout
+  section="home"
+  headerSearch={false}
+  description={`${SITE.description} Browse ${stats.images.value} images, from Plex and Jellyfin to Webtop.`}
+  jsonLd={[itemListJsonLd('Most popular LinuxServer.io images', mostPulled.map((i) => ({ name: i.name, url: i.url })), Astro.site)]}
+>
+  <!-- 1. Search-led hero on the signature band -->
+  <section class="cur-band relative overflow-hidden text-white" aria-labelledby="hero-title">
+    <div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[44%] items-center justify-center lg:flex" aria-hidden="true">
+      <ul class="grid rotate-[-8deg] grid-cols-4 gap-4 [mask-image:radial-gradient(closest-side,#000_55%,transparent)] xl:gap-5">
+        {
+          wall.map((i, n) => (
+            <li class:list={['grid size-24 place-items-center rounded-2xl bg-white shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] xl:size-28', n % 2 && 'translate-y-6']}>
+              <ImageLogo image={i} size={64} class="size-14 xl:size-16" loading="eager" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="cur-container relative pt-14 pb-12 md:pt-20 md:pb-16">
+      <div class="max-w-3xl">
+        <p class="font-heading text-sm font-medium text-white/85">
+          {stats.images.value} images · rebuilt {relative(recentlyUpdated[0]?.version_timestamp ?? snapshotDate, snapshotDate)}
+        </p>
+        <h1 id="hero-title" class="mt-3 font-heading text-[2.5rem] leading-[1.02] font-semibold tracking-tight md:text-6xl lg:text-[4.25rem]">
+          Every container you need,<br class="hidden sm:block" /> built the same good way.
+        </h1>
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-white/90">
+          Community-maintained Docker images with a common base, automatic rebuilds and real documentation. Free, open source and ready for your home lab.
+        </p>
+      </div>
+      <div class="mt-9 max-w-3xl">
+        <HeroSearch
+          client:load
+          indexUrl={withBase('/search-index.json')}
+          imagesUrl={withBase('/images/')}
+          total={stats.images.raw}
+          suggestions={suggestions}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Stats strip -->
+  <div class="cur-container relative z-10 -mt-px pt-8">
+    <StatStrip stats={[stats.hubPulls, stats.monthlyPulls, stats.images, stats.stars, stats.arm64, stats.years]} />
+    <p class="mt-2 text-right text-xs text-muted-foreground">
+      Hover or focus a number for its source. Data refreshed {formatDate(snapshotDate)}.
+    </p>
+  </div>
+
+  <!-- 3. Spotlight of the week -->
+  <section class="cur-container mt-20" aria-labelledby="spotlight">
+    <SectionHeader id="spotlight" eyebrow={`Week ${Number(weekNo)} · ${spotlight.week.slice(0, 4)}`} title="Spotlight of the week" />
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+      <article class="cur-band group relative isolate overflow-hidden rounded-2xl p-7 text-white md:p-10">
+        <div class="absolute -right-10 -bottom-16 -z-10 size-80 rounded-full bg-white/10 blur-2xl" aria-hidden="true"></div>
+        <div class="flex items-start justify-between gap-6">
+          <div class="rounded-2xl bg-white p-3 shadow-xl">
+            <ImageLogo image={sp} size={88} class="size-[4.5rem] md:size-[5.5rem]" loading="eager" />
+          </div>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 font-heading text-xs font-semibold backdrop-blur">
+            <Sparkles className="size-3.5" aria-hidden="true" />
+            {spotlight.note ? 'Picked by the team' : 'New to the fleet'}
+          </span>
+        </div>
+        <h3 class="mt-8 font-heading text-4xl font-semibold tracking-tight md:text-5xl">
+          <a href={withBase(sp.url)} class="cur-stretch outline-none group-focus-within:underline">{sp.name}</a>
+        </h3>
+        <p class="mt-1 font-heading text-white/85">{sp.categories.join(' · ')}{sp.initial_date && ` · added ${formatDate(sp.initial_date)}`}</p>
+        <p class="mt-5 line-clamp-5 max-w-2xl text-lg leading-relaxed text-white/95 md:line-clamp-none">{sp.summary}</p>
+        {
+          spotlight.note && (
+            <blockquote class="mt-6 max-w-2xl border-l-2 border-white/60 pl-4 text-white/95 italic">
+              {spotlight.note}
+              {spotlight.by && <footer class="mt-1 text-sm not-italic text-white/80">— {spotlight.by}</footer>}
+            </blockquote>
+          )
+        }
+        <p class="relative mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 font-heading font-semibold text-[#0f172a]">
+          Set up {sp.name} <ArrowRight className="size-4" aria-hidden="true" />
+        </p>
+      </article>
+      <div>
+        <h3 class="cur-eyebrow mb-3">Also new to the fleet</h3>
+        <ul class="divide-y divide-border rounded-xl border border-border bg-card">
+          {
+            spotlight.alsoNew.map((i) => (
+              <li class="group relative flex items-center gap-3 px-4 py-3">
+                <ImageLogo image={i} size={36} class="size-9 shrink-0 rounded-md" />
+                <div class="min-w-0 flex-1">
+                  <a href={withBase(i.url)} class="cur-stretch block truncate font-heading font-semibold outline-none group-hover:text-primary group-focus-within:underline">
+                    {i.name}
+                  </a>
+                  <p class="truncate text-sm text-muted-foreground">{i.summary}</p>
+                </div>
+                <span class="shrink-0 text-xs text-muted-foreground tabular">{i.initial_date && formatDate(i.initial_date)}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Categories -->
+  <section class="cur-container mt-20" aria-labelledby="categories">
+    <SectionHeader
+      id="categories"
+      eyebrow="Browse"
+      title="Find it by what it does"
+      description={`${categories.length} categories across the fleet. Most images sit in more than one.`}
+      link={{ label: 'All images', href: withBase('/images/') }}
+    />
+    <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {
+        categories.slice(0, 12).map((c, n) => {
+          const Icon = categoryIcon(c.name);
+          return (
+            <li class:list={[n >= 8 && 'max-sm:hidden']}>
+              <a
+                href={withBase(`/images/?category=${encodeURIComponent(c.name)}`)}
+                class="cur-card cur-hover group flex h-full flex-col gap-4 p-4 hover:border-primary/40 sm:gap-6"
+              >
+                <span class="grid size-10 place-items-center rounded-lg bg-accent text-accent-foreground transition group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Icon className="size-5" aria-hidden="true" />
+                </span>
+                <span>
+                  <span class="block font-heading font-semibold">{c.name}</span>
+                  <span class="text-sm text-muted-foreground tabular">{c.count} images</span>
+                </span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+
+  <!-- 5. Charts -->
+  <section class="cur-container mt-20" aria-labelledby="charts">
+    <SectionHeader id="charts" eyebrow="Top charts" title="What the community runs" link={{ label: 'See the full catalogue', href: withBase('/images/') }} />
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-2">
+      <div class="cur-card p-5 md:p-6">
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="font-heading text-lg font-semibold">Highest rated</h3>
+          <a href={withBase('/images/?sort=stars')} class="text-sm font-medium text-[var(--link)] hover:underline">By GitHub stars</a>
+        </div>
+        <RankList images={mostStarred} metric="stars" unit="stars" />
+      </div>
+      <div class="cur-card p-5 md:p-6">
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="font-heading text-lg font-semibold">Most pulled this month</h3>
+          <a href={withBase('/images/?sort=popular')} class="text-sm font-medium text-[var(--link)] hover:underline">By monthly pulls</a>
+        </div>
+        <RankList images={mostPulled} metric="monthly_pulls" unit="/mo" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. New arrivals -->
+  <section class="cur-container mt-20" aria-labelledby="new">
+    <SectionHeader
+      id="new"
+      eyebrow="Fresh"
+      title="New arrivals"
+      description="The latest images to join the fleet. Scroll sideways for more."
+      link={{ label: 'All new images', href: withBase('/images/?sort=newest') }}
+    />
+    <div class="cur-row" role="region" aria-label="New arrivals, scrollable" tabindex="0">
+      {newest.map((i) => <ImageCard image={i} />)}
+    </div>
+  </section>
+
+  <!-- 7. Just updated + 8. latest posts -->
+  <div class="cur-container mt-20 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+    <section aria-labelledby="updated">
+      <SectionHeader id="updated" eyebrow="Live" title="Just rebuilt" />
+      <ul class="divide-y divide-border rounded-xl border border-border bg-card">
+        {
+          recentlyUpdated.map((i) => (
+            <li class="group relative flex items-center gap-3 px-4 py-3">
+              <ImageLogo image={i} size={28} class="size-7 shrink-0 rounded" />
+              <div class="min-w-0 flex-1">
+                <a href={withBase(i.url)} class="cur-stretch block truncate font-heading text-[0.9375rem] font-semibold outline-none group-hover:text-primary group-focus-within:underline">
+                  {i.name}
+                </a>
+                <p class="truncate font-mono text-xs text-muted-foreground">{i.version}</p>
+              </div>
+              <time datetime={i.version_timestamp.replace(' ', 'T')} class="shrink-0 text-xs text-muted-foreground">
+                {relative(i.version_timestamp.replace(' ', 'T'), snapshotDate)}
+              </time>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-3 text-sm text-muted-foreground">
+        {stats.updatedThisWeek.value} images rebuilt in the last seven days. <a href={LINKS.info} target="_blank" rel="noopener" class="cur-link">Fleet info<span class="sr-only"> (opens in a new tab)</span></a>
+      </p>
+    </section>
+
+    <section aria-labelledby="blog">
+      <SectionHeader id="blog" eyebrow="From the blog" title="News, guides and release notes" link={{ label: 'All posts', href: withBase('/blog/') }} />
+      {lead && <PostCard post={lead} size="lg" />}
+      <ul class="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 sm:grid-cols-2">
+        {
+          morePosts.slice(0, 2).map((p) => (
+            <li>
+              <PostCard post={p} size="md" />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+
+  <!-- 9. Support band -->
+  <section class="cur-container mt-24" aria-labelledby="help">
+    <div class="grid grid-cols-[minmax(0,1fr)] overflow-hidden rounded-2xl border border-border bg-[var(--cur-signature-soft)] md:grid-cols-[minmax(0,1fr)_auto]">
+      <div class="p-7 md:p-10">
+        <h2 id="help" class="font-heading text-2xl font-semibold md:text-3xl">Run by volunteers, kept going by you</h2>
+        <p class="mt-2 max-w-2xl text-muted-foreground">
+          Nobody at LinuxServer.io is paid. {stats.backers.value} backers on Open Collective cover the build servers and bandwidth. Stuck with an image? The community has your back.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href={DONATE_URL} target="_blank" rel="noopener" class="inline-flex h-11 items-center gap-2 rounded-lg bg-primary px-5 font-heading font-semibold text-primary-foreground hover:brightness-110">
+            <Heart className="size-4" aria-hidden="true" /> Become a backer<span class="sr-only"> (opens in a new tab)</span>
+          </a>
+          <a href={withBase('/support/')} class="inline-flex h-11 items-center gap-2 rounded-lg border border-border bg-card px-5 font-heading font-semibold hover:bg-muted">
+            <LifeBuoy className="size-4" aria-hidden="true" /> Get support
+          </a>
+          <a href={LINKS.docs} target="_blank" rel="noopener" class="inline-flex h-11 items-center gap-2 rounded-lg px-3 font-heading font-semibold text-[var(--link)] hover:underline">
+            <BookOpen className="size-4" aria-hidden="true" /> Read the docs <ArrowUpRight className="size-3.5" aria-hidden="true" /><span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
+      </div>
+      <div class="hidden w-72 self-end md:block">
+        <Otter pose="float" class="w-full" />
+      </div>
+    </div>
+  </section>
+</Layout>

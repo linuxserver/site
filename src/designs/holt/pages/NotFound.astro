@@ -1,0 +1,39 @@
+---
+import Layout from '../Layout.astro';
+import ImageCard from '../components/ImageCard.astro';
+import Otter from '@/components/shared/Otter.astro';
+import CommandSearch from '@/components/islands/CommandSearch';
+import type { NotFoundProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+
+type Props = NotFoundProps;
+const { popular } = Astro.props;
+---
+
+<Layout title="Page not found" description="This page could not be found." noindex>
+  <section class="holt-glow">
+    <div class="holt-container py-16 text-center md:py-24">
+      <div class="mx-auto w-56 md:w-72"><Otter pose="peek" ledge label="An otter peeking over a ledge, looking for the missing page" /></div>
+      <p class="mt-8 text-sm font-semibold tracking-wide text-primary">404</p>
+      <h1 class="mt-2 font-heading text-4xl font-extrabold tracking-tight text-foreground md:text-6xl">This page has swum off.</h1>
+      <p class="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
+        It may have moved when we rebuilt the site. Old blog posts now live under <code class="rounded bg-muted px-1.5 py-0.5">/blog/</code>, and every image has its own page.
+      </p>
+      <div class="mx-auto mt-8 max-w-md">
+        <CommandSearch client:load indexUrl={withBase('/search-index.json')} searchUrl={withBase('/search/')} trigger="input" placeholder="Search images and posts…" className="h-12 rounded-full bg-card px-5 text-base" />
+      </div>
+      <p class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 font-semibold">
+        <a href={withBase('/')} class="text-[var(--link)] underline-offset-4 hover:underline">Home</a>
+        <a href={withBase('/images/')} class="text-[var(--link)] underline-offset-4 hover:underline">All images</a>
+        <a href={withBase('/blog/')} class="text-[var(--link)] underline-offset-4 hover:underline">Blog</a>
+        <a href={withBase('/support/')} class="text-[var(--link)] underline-offset-4 hover:underline">Support</a>
+      </p>
+    </div>
+  </section>
+  <section aria-labelledby="popular" class="holt-container py-16">
+    <h2 id="popular" class="font-heading text-2xl font-bold text-foreground">Popular right now</h2>
+    <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {popular.map((i) => <ImageCard image={i} />)}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,50 @@
+---
+/** Blog post card: hero, mono date, title, excerpt, first tags. */
+import { Image } from 'astro:assets';
+import type { PostView } from '@/lib/views';
+import { formatDate, isoDate } from '@/lib/format';
+
+interface Props {
+  post: PostView;
+  headingLevel?: 'h2' | 'h3';
+  eager?: boolean;
+}
+const { post, headingLevel: H = 'h3', eager = false } = Astro.props;
+---
+
+<article class="raft-panel raft-glow-edge group relative flex flex-col overflow-hidden">
+  <div class="relative aspect-[16/9] overflow-hidden border-b border-[var(--raft-hair)] bg-[var(--raft-surface)]">
+    <Image
+      src={post.hero}
+      alt=""
+      widths={[400, 640, 880]}
+      sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+      class:list={['h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]', post.heroIsDefault && 'opacity-70 saturate-50']}
+      loading={eager ? 'eager' : 'lazy'}
+    />
+  </div>
+  <div class="flex flex-1 flex-col p-5">
+    <p class="flex flex-wrap items-center gap-x-2 font-mono text-xs text-muted-foreground">
+      <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time>
+      <span aria-hidden="true">·</span>
+      <span>{post.readingTime} min read</span>
+    </p>
+    <H class="mt-2 text-lg leading-snug font-semibold tracking-tight">
+      <a href={post.url} class="after:absolute after:inset-0 after:content-[''] group-hover:text-primary">{post.title}</a>
+    </H>
+    <p class="mt-2 line-clamp-3 text-sm text-muted-foreground">{post.excerpt}</p>
+    {
+      post.tags.length > 0 && (
+        <ul class="relative z-10 mt-auto flex flex-wrap gap-1.5 pt-4" aria-label="Tags">
+          {post.tags.slice(0, 3).map((t) => (
+            <li>
+              <a href={t.url} class="rounded border border-[var(--raft-hair)] px-1.5 py-0.5 font-mono text-[0.6875rem] text-muted-foreground hover:border-[var(--raft-hair-strong)] hover:text-foreground">
+                #{t.slug}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>

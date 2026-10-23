@@ -1,0 +1,24 @@
+---
+import Layout from '../Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import ImageCard from '../components/ImageCard.astro';
+import SiteSearch from '../islands/SiteSearch';
+import type { SearchProps } from '@/designs/types';
+import { withBase } from '@/lib/base';
+
+type Props = SearchProps;
+const { suggestions } = Astro.props;
+---
+
+<Layout section="search" title="Search" description="Search every LinuxServer.io image and blog post." noindex>
+  <PageHero eyebrow="Search" title="What are you looking for?" lede="Images, guides, release notes. Everything on the site, in one box." compact />
+  <div class="holt-container max-w-4xl py-12">
+    <SiteSearch client:load indexUrl={withBase('/search-index.json')} action={withBase('/search/')} />
+  </div>
+  <section aria-labelledby="suggested" class="holt-container py-8">
+    <h2 id="suggested" class="font-heading text-2xl font-bold text-foreground">Popular images</h2>
+    <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {suggestions.slice(0, 8).map((i) => <ImageCard image={i} />)}
+    </div>
+  </section>
+</Layout>

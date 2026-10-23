@@ -1,0 +1,21 @@
+---
+import BlogList from '@design/pages/BlogList.astro';
+import { getPosts } from '@/lib/posts';
+import { listing, pageCount, topTags } from '../_list';
+
+export async function getStaticPaths() {
+  const n = pageCount((await getPosts()).length);
+  return Array.from({ length: n - 1 }, (_, i) => ({ params: { page: String(i + 2) } }));
+}
+
+const n = Number(Astro.params.page);
+const props = {
+  kind: 'all' as const,
+  heading: 'Blog',
+  description: `News, guides and release notes from the LinuxServer.io team. Page ${n}.`,
+  page: await listing(await getPosts(), n, '/blog/'),
+  topTags: await topTags(),
+};
+---
+
+<BlogList {...props} />

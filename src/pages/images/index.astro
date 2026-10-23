@@ -1,0 +1,10 @@
+---
+import Images from '@design/pages/Images.astro';
+import { getAllImages, getCategories, SNAPSHOT_DATE } from '@/lib/images';
+import { stat } from '@/lib/stats';
+import { toCards } from '@/lib/views';
+
+const props = { cards: await toCards(getAllImages()), categories: getCategories(), stats: stat, snapshotDate: SNAPSHOT_DATE };
+---
+
+<Images {...props} />

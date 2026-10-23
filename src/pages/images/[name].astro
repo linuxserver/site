@@ -1,0 +1,26 @@
+---
+import ImagePage from '@design/pages/Image.astro';
+import { composeSnippet, dockerRunSnippet, getAllImages, relatedImages, SNAPSHOT_DATE, type Image } from '@/lib/images';
+import { getPosts, postsForImage } from '@/lib/posts';
+import { toPostViews } from '@/lib/views';
+
+export function getStaticPaths() {
+  return getAllImages().map((image) => ({ params: { name: image.name }, props: { image } }));
+}
+
+const { image } = Astro.props as { image: Image };
+const props = {
+  image,
+  related: relatedImages(image, 4),
+  posts: await toPostViews(postsForImage(image.name, await getPosts())),
+  snippets: {
+    compose: composeSnippet(image),
+    composeRequired: composeSnippet(image, { optional: false }),
+    run: dockerRunSnippet(image),
+    runRequired: dockerRunSnippet(image, { optional: false }),
+  },
+  snapshotDate: SNAPSHOT_DATE,
+};
+---
+
+<ImagePage {...props} />

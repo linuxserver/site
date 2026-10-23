@@ -1,0 +1,17 @@
+---
+import About from '@design/pages/About.astro';
+import { getAllImages, getCategories } from '@/lib/images';
+import { SUPPORTERS } from '@/lib/site';
+import { stat } from '@/lib/stats';
+import { getTeam } from '@/lib/team';
+
+// New images per year from first-build dates (deprecated images count: they were part of the fleet).
+const years = new Map<number, number>();
+for (const i of getAllImages()) if (i.initial_date) years.set(+i.initial_date.slice(0, 4), (years.get(+i.initial_date.slice(0, 4)) ?? 0) + 1);
+let total = 0;
+const growth = [...years]
+  .sort((a, b) => a[0] - b[0])
+  .map(([year, added]) => ({ year, added, total: (total += added) }));
+---
+
+<About stats={stat} team={getTeam()} supporters={SUPPORTERS} growth={growth} categories={getCategories()} />
