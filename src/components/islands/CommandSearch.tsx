@@ -31,6 +31,43 @@ interface Props {
 }
 
 let indexPromise: Promise<SearchIndex> | undefined;
+/** Every term has to match somewhere; matches in the name rank far above category or description matches. */
+const startsWord = (text: string, t: string) => (' ' + text).includes(' ' + t);
+function scoreImage(i: SearchIndex['images'][number], terms: string[]): number {
+  const name = i.n.toLowerCase();
+  const cats = i.c.join(' ').toLowerCase();
+  const text = i.s.toLowerCase();
+  let total = 0;
+  for (const t of terms) {
+    if (name === t) total += 100;
+    else if (name.startsWith(t)) total += 60;
+    else if (name.includes(t)) total += 40;
+    else if (startsWord(cats, t)) total += 15;
+    else if (startsWord(text, t)) total += 6;
+    else return 0;
+  }
+  return total;
+}
+function scorePost(p: SearchIndex['posts'][number], terms: string[]): number {
+  const title = p.t.toLowerCase();
+  const tags = p.g.join(' ').toLowerCase();
+  let total = 0;
+  for (const t of terms) {
+    if (startsWord(title, t)) total += 20;
+    else if (startsWord(tags, t)) total += 8;
+    else return 0;
+  }
+  return total;
+}
+/** Highest score first; ties go to `tiebreak` (higher first), e.g. monthly pulls for images. */
+const ranked = <T,>(items: T[], score: (x: T) => number, limit: number, tiebreak: (x: T) => number = () => 0) =>
+  items
+    .map((x) => [x, score(x)] as const)
+    .filter(([, n]) => n > 0)
+    .sort((a, b) => b[1] - a[1] || tiebreak(b[0]) - tiebreak(a[0]))
+    .slice(0, limit)
+    .map(([x]) => x);
+
 /**
  * Several triggers can be on a page (e.g. a desktop search bar and a mobile icon), each its own island.
  * The first one to mount owns the dialog and the keyboard shortcuts; the others ask it to open, so there is
@@ -45,6 +82,8 @@ export default function CommandSearch({ indexUrl, searchUrl, trigger = 'input', 
   const [query, setQuery] = React.useState('');
   const [index, setIndex] = React.useState<SearchIndex | null>(null);
   const [mac, setMac] = React.useState(true);
+  const [selected, setSelected] = React.useState('');
+  const listRef = React.useRef<HTMLDivElement>(null);
   const me = React.useRef(Symbol('search'));
   const [isOwner, setIsOwner] = React.useState(false);
 
@@ -100,9 +139,18 @@ export default function CommandSearch({ indexUrl, searchUrl, trigger = 'input', 
   };
 
   const q = query.trim();
+  const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
   const popular = React.useMemo(() => (index ? [...index.images].sort((a, b) => b.p - a.p).slice(0, 6) : []), [index]);
-  const images = q ? (index?.images ?? []) : popular;
-  const posts = q ? (index?.posts ?? []) : (index?.posts.slice(0, 4) ?? []);
+  const images = q ? ranked(index?.images ?? [], (i) => scoreImage(i, terms), 8, (i) => i.p) : popular;
+  const posts = q ? ranked(index?.posts ?? [], (p) => scorePost(p, terms), 6) : (index?.posts.slice(0, 4) ?? []);
+  const pages = (index?.pages ?? []).filter((p) => !q || terms.every((t) => `${p.t} ${p.k ?? ''}`.toLowerCase().includes(t)));
+  const first = images[0] ? `image ${images[0].n}` : posts[0] ? `post ${posts[0].t}` : pages[0] ? `page ${pages[0].t}` : q ? `fulltext ${q}` : '';
+
+  // Every keystroke: highlight the best match and scroll back to the top so it is visible.
+  React.useEffect(() => {
+    setSelected(first);
+    listRef.current?.scrollTo({ top: 0 });
+  }, [q, index, first]);
 
   const shortcut = mac ? '⌘K' : 'Ctrl K';
 
@@ -161,14 +209,14 @@ export default function CommandSearch({ indexUrl, searchUrl, trigger = 'input', 
           className="sm:max-w-xl"
         >
           {/* cmdk's input and items need a <Command> root; this shadcn CommandDialog does not add one. */}
-          <Command label="Search LinuxServer.io">
+          <Command label="Search LinuxServer.io" shouldFilter={false} value={selected} onValueChange={setSelected}>
             <CommandInput placeholder="Search 200+ images and 160 posts…" value={query} onValueChange={setQuery} />
-            <CommandList className="max-h-[min(60vh,28rem)]">
+            <CommandList ref={listRef} className="max-h-[min(60vh,28rem)]">
               <CommandEmpty>{index ? 'Nothing matches that.' : 'Loading…'}</CommandEmpty>
               {images.length > 0 && (
                 <CommandGroup heading={q ? 'Images' : 'Popular images'}>
                   {images.map((i) => (
-                    <CommandItem key={i.u} value={`image ${i.n}`} keywords={[i.s, ...i.c]} onSelect={() => go(i.u)}>
+                    <CommandItem key={i.u} value={`image ${i.n}`} onSelect={() => go(i.u)}>
                       {i.l ? (
                         <img src={i.l} alt="" width={20} height={20} className="size-5 rounded object-contain" loading="lazy" />
                       ) : (
@@ -183,7 +231,7 @@ export default function CommandSearch({ indexUrl, searchUrl, trigger = 'input', 
               {posts.length > 0 && (
                 <CommandGroup heading={q ? 'Blog posts' : 'Latest posts'}>
                   {posts.map((p) => (
-                    <CommandItem key={p.u} value={`post ${p.t}`} keywords={p.g} onSelect={() => go(p.u)}>
+                    <CommandItem key={p.u} value={`post ${p.t}`} onSelect={() => go(p.u)}>
                       <FileText aria-hidden="true" />
                       <span className="min-w-0 flex-1 truncate">{p.t}</span>
                       <span className="ml-auto text-xs text-muted-foreground tabular-nums">{p.y}</span>
@@ -191,10 +239,10 @@ export default function CommandSearch({ indexUrl, searchUrl, trigger = 'input', 
                   ))}
                 </CommandGroup>
               )}
-              {index && (
+              {pages.length > 0 && (
                 <CommandGroup heading="Pages">
-                  {index.pages.map((p) => (
-                    <CommandItem key={p.u} value={`page ${p.t}`} keywords={p.k ? [p.k] : undefined} onSelect={() => go(p.u)}>
+                  {pages.map((p) => (
+                    <CommandItem key={p.u} value={`page ${p.t}`} onSelect={() => go(p.u)}>
                       <ArrowRight aria-hidden="true" />
                       {p.t}
                     </CommandItem>
@@ -205,7 +253,7 @@ export default function CommandSearch({ indexUrl, searchUrl, trigger = 'input', 
                 <>
                   <CommandSeparator />
                   <CommandGroup>
-                    <CommandItem value={`fulltext ${q}`} forceMount onSelect={() => go(`${searchUrl}?q=${encodeURIComponent(q)}`)}>
+                    <CommandItem value={`fulltext ${q}`} onSelect={() => go(`${searchUrl}?q=${encodeURIComponent(q)}`)}>
                       <TextSearch aria-hidden="true" />
                       Search every post for “{q}”
                     </CommandItem>

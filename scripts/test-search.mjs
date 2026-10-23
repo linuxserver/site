@@ -33,6 +33,20 @@ await Promise.all([p.waitForURL(/images\/jellyfin/), p.keyboard.press('Enter')])
 check('Enter navigates to /images/jellyfin/', p.url().includes('/images/jellyfin/'));
 await p.waitForLoadState('networkidle');
 await p.waitForTimeout(1000);
+// 1b. precise matching and scroll position (regression: fuzzy matches buried the real hit)
+await p.keyboard.press('Control+k');
+await p.waitForSelector('[cmdk-input]');
+await p.keyboard.type('a');
+await p.waitForSelector('[cmdk-item][data-value^="image"]');
+await p.locator('[cmdk-list]').evaluate((el) => el.scrollTo({ top: el.scrollHeight }));
+await p.keyboard.type('udiosilo');
+await p.waitForTimeout(300);
+const imgs = await p.locator('[cmdk-item][data-value^="image"]').allInnerTexts();
+check(`"audiosilo" matches only audiosilo (${imgs.map((t) => t.split('\n')[0].split(' ')[0]).join(', ')})`, imgs.length === 1 && imgs[0].startsWith('audiosilo'));
+check('list scrolled back to the top', (await p.locator('[cmdk-list]').evaluate((el) => el.scrollTop)) === 0);
+check('best match is highlighted', (await p.locator('[cmdk-item][data-selected="true"]').innerText()).startsWith('audiosilo'));
+await p.keyboard.press('Escape');
+await p.waitForTimeout(300);
 // 2. ⌘K / Ctrl+K opens, Escape closes and trigger is still there
 await p.keyboard.press('Control+k');
 await p.waitForTimeout(400);
