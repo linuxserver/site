@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { parse as parseYaml } from 'yaml';
 
 /**
  * Blog posts: one folder per post, src/content/posts/<slug>/index.md, images alongside.
@@ -49,26 +50,20 @@ const authors = defineCollection({
 });
 
 /**
- * Optional hand-written spotlights, keyed by ISO week ("2026-W44"). Weeks without an entry fall back
- * to the automatic rotation (src/lib/images.ts): spotlight-rotation.yaml plus recently added images.
+ * The weekly spotlight: images that take turns, one per week, in file order (src/content/spotlight.yaml).
+ * Each entry's id is an image name.
  */
-const spotlights = defineCollection({
-  loader: file('./src/content/spotlights.yaml'),
+const spotlight = defineCollection({
+  // Collections don't keep file order, so each entry records its position for the rotation to sort by.
+  loader: file('./src/content/spotlight.yaml', {
+    parser: (text) => (parseYaml(text) as { id: string }[]).map((entry, position) => ({ ...entry, position })),
+  }),
   schema: z.object({
-    image: z.string(),
+    position: z.number(),
     /** A sentence or two from the team about why this image is worth a look. */
     note: z.string().optional(),
     by: z.string().optional(),
   }),
 });
 
-/** Images always included in the automatic weekly rotation, on top of the newest additions. */
-const rotation = defineCollection({
-  loader: file('./src/content/spotlight-rotation.yaml'),
-  schema: z.object({
-    note: z.string().optional(),
-    by: z.string().optional(),
-  }),
-});
-
-export const collections = { posts, authors, spotlights, rotation };
+export const collections = { posts, authors, spotlight };

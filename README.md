@@ -27,7 +27,7 @@ src/
   content/
     posts/         one folder per blog post (index.md + images)
     authors/       one YAML file per author
-    spotlights.yaml  optional hand-written weekly spotlights
+    spotlight.yaml   images that take turns in the weekly spotlight
   lib/             data layer: images, posts, stats, compose generator, feeds, JSON-LD, formatting
   pages/           routes. Each one gathers data and renders @design/pages/<Page>.astro
   designs/raft/    the design: Layout, theme, page components and islands (see designs/README.md)

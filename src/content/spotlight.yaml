@@ -1,0 +1,11 @@
+# The weekly spotlight on the home page. These images take turns, one per week, in this order,
+# changing every Monday. A `note` (and optional `by`) is shown whenever that image comes round.
+# Newly added images are not part of this; they have their own section on the home page.
+#
+# - id: swag
+#   note: A sentence or two on why it is worth a look.
+#   by: thespad
+- id: webtop
+- id: audiosilo
+- id: swag
+- id: heimdall

@@ -152,32 +152,40 @@ export interface Spotlight {
   /** "2026-W43" */
   week: string;
   image: Image;
-  /** Hand-written note from src/content/spotlights.yaml, if there is one for this week. */
+  /** Note from src/content/spotlight.yaml, if the entry has one. */
   note?: string;
   by?: string;
   /** Other recent additions, for a "new this season" strip next to the spotlight. */
   alsoNew: Image[];
 }
 
+/** The Monday the rotation starts from: the first image in spotlight.yaml is featured this week. */
+const ROTATION_START = Date.UTC(2026, 9, 19);
+const WEEK = 7 * 864e5;
+
 /**
- * The weekly spotlight. A hand-written entry for the current ISO week (spotlights.yaml) wins; otherwise we
- * rotate, one image per week, through the images listed in spotlight-rotation.yaml plus the 24 most recently
- * added images that have a logo, so every new image gets its turn. Built daily by CI, so it changes on
- * Monday without anyone touching anything.
+ * The weekly spotlight: the images in src/content/spotlight.yaml take turns, one per week, in file order,
+ * changing every Monday (CI builds daily). An image name that doesn't exist, or is deprecated, fails the
+ * build so a typo can't slip through.
  */
 export async function getSpotlight(now = new Date()): Promise<Spotlight> {
   const { year, week } = isoWeek(now);
-  const id = `${year}-W${String(week).padStart(2, '0')}`;
-  const pinned = (await getCollection('rotation')).filter((r) => getImage(r.id) && !getImage(r.id)!.deprecated);
-  const pool = [...new Set([...pinned.map((r) => getImage(r.id)!), ...newest(24).filter((i) => i.logo)])];
-  const manual = (await getCollection('spotlights')).find((s) => s.id === id);
-  const image = (manual && getImage(manual.data.image)) || pool[(year * 53 + week) % pool.length];
-  const rotationNote = pinned.find((r) => r.id === image.name)?.data;
+  const entries = (await getCollection('spotlight')).sort((a, b) => a.data.position - b.data.position);
+  if (!entries.length) throw new Error('src/content/spotlight.yaml needs at least one image');
+  for (const e of entries) {
+    const img = getImage(e.id);
+    if (!img) throw new Error(`src/content/spotlight.yaml: there is no image called "${e.id}"`);
+    if (img.deprecated) throw new Error(`src/content/spotlight.yaml: "${e.id}" is deprecated`);
+  }
+  const monday = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - ((now.getUTCDay() + 6) % 7) * 864e5;
+  const turn = Math.round((monday - ROTATION_START) / WEEK);
+  const entry = entries[((turn % entries.length) + entries.length) % entries.length];
+  const image = getImage(entry.id)!;
   return {
-    week: id,
+    week: `${year}-W${String(week).padStart(2, '0')}`,
     image,
-    note: manual ? manual.data.note : rotationNote?.note,
-    by: manual ? manual.data.by : rotationNote?.by,
+    note: entry.data.note,
+    by: entry.data.by,
     alsoNew: newest(7).filter((i) => i.name !== image.name).slice(0, 6),
   };
 }

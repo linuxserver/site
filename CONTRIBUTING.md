@@ -80,14 +80,14 @@ that names the file and field. You'll know before anything goes live.
 
 ## The weekly spotlight
 
-The home page features one image each week, chosen automatically from the 24 most recently added images
-plus any listed in `src/content/spotlight-rotation.yaml` (add `- id: <image>` to keep an image in the
-rotation permanently). To pick the spotlight yourself, add an entry to `src/content/spotlights.yaml` with
-the ISO week (`date +%G-W%V`):
+The home page features one image each week. The images listed in `src/content/spotlight.yaml` take
+turns in file order, changing every Monday. Add, remove or reorder entries to change the rotation, and
+give an entry a `note` to say why it's worth a look:
 
 ```yaml
-- id: 2026-W44
-  image: pelorus
+- id: swag
   note: A sentence or two on why it's worth a look.
   by: thespad
 ```
+
+Newly added images aren't part of the rotation; they have their own section on the home page.

@@ -1,9 +1,0 @@
-# Hand-picked spotlights, one per ISO week. Weeks without an entry rotate automatically (see
-# spotlight-rotation.yaml). Find this week's number with: date +%G-W%V
-#
-# - id: 2026-W44
-#   image: pelorus
-#   note: A sentence or two on why it is worth a look.   (optional)
-#   by: thespad                                           (optional)
-- id: 2026-W43
-  image: webtop
