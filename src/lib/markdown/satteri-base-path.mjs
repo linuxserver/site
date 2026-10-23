@@ -5,23 +5,16 @@ import { defineHastPlugin } from 'satteri';
  * "/another-post/" or embed "/content/images/x.png" and "/media/<slug>/clip.mp4" regardless of whether
  * the site is served from "/" or "/blog/".
  *
- * `sharedBase` (optional) sends the big static folders, /content/ and /media/, to a different prefix. The
- * three-design review build uses it so all designs share one copy instead of three.
- *
- * Returns null (a no-op entry) when there is nothing to rewrite.
+ * Returns null (a no-op entry) when the base is "/".
  */
-const SHARED = ['/content/', '/media/'];
-
-export default function satteriBasePath(base, sharedBase) {
+export default function satteriBasePath(base) {
   const prefix = String(base ?? '/').replace(/\/+$/, '');
-  const shared = sharedBase == null ? prefix : String(sharedBase).replace(/\/+$/, '');
-  if (!prefix && !shared) return null;
+  if (!prefix) return null;
 
-  const fix = (value) => {
-    if (typeof value !== 'string' || !value.startsWith('/') || value.startsWith('//')) return value;
-    const p = SHARED.some((s) => value.startsWith(s)) ? shared : prefix;
-    return p && !value.startsWith(p + '/') ? p + value : value;
-  };
+  const fix = (value) =>
+    typeof value === 'string' && value.startsWith('/') && !value.startsWith('//') && !value.startsWith(prefix + '/')
+      ? prefix + value
+      : value;
 
   const ATTRS = ['href', 'src', 'poster'];
 

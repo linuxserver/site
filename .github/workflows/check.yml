@@ -6,9 +6,6 @@ name: Check
 on:
   pull_request:
 
-env:
-  DESIGN: holt
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +16,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build:one
+      - run: npm run build
       - name: Accessibility (axe)
         run: |
           npx playwright install --with-deps chromium

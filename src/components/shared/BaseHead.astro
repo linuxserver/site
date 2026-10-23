@@ -32,8 +32,8 @@ const {
   themeColor = { light: '#ffffff', dark: '#120b1f' },
 } = Astro.props;
 
-// The three-design review build must never be indexed (it is the same content three times).
-const review = import.meta.env.PUBLIC_REVIEW === '1';
+// Staging copies (e.g. the GitHub Pages preview) set PUBLIC_NOINDEX=1 so they never compete with the real site.
+const staging = import.meta.env.PUBLIC_NOINDEX === '1';
 const fullTitle = title ? `${title} | ${SITE.name}` : SITE.title;
 const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/').replace(/\/index\.html\/$/, '/'), Astro.site);
 
@@ -90,7 +90,7 @@ const ld = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@g
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
-{(noindex || review) && <meta name="robots" content="noindex, follow" />}
+{(noindex || staging) && <meta name="robots" content="noindex, follow" />}
 <meta name="generator" content={Astro.generator} />
 
 <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />

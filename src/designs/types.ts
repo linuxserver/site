@@ -1,11 +1,11 @@
 /**
- * The contract every design implements. Routes in src/pages build these props from the data layer and
- * render `@design/pages/<Name>.astro`; `@design` points at src/designs/<DESIGN> (see astro.config.mjs).
+ * The props contract between routes and the design. Routes in src/pages build these props from the data
+ * layer and render `@design/pages/<Name>.astro`; `@design` points at src/designs/raft (astro.config.mjs).
+ * Keeping presentation behind this contract means the look can change without touching data logic.
  *
  * A design folder contains:
  *   Layout.astro                   <html>, <BaseHead>, header, footer. Props: LayoutProps
  *   theme.css                      tokens (:root / .dark), fonts, design-only CSS. Imported by Layout
- *   meta.ts                        name, tagline and intent, shown on the design chooser
  *   pages/Home.astro               HomeProps
  *   pages/Images.astro             ImagesProps
  *   pages/Image.astro              ImageProps
@@ -157,16 +157,4 @@ export interface AboutProps {
 
 export interface NotFoundProps {
   popular: Image[];
-}
-
-export interface DesignMeta {
-  id: 'holt' | 'raft' | 'current';
-  name: string;
-  tagline: string;
-  /** Two or three sentences: what the design is for and why it looks the way it does. */
-  intent: string;
-  /** Short bullet points for the chooser. */
-  traits: string[];
-  /** Representative colours for the chooser swatch. */
-  swatch: string[];
 }

@@ -4,19 +4,15 @@ The LinuxServer.io website: home, the image catalogue with a page for every imag
 about, support and donate pages. Built with [Astro](https://astro.build), Tailwind CSS and
 [shadcn/ui](https://ui.shadcn.com), with no server or database.
 
-> **Design review.** This repository currently holds three candidate designs (`src/designs/holt`,
-> `raft` and `current`) over one shared codebase. `npm run build && npm run preview` serves all three
-> at http://localhost:4321 with a chooser page. Once one is picked, delete the other two folders and
-> `scripts/build-all.mjs`, and set `DESIGN` in `.github/workflows/*.yml`.
+Staging: https://linuxserver.github.io/site/ (deployed from `main` by `.github/workflows/deploy.yml`).
 
 ## Quick start
 
 ```bash
 npm install
-npm run dev:holt          # or dev:raft / dev:current: http://localhost:4321
-npm run build             # all three designs → dist/<design>/ + chooser at dist/index.html
-npm run preview           # serve dist/ at http://localhost:4321
-npm run build:one         # one design (DESIGN=…) at the site root, plus the search index. This is what CI deploys
+npm run dev               # http://localhost:4321
+npm run build             # dist/ plus the Pagefind search index. This is what CI deploys
+npm run preview           # serve dist/
 ```
 
 Writing a blog post? See [CONTRIBUTING.md](CONTRIBUTING.md), or just run `npm run new-post`.
@@ -34,12 +30,12 @@ src/
     spotlights.yaml  optional hand-written weekly spotlights
   lib/             data layer: images, posts, stats, compose generator, feeds, JSON-LD, formatting
   pages/           routes. Each one gathers data and renders @design/pages/<Page>.astro
-  designs/<name>/  Layout, theme, page components and islands for one design (see designs/README.md)
+  designs/raft/    the design: Layout, theme, page components and islands (see designs/README.md)
   components/
-    ui/            shadcn/ui components (Radix), themed by each design's tokens
+    ui/            shadcn/ui components (Radix), themed by the design's tokens
     islands/       shared React islands: ⌘K search, theme toggle, mobile nav, quick start, copy
     shared/        head/SEO, logo, otter illustrations, image logos, post body
-scripts/           data refresh, new-post, brand assets, review build, screenshots, accessibility checks
+scripts/           data refresh, new-post, brand assets, screenshots, accessibility checks
 ```
 
 ### Data

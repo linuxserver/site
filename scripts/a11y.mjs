@@ -4,7 +4,7 @@
  *
  *   node scripts/a11y.mjs <baseUrl> [path ...]
  *
- * e.g. node scripts/a11y.mjs http://localhost:4321/holt / /images/ /images/webtop/ /blog/
+ * e.g. node scripts/a11y.mjs http://localhost:4321 / /images/ /images/webtop/ /blog/
  * Exits non-zero when violations are found.
  */
 import { chromium } from 'playwright';

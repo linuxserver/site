@@ -1,13 +1,8 @@
 # Builds the site and publishes it to GitHub Pages: on every push to main, daily (so stats, image data
 # and the weekly spotlight stay fresh), and on demand from the Actions tab.
 #
-# DESIGN REVIEW MODE (now): builds all three designs plus the chooser to
-#   https://linuxserver.github.io/site/            chooser
-#   https://linuxserver.github.io/site/holt/ …     each design
-# The review build is marked noindex so search engines ignore it.
-#
-# Once a design is chosen, switch to production mode: set DESIGN, set SITE_URL/BASE_PATH for the final
-# domain, and replace the "Build" step with `npm run build:one` (one design at the root, plus search).
+# Staging: https://linuxserver.github.io/site/ (noindex). At the domain cut-over set SITE_URL to
+# https://www.linuxserver.io, BASE_PATH to /, remove PUBLIC_NOINDEX, and add public/CNAME.
 name: Deploy
 
 on:
@@ -28,7 +23,8 @@ concurrency:
 
 env:
   SITE_URL: https://linuxserver.github.io
-  REVIEW_ROOT: /site/
+  BASE_PATH: /site/
+  PUBLIC_NOINDEX: '1'
 
 jobs:
   build:
@@ -63,12 +59,9 @@ jobs:
       - name: Cache optimised images
         uses: actions/cache@v6
         with:
-          path: node_modules/.astro-*
+          path: node_modules/.astro
           key: astro-${{ hashFiles('src/content/**', 'src/assets/**', 'package-lock.json') }}
           restore-keys: astro-
-
-      - name: Install Chromium (chooser screenshots)
-        run: npx playwright install --with-deps chromium
 
       - name: Build
         run: npm run build

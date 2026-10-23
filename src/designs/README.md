@@ -1,30 +1,18 @@
-# Designs
+# Design
 
-Three candidate designs share one data layer, one set of routes and one component library. Each design
-is a folder here; `DESIGN=<name>` (see `astro.config.mjs`) aliases `@design` to it.
-
-| Design | Intent |
-| --- | --- |
-| `holt/` | Warm, editorial, community-first. Light by default. |
-| `raft/` | Dark, technical, product-grade. A control panel for the fleet. |
-| `current/` | Catalogue-first, search-led, information-dense. A registry you enjoy using. |
-
-## What a design must provide
-
-See `types.ts` for every prop. Each design folder contains:
+The site's look lives in `raft/` (dark-first, technical, product-grade). Routes in `src/pages` gather data
+and render `@design/pages/<Page>.astro`, where `@design` is aliased to `src/designs/raft`
+(`astro.config.mjs`). `types.ts` is the props contract between the two, so presentation can change
+without touching data logic.
 
 ```
-Layout.astro      <html> shell: <BaseHead>, skip link, header, <main id="main">, footer, <ReviewBar/>
-theme.css         first line: @import '../../styles/globals.css'; then fonts, tokens (:root and .dark), utilities
-meta.ts           DesignMeta for the chooser page
-pages/Home.astro  Images.astro  Image.astro  BlogList.astro  Post.astro  Tags.astro
-      Search.astro  Donate.astro  Support.astro  About.astro  NotFound.astro
-islands/          optional design-specific React islands
+raft/
+  Layout.astro      <html> shell: <BaseHead>, skip link, header, <main id="main">, footer
+  theme.css         first line: @import '../../styles/globals.css'; then fonts, tokens (:root and .dark), utilities
+  pages/            Home  Images  Image  BlogList  Post  Tags  Search  Donate  Support  About  NotFound
+  components/       design-specific Astro components
+  islands/          design-specific React islands (catalogue, search results, …)
 ```
-
-Only edit files inside your own design folder. Shared code (`src/lib`, `src/components`, `src/pages`,
-`src/styles/globals.css`) is shared by all three; if you need a change there, keep it additive and
-backwards compatible, and say so in your report.
 
 ## Shared building blocks
 
@@ -36,7 +24,6 @@ backwards compatible, and say so in your report.
 | `@/components/shared/Icon.astro` | Brand icons (github, discord, mastodon, bluesky, rss, opencollective, docker). Others: `lucide-react`. |
 | `@/components/shared/ImageLogo.astro` | Optimised image logo with monogram fallback. |
 | `@/components/shared/PostBody.astro` | Wrap `<Content />` in it. Gives article typography, callouts, code, click-to-enlarge. |
-| `@/components/shared/ReviewBar.astro` | Design switcher for the review build. Put it at the end of `<body>`. |
 | `@/components/islands/CommandSearch` | ⌘K palette over images, posts and pages. `trigger="input" \| "button" \| "icon" \| "none"`. |
 | `@/components/islands/ThemeToggle` | Light / dark / system menu. |
 | `@/components/islands/MobileNav` | Sheet-based mobile menu. |
@@ -47,13 +34,13 @@ backwards compatible, and say so in your report.
 | `@/lib/jsonld` | `imageJsonLd`, `postJsonLd`, `itemListJsonLd` → pass to `<Layout jsonLd={[…]}>`. |
 | `@/lib/format` | `compact`, `grouped`, `formatDate`, `relative`, `isoDate`, `plural`. |
 | `@/lib/site` | `SITE`, `NAV`, `NAV_SECONDARY`, `LINKS`, `SOCIAL`, `SUPPORT_CHANNELS`, `SUPPORTERS`, `PILLARS`, `MISSION`, `DONATE_URL`. |
-| `@/lib/base` | `withBase(path)`. **Every internal href goes through it** (the review build serves designs under `/holt/` etc.). |
+| `@/lib/base` | `withBase(path)`. **Every internal href goes through it** (staging is served under `/site/`). |
 
 React islands need a `client:*` directive to be interactive (`client:idle` for header widgets,
 `client:visible` below the fold, `client:load` only for above-the-fold interactivity). shadcn components
 used without a directive render as static HTML, which is fine for Card, Badge, Button-as-link and so on.
 
-## Rules every design follows
+## Rules the design follows
 
 - **Content is real.** Use only the props and `lib/site.ts`. Never invent stats, quotes, testimonials or features.
 - **Stats are honest.** Use `stats.<x>.value`, `.label`, `.long` and `.source`. `hubPulls` is a lower bound, so show its `+`.
@@ -70,11 +57,11 @@ used without a directive render as static HTML, which is fine for Card, Badge, B
 - **Responsive:** check 390px, 768px, 1280px and 1440px wide. No horizontal scroll.
 - **Light and dark:** both must look intentional.
 
-## Working on a design
+## Working on the design
 
 ```bash
-DESIGN=raft npx astro dev --port 4322            # live dev server
-node scripts/shot.mjs http://localhost:4322/images/ /tmp/x.png --full [--dark] [--mobile]
-node scripts/a11y.mjs http://localhost:4322 / /images/ /images/webtop/   # axe, light + dark
-DESIGN=raft OUT_DIR=./dist-raft npx astro build   # must pass
+npm run dev                                                  # http://localhost:4321
+node scripts/shot.mjs http://localhost:4321/images/ /tmp/x.png --full [--dark] [--mobile]
+node scripts/a11y.mjs http://localhost:4321 / /images/ /images/webtop/   # axe, light + dark
+npm run build && npm run check                               # must pass
 ```
