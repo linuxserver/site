@@ -17,9 +17,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Accessibility (axe)
+      - name: Accessibility (axe) and search
         run: |
           npx playwright install --with-deps chromium
           npx astro preview --port 4321 &
           npx wait-on http://localhost:4321/
           node scripts/a11y.mjs http://localhost:4321
+          node scripts/test-search.mjs http://localhost:4321
