@@ -31,7 +31,11 @@ export default function RankTabs({ lists }: Props) {
       </div>
       {lists.map((l) => (
         <TabsContent key={l.key} value={l.key} forceMount className="p-2 data-[state=inactive]:hidden">
-          <ol className="grid grid-cols-1 gap-x-4 md:grid-cols-2">
+          {/* Fill down then across, so the first column reads 1..n/2 */}
+          <ol
+            className="grid grid-cols-1 gap-x-4 md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(var(--rows),auto)]"
+            style={{ '--rows': Math.ceil(l.rows.length / 2) } as React.CSSProperties}
+          >
             {l.rows.map((r, i) => (
               <li key={r.name}>
                 <a href={r.url} className="group flex items-center gap-3.5 rounded-md px-3 py-2.5 transition-colors hover:bg-muted focus-visible:bg-muted">
