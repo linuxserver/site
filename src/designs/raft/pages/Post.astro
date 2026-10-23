@@ -98,9 +98,10 @@ const crumbs = [
       </div>
     </header>
 
-    <div class="raft-container grid grid-cols-1 gap-12 pt-6 lg:grid-cols-[minmax(0,1fr)_16rem] xl:grid-cols-[14rem_minmax(0,1fr)_14rem]">
-      <div class="hidden xl:block" aria-hidden="true"></div>
-      <div class="mx-auto w-full max-w-[44rem] min-w-0">
+    <!-- Same width as the hero: text aligned to its left edge, contents in a right rail (as in Holt). -->
+    <div class="raft-container">
+     <div class="mx-auto grid max-w-5xl grid-cols-1 gap-12 pt-8 lg:grid-cols-[minmax(0,1fr)_14rem] xl:gap-16">
+      <div class="w-full max-w-[46rem] min-w-0">
         <PostBody>
           <Content />
         </PostBody>
@@ -149,13 +150,14 @@ const crumbs = [
           )
         }
       </aside>
+     </div>
     </div>
   </article>
 
   {
     (older || newer) && (
       <nav aria-label="More posts" class="raft-container mt-16">
-        <div class="mx-auto grid grid-cols-1 max-w-[44rem] gap-3 sm:grid-cols-2">
+        <div class="mx-auto grid max-w-5xl grid-cols-1 gap-3 sm:grid-cols-2">
           {older ? (
             <a href={older.url} class="raft-panel group flex flex-col gap-1 p-4 hover:bg-muted/40">
               <span class="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground"><ArrowLeft className="size-3.5" aria-hidden="true" /> Older</span>
