@@ -1,4 +1,4 @@
-/** Site-wide settings shared by every design. Everything that used to live in the Grav theme YAML. */
+/** Site-wide settings. Everything that used to live in the Grav theme YAML. */
 
 export const SITE = {
   name: 'LinuxServer.io',
@@ -122,7 +122,7 @@ export const SUPPORTERS: Supporter[] = [
   { name: 'Unraid', href: 'https://unraid.net/', contribution: 'Generous monetary donations and licence keys for their software.' },
 ];
 
-/** The four principles from the Grav home page, reused by every design. */
+/** The four principles from the Grav home page. */
 export const PILLARS = [
   {
     id: 'standardised',

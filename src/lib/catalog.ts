@@ -1,5 +1,5 @@
 /**
- * Client-side filtering for the image catalogue, shared by every design's catalogue island.
+ * Client-side filtering for the image catalogue island.
  * Filter state lives in the URL (?q=&category=&arch=&sort=&deprecated=1) so results can be linked to,
  * survive reloads and work with the back button. Browser-safe: no astro:* imports here.
  */

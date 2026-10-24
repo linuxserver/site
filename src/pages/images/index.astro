@@ -1,10 +1,49 @@
 ---
-import Images from '@design/pages/Images.astro';
+import Layout from '@/layouts/Layout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Catalog from '@/components/islands/Catalog';
+import { BASE } from '@/lib/base';
+import { formatDate } from '@/lib/format';
 import { getAllImages, getCategories, SNAPSHOT_DATE } from '@/lib/images';
+import { itemListJsonLd } from '@/lib/jsonld';
 import { stat } from '@/lib/stats';
 import { toCards } from '@/lib/views';
 
-const props = { cards: await toCards(getAllImages()), categories: getCategories(), stats: stat, snapshotDate: SNAPSHOT_DATE };
+const cards = await toCards(getAllImages());
+const active = cards.filter((c) => !c.deprecated);
 ---
 
-<Images {...props} />
+<Layout
+  section="images"
+  title="Docker images"
+  description={`Browse all ${stat.images.value} LinuxServer.io Docker images: search, filter by category and architecture, and get a compose file for each.`}
+  breadcrumbs={[{ name: 'Images', href: '/images/' }]}
+  jsonLd={[itemListJsonLd('LinuxServer.io Docker images', active.map((c) => ({ name: c.name, url: c.url })), Astro.site)]}
+>
+  <PageHeader
+    eyebrow="Catalogue"
+    title={`${stat.images.value} images, one standard`}
+    lede="Every image shares the same base, the same PUID/PGID conventions and the same documentation format. Find yours, then copy a compose file."
+    crumbs={[{ name: 'Images', href: '/images/' }]}
+  >
+    <dl class="mt-8 flex flex-wrap gap-x-8 gap-y-3 font-mono text-sm">
+      {
+        [stat.monthlyPulls, stat.arm64, stat.updatedThisWeek].map((x) => (
+          <div class="flex items-baseline gap-2">
+            <dt class="sr-only">{x.label}</dt>
+            <dd class="text-foreground">{x.value}</dd>
+            <dd class="text-muted-foreground" aria-hidden="true">{x.label}</dd>
+          </div>
+        ))
+      }
+      <div class="flex items-baseline gap-2">
+        <dt class="text-muted-foreground">updated</dt>
+        <dd><time datetime={SNAPSHOT_DATE.toISOString()}>{formatDate(SNAPSHOT_DATE)}</time></dd>
+      </div>
+    </dl>
+  </PageHeader>
+
+  <div class="raft-container pt-10">
+    <Catalog client:load cards={cards} categories={getCategories()} snapshot={SNAPSHOT_DATE.toISOString()} base={BASE} />
+  </div>
+</Layout>

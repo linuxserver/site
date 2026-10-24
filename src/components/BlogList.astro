@@ -1,15 +1,28 @@
 ---
 import { Image } from 'astro:assets';
-import Layout from '../Layout.astro';
-import PageHeader from '../components/PageHeader.astro';
-import Pagination from '../components/Pagination.astro';
-import PostCard from '../components/PostCard.astro';
-import Icon from '@/components/shared/Icon.astro';
-import type { BlogListProps, Crumb } from '@/designs/types';
+import Layout from '@/layouts/Layout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Pagination from '@/components/Pagination.astro';
+import PostCard from '@/components/PostCard.astro';
+import Icon from '@/components/Icon.astro';
 import { withBase } from '@/lib/base';
 import { formatDate, isoDate } from '@/lib/format';
+import type { Page, TagInfo } from '@/lib/posts';
+import type { Crumb } from '@/lib/seo';
+import type { AuthorView, PostView } from '@/lib/views';
 
-type Props = BlogListProps;
+/** The blog index, pages 2+, and the tag and author listings. */
+interface Props {
+  kind: 'all' | 'tag' | 'author';
+  /** The tag or author name for those listings. */
+  heading: string;
+  description: string;
+  page: Page<PostView>;
+  /** Most used tags, for filter chips. */
+  topTags: TagInfo[];
+  tag?: TagInfo;
+  author?: AuthorView;
+}
 const { kind, heading, description, page, topTags, tag, author } = Astro.props;
 
 const crumbs: Crumb[] = [{ name: 'Blog', href: '/blog/' }];

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * Screenshots for visual checks while developing a design.
+ * Screenshots for visual checks.
  *
  *   node scripts/shot.mjs <url> <out.png> [--dark] [--mobile] [--full] [--width=1440] [--height=900] [--theme=light|dark|system]
  *
- * e.g. node scripts/shot.mjs http://localhost:4322/images/ /tmp/raft-images.png --full --dark
+ * e.g. node scripts/shot.mjs http://localhost:4321/images/ /tmp/images.png --full --dark
  */
 import { chromium } from 'playwright';
 
@@ -25,9 +25,10 @@ const page = await browser.newPage({
   isMobile: mobile,
   hasTouch: mobile,
 });
-// --theme=light|dark|system stores a theme choice before load, for designs whose default ignores the OS setting.
-const theme = flags.find((f) => f.startsWith('--theme='))?.split('=')[1];
-if (theme) await page.addInitScript((t) => localStorage.setItem('theme', t), theme);
+// The site defaults to dark whatever the OS says, so store the theme choice before load: --dark, or
+// --theme=light|dark|system. Light otherwise.
+const theme = flags.find((f) => f.startsWith('--theme='))?.split('=')[1] ?? (flag('dark') ? 'dark' : 'light');
+await page.addInitScript((t) => localStorage.setItem('theme', t), theme);
 const errors = [];
 page.on('pageerror', (e) => errors.push(e.message));
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -44,7 +45,7 @@ if (flag('full')) {
   });
   await page.waitForLoadState('networkidle');
 }
-await page.addStyleTag({ content: 'nav[aria-label="Design review"]{display:none!important} vite-error-overlay{display:none}' });
+await page.addStyleTag({ content: 'vite-error-overlay{display:none}' });
 await page.waitForTimeout(300);
 await page.screenshot({ path: out, fullPage: flag('full') });
 await browser.close();

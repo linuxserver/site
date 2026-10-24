@@ -1,20 +1,23 @@
 ---
-import './theme.css';
-import BaseHead from '@/components/shared/BaseHead.astro';
-import Icon from '@/components/shared/Icon.astro';
-import Logo from '@/components/shared/Logo.astro';
+import '@/styles/globals.css';
+import BaseHead from '@/components/BaseHead.astro';
+import Icon from '@/components/Icon.astro';
+import Logo from '@/components/Logo.astro';
 import CommandSearch from '@/components/islands/CommandSearch';
 import MobileNav from '@/components/islands/MobileNav';
 import ThemeToggle from '@/components/islands/ThemeToggle';
-import type { LayoutProps } from '@/designs/types';
 import { withBase } from '@/lib/base';
 import { formatDate } from '@/lib/format';
 import { SNAPSHOT_DATE } from '@/lib/images';
+import type { SeoProps } from '@/lib/seo';
 import { DONATE_URL, LINKS, NAV, NAV_SECONDARY, SOCIAL } from '@/lib/site';
 import { stat } from '@/lib/stats';
 import { ArrowUpRight } from 'lucide-react';
 
-type Props = LayoutProps;
+interface Props extends SeoProps {
+  /** Top-level section, for aria-current in the nav. */
+  section?: 'home' | 'images' | 'blog' | 'support' | 'about' | 'donate' | 'search' | 'none';
+}
 const { section = 'none', ...seo } = Astro.props;
 
 const href = (h: string) => (h.startsWith('/') ? withBase(h) : h);
@@ -63,9 +66,9 @@ const footerCols = [
 ---
 
 <!doctype html>
-<html lang="en-GB" data-design="raft">
+<html lang="en-GB">
   <head>
-    <BaseHead {...seo} defaultTheme="dark" themeColor={{ light: '#ffffff', dark: '#0b0913' }} />
+    <BaseHead {...seo} />
   </head>
   <body class="min-h-dvh bg-background font-sans text-[0.9375rem] text-foreground antialiased">
     <a href="#main" class="skip-link">Skip to content</a>

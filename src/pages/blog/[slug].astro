@@ -1,29 +1,205 @@
 ---
+import { getImage, Image } from 'astro:assets';
 import { render } from 'astro:content';
-import Post from '@design/pages/Post.astro';
-import { getImage as getContainer, type Image } from '@/lib/images';
-import { getPosts, relatedPosts, tagSlug, type Post as PostEntry } from '@/lib/posts';
+import Layout from '@/layouts/Layout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ImageRow from '@/components/ImageRow.astro';
+import PostCard from '@/components/PostCard.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import PostBody from '@/components/PostBody.astro';
+import { formatDate, formatDateLong, isoDate } from '@/lib/format';
+import { getImage as getContainer, type Image as Container } from '@/lib/images';
+import { postJsonLd } from '@/lib/jsonld';
+import { getPosts, relatedPosts, tagSlug, type Post } from '@/lib/posts';
 import { LINKS } from '@/lib/site';
 import { toPostView, toPostViews } from '@/lib/views';
+import { ArrowLeft, ArrowRight, Pencil } from 'lucide-react';
 
 export async function getStaticPaths() {
   const posts = await getPosts(); // newest first
-  return posts.map((post, i) => ({ params: { slug: post.id }, props: { post, newer: posts[i - 1], older: posts[i + 1], posts } }));
+  return posts.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, newerEntry: posts[i - 1], olderEntry: posts[i + 1], posts } }));
 }
 
-const { post, newer, older, posts } = Astro.props as { post: PostEntry; newer?: PostEntry; older?: PostEntry; posts: PostEntry[] };
-const { Content, headings } = await render(post);
-const names = new Set([...post.data.images, ...post.data.tags.map(tagSlug)]);
-const props = {
-  post: await toPostView(post),
-  Content,
-  headings,
-  newer: newer && (await toPostView(newer)),
-  older: older && (await toPostView(older)),
-  related: await toPostViews(relatedPosts(post, posts, 3)),
-  images: [...names].map((n) => getContainer(n)).filter((i): i is Image => !!i && !i.deprecated),
-  editUrl: `${LINKS.repo}/edit/main/src/content/posts/${post.id}/index.md`,
-};
+const { entry, newerEntry, olderEntry, posts } = Astro.props as { entry: Post; newerEntry?: Post; olderEntry?: Post; posts: Post[] };
+const { Content, headings } = await render(entry);
+const post = await toPostView(entry);
+const newer = newerEntry && (await toPostView(newerEntry));
+const older = olderEntry && (await toPostView(olderEntry));
+const related = await toPostViews(relatedPosts(entry, posts, 3));
+// Images the post is about: front matter `images:`, or tags that match an image name
+const names = new Set([...entry.data.images, ...entry.data.tags.map(tagSlug)]);
+const images = [...names].map((n) => getContainer(n)).filter((i): i is Container => !!i && !i.deprecated);
+const editUrl = `${LINKS.repo}/edit/main/src/content/posts/${entry.id}/index.md`;
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const hero = await getImage({ src: post.hero, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const heroUrl = new URL(hero.src, Astro.site).toString();
+const crumbs = [
+  { name: 'Blog', href: '/blog/' },
+  { name: post.title, href: `/blog/${post.id}/` },
+];
 ---
 
-<Post {...props} />
+<Layout
+  section="blog"
+  title={post.title}
+  description={post.excerpt}
+  image={post.hero}
+  imageAlt={post.heroAlt || undefined}
+  type="article"
+  publishedTime={post.date}
+  modifiedTime={post.updated}
+  author={post.byline?.name}
+  tags={post.tags.map((t) => t.name)}
+  breadcrumbs={crumbs}
+  jsonLd={[postJsonLd(post, heroUrl, Astro.site)]}
+>
+  <article>
+    <header class="relative overflow-hidden">
+      <div class="raft-aurora pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+      <div class="raft-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+      <div class="raft-container relative pt-10 pb-10 md:pt-14">
+        <Breadcrumbs crumbs={crumbs} />
+        <div class="mx-auto mt-10 max-w-3xl text-center">
+          {
+            post.tags.length > 0 && (
+              <ul class="flex flex-wrap justify-center gap-1.5" aria-label="Tags">
+                {post.tags.map((t) => (
+                  <li>
+                    <a href={t.url} class="rounded-md border border-[var(--raft-hair)] bg-background/50 px-2 py-0.5 font-mono text-xs text-muted-foreground hover:text-foreground">
+                      #{t.slug}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+          <h1 class="mt-5 text-4xl leading-[1.1] font-semibold tracking-[-0.035em] md:text-[3.25rem]">{post.title}</h1>
+          <p class="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
+            {
+              post.byline && (
+                <span class="inline-flex items-center gap-2">
+                  <span class="grid size-7 place-items-center rounded-full bg-gradient-to-br from-otter-magenta to-otter-violet font-mono text-[0.625rem] font-semibold text-white" aria-hidden="true">
+                    {post.byline.initials}
+                  </span>
+                  {post.byline.url ? (
+                    <a href={post.byline.url} class="font-medium text-foreground hover:text-primary">
+                      {post.byline.name}
+                    </a>
+                  ) : (
+                    <span class="font-medium text-foreground">{post.byline.name}</span>
+                  )}
+                </span>
+              )
+            }
+            {post.byline && <span aria-hidden="true">·</span>}
+            <time datetime={isoDate(post.date)} class="font-mono text-xs">{formatDateLong(post.date)}</time>
+            <span aria-hidden="true">·</span>
+            <span class="font-mono text-xs">{post.readingTime} min read</span>
+          </p>
+        </div>
+        {
+          !post.heroIsDefault && (
+            <div class="raft-panel mx-auto mt-10 max-w-5xl overflow-hidden">
+              <Image
+                src={post.hero}
+                alt={post.heroAlt}
+                widths={[640, 960, 1280, 1600]}
+                sizes="(min-width: 1100px) 1024px, 100vw"
+                loading="eager"
+                fetchpriority="high"
+                class="max-h-[34rem] w-full object-cover"
+              />
+            </div>
+          )
+        }
+      </div>
+    </header>
+
+    <!-- Same width as the hero: text aligned to its left edge, contents in a right rail. -->
+    <div class="raft-container">
+     <div class="mx-auto grid max-w-5xl grid-cols-1 gap-12 pt-8 lg:grid-cols-[minmax(0,1fr)_14rem] xl:gap-16">
+      <div class="w-full max-w-[46rem] min-w-0">
+        <PostBody>
+          <Content />
+        </PostBody>
+        <div class="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--raft-hair)] pt-6 text-sm text-muted-foreground">
+          <p class="font-mono text-xs">
+            {post.updated ? <>Last updated <time datetime={isoDate(post.updated)}>{formatDate(post.updated)}</time></> : <>Published <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time></>}
+          </p>
+          <a href={editUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:text-foreground">
+            <Pencil className="size-3.5" aria-hidden="true" /> Edit this post on GitHub<span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
+      </div>
+
+      <aside class="space-y-6 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6rem)] lg:self-start lg:overflow-y-auto">
+        {
+          toc.length > 2 && (
+            <nav aria-labelledby="toc-title" class="hidden lg:block">
+              <h2 id="toc-title" class="raft-eyebrow">On this page</h2>
+              <ol class="mt-3 space-y-1.5 border-l border-[var(--raft-hair)] text-sm">
+                {toc.map((h) => (
+                  <li>
+                    <a
+                      href={`#${h.slug}`}
+                      class:list={['-ml-px block border-l border-transparent py-0.5 text-muted-foreground hover:border-primary hover:text-foreground', h.depth === 3 ? 'pl-6' : 'pl-3']}
+                    >
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )
+        }
+        {
+          images.length > 0 && (
+            <section aria-labelledby="post-images" class="raft-panel p-2">
+              <h2 id="post-images" class="raft-eyebrow px-3 pt-2 pb-1">Images in this post</h2>
+              <ul>
+                {images.slice(0, 5).map((i) => (
+                  <li>
+                    <ImageRow image={i} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </aside>
+     </div>
+    </div>
+  </article>
+
+  {
+    (older || newer) && (
+      <nav aria-label="More posts" class="raft-container mt-16">
+        <div class="mx-auto grid max-w-5xl grid-cols-1 gap-3 sm:grid-cols-2">
+          {older ? (
+            <a href={older.url} class="raft-panel group flex flex-col gap-1 p-4 hover:bg-muted/40">
+              <span class="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground"><ArrowLeft className="size-3.5" aria-hidden="true" /> Older</span>
+              <span class="font-medium group-hover:text-primary">{older.title}</span>
+            </a>
+          ) : <span />}
+          {newer && (
+            <a href={newer.url} class="raft-panel group flex flex-col items-end gap-1 p-4 text-right hover:bg-muted/40">
+              <span class="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground">Newer <ArrowRight className="size-3.5" aria-hidden="true" /></span>
+              <span class="font-medium group-hover:text-primary">{newer.title}</span>
+            </a>
+          )}
+        </div>
+      </nav>
+    )
+  }
+
+  {
+    related.length > 0 && (
+      <section class="raft-container pt-20" aria-labelledby="related-title">
+        <SectionHead eyebrow="Keep reading" title="Related posts" id="related-title" />
+        <div class="mt-8 grid grid-cols-1 gap-3 md:grid-cols-3">
+          {related.map((p) => <PostCard post={p} />)}
+        </div>
+      </section>
+    )
+  }
+</Layout>

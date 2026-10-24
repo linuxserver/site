@@ -23,14 +23,13 @@ const browser = await chromium.launch();
 let total = 0;
 for (const scheme of ['light', 'dark']) {
   const ctx = await browser.newContext({ colorScheme: scheme, viewport: { width: 1280, height: 900 } });
-  // Store the choice too, so designs whose default ignores the OS setting are tested in both themes.
+  // Store the choice too: the site defaults to dark whatever the OS says.
   await ctx.addInitScript((t) => localStorage.setItem('theme', t), scheme);
   for (const p of list) {
     const page = await ctx.newPage();
     await page.goto(base.replace(/\/$/, '') + p, { waitUntil: 'networkidle' });
     const res = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag2aaa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'])
-      .exclude('nav[aria-label="Design review"]')
       .analyze();
     const v = res.violations;
     total += v.length;

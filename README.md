@@ -29,12 +29,12 @@ src/
     authors/       one YAML file per author
     spotlight.yaml   images that take turns in the weekly spotlight
   lib/             data layer: images, posts, stats, compose generator, feeds, JSON-LD, formatting
-  pages/           routes. Each one gathers data and renders @design/pages/<Page>.astro
-  designs/raft/    the design: Layout, theme, page components and islands (see designs/README.md)
-  components/
-    ui/            shadcn/ui components (Radix), themed by the design's tokens
-    islands/       shared React islands: ⌘K search, theme toggle, mobile nav, quick start, copy
-    shared/        head/SEO, logo, otter illustrations, image logos, post body
+  pages/           routes: each gathers its data in the frontmatter and renders the page
+  layouts/         Layout.astro: <html>, <head> (via BaseHead), header, footer
+  styles/          globals.css: Tailwind, fonts, colour tokens (:root and .dark), utilities, article typography
+  components/      Astro components: page header, panels, post cards, image rows, logos, otters, blog listing
+    islands/       React islands: ⌘K search, catalogue, search results, rankings, theme toggle, mobile nav, quick start, copy
+    ui/            shadcn/ui components (Radix). Do not edit; restyle with `className`
 scripts/           data refresh, new-post, brand assets, screenshots, accessibility checks
 ```
 
@@ -69,6 +69,27 @@ when an upstream API is down. `npm run data` refreshes them (set `GITHUB_TOKEN` 
 
 Old Grav URLs (`/our-images`, `/blog/page:2`, `/blog/tag:docker`) are redirected by `public/_redirects`
 (Cloudflare Pages / Netlify format).
+
+### Design
+
+Raft: dark-first, technical, product-grade. Geist for UI, Geist Mono for every number, version and date,
+hairline panels (`raft-panel`) and the logo gradient used as light, never as text. The colour tokens and
+their contrast ratios are at the top of `src/styles/globals.css`.
+
+- **Content is real.** Use the data layer and `lib/site.ts`. Never invent stats, quotes, testimonials or features.
+- **Stats are honest.** Use `stat.<x>.value`, `.label`, `.long` and `.source`. `hubPulls` is a lower bound, so show its `+`.
+- **Every internal href goes through `withBase()`** (`lib/base.ts`); staging is served under `/site/`.
+- **Accessibility (WCAG 2.2 AA everywhere, AAA contrast for text):** one `<h1>` per page and no skipped heading levels;
+  landmarks (`header`, `nav[aria-label]`, `main#main`, `footer`); visible focus; `aria-current="page"` in nav;
+  text contrast ≥ 7:1 (≥ 4.5:1 for large/UI text); logo pinks `#ff4f97`/`#d93b92` are decoration only on light
+  backgrounds; no information by colour alone; respect `prefers-reduced-motion`; images have `alt` (decorative
+  `alt=""`); external links that open new tabs say so to screen readers; everything works by keyboard.
+- **SEO:** pass `title`, `description`, `breadcrumbs` and `jsonLd` (`lib/jsonld.ts`) to the Layout. Use real `<a href>`
+  links for everything navigational; islands must server-render their initial content.
+- **Performance:** no client JS unless it earns it (`client:idle` for header widgets, `client:visible` below the fold,
+  `client:load` only for above-the-fold interactivity); images through `astro:assets` or `ImageLogo`, with
+  `loading="eager"` + `fetchpriority="high"` only for the LCP image.
+- **Responsive and themed:** check 390px, 768px, 1280px and 1440px wide with no horizontal scroll, in light and dark.
 
 ### Quality checks
 

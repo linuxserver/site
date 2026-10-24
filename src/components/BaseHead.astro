@@ -1,19 +1,14 @@
 ---
 /**
- * Everything in <head> that is the same for every design: title, description, canonical, Open Graph,
- * Twitter, fediverse, feeds, icons, JSON-LD and the no-flash theme script.
+ * Everything in <head>: title, description, canonical, Open Graph, Twitter, fediverse, feeds, icons,
+ * JSON-LD and the no-flash theme script.
  */
 import { getImage } from 'astro:assets';
-import type { SeoProps } from '@/designs/types';
 import { withBase } from '@/lib/base';
+import type { SeoProps } from '@/lib/seo';
 import { LINKS, SITE } from '@/lib/site';
 
-interface Props extends SeoProps {
-  /** Theme used when the visitor has not chosen one and prefers-color-scheme has no say: 'light' | 'dark' | 'system'. */
-  defaultTheme?: 'light' | 'dark' | 'system';
-  /** <meta name="theme-color"> for light and dark. */
-  themeColor?: { light: string; dark: string };
-}
+type Props = SeoProps;
 
 const {
   title,
@@ -28,8 +23,6 @@ const {
   noindex = false,
   jsonLd = [],
   breadcrumbs = [],
-  defaultTheme = 'system',
-  themeColor = { light: '#ffffff', dark: '#120b1f' },
 } = Astro.props;
 
 // Staging copies (e.g. the GitHub Pages preview) set PUBLIC_NOINDEX=1 so they never compete with the real site.
@@ -97,8 +90,8 @@ const ld = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@g
 <link rel="icon" href={withBase('/favicon-32.png')} type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
 <link rel="manifest" href={withBase('/manifest.webmanifest')} />
-<meta name="theme-color" content={themeColor.light} media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content={themeColor.dark} media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0b0913" media="(prefers-color-scheme: dark)" />
 
 <link rel="alternate" type="application/rss+xml" title={`${SITE.name} Blog (RSS)`} href={withBase('/blog/rss.xml')} />
 <link rel="alternate" type="application/atom+xml" title={`${SITE.name} Blog (Atom)`} href={withBase('/blog/atom.xml')} />
@@ -123,12 +116,12 @@ const ld = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@g
 <meta name="fediverse:creator" content={SITE.fediverse} />
 {ld && <script type="application/ld+json" set:html={ld} />}
 
-<script is:inline define:vars={{ defaultTheme }}>
-  // Runs before first paint so the page never flashes the wrong theme.
+<script is:inline>
+  // Runs before first paint so the page never flashes the wrong theme. Dark unless the visitor chose otherwise.
   (function () {
     var stored = null;
     try { stored = localStorage.getItem('theme'); } catch (e) {}
-    var pref = stored || defaultTheme;
+    var pref = stored || 'dark';
     var dark = pref === 'dark' || (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
     var root = document.documentElement;
     root.classList.toggle('dark', dark);

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { ArrowUpRight, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -17,13 +16,10 @@ interface Props {
   secondary?: MobileNavItem[];
   cta?: { label: string; href: string };
   className?: string;
-  /** Classes for the sheet panel, so each design can style it. */
-  panelClassName?: string;
-  side?: 'left' | 'right' | 'top';
 }
 
 /** Hamburger + slide-over navigation for small screens (shadcn Sheet: focus-trapped, Esc to close). */
-export default function MobileNav({ items, secondary = [], cta, className, panelClassName, side = 'right' }: Props) {
+export default function MobileNav({ items, secondary = [], cta, className }: Props) {
   const link = (item: MobileNavItem, big: boolean) => (
     <SheetClose asChild key={item.href}>
       <a
@@ -56,7 +52,7 @@ export default function MobileNav({ items, secondary = [], cta, className, panel
           <Menu className="size-5" aria-hidden="true" />
         </Button>
       </SheetTrigger>
-      <SheetContent side={side} className={cn('w-[min(22rem,90vw)] gap-0 overflow-y-auto', panelClassName)}>
+      <SheetContent side="right" className="w-[min(22rem,90vw)] gap-0 overflow-y-auto">
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>
           <SheetDescription className="sr-only">Site navigation</SheetDescription>

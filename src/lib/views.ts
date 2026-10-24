@@ -1,11 +1,8 @@
-/**
- * View models handed from routes (src/pages) to design page components (src/designs/<name>/pages).
- * Designs only ever see these shapes, so swapping designs never touches data logic.
- */
+/** Display-ready shapes of posts, authors and image cards, built at render time for pages and islands. */
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import defaultHero from '@/assets/default-hero.jpg';
-import { byline, excerpt, readingTime, postUrl, tagSlug, tagUrl, type Byline, type Post } from './posts';
+import { byline, excerpt, getAuthors, readingTime, postUrl, tagSlug, tagUrl, type Byline, type Post } from './posts';
 import { toCard, type Image, type ImageCard } from './images';
 
 export interface TagLink {
@@ -58,6 +55,31 @@ export async function toPostView(post: Post): Promise<PostView> {
 }
 
 export const toPostViews = (posts: Post[]) => Promise.all(posts.map(toPostView));
+
+export interface AuthorView {
+  id: string;
+  name: string;
+  github?: string;
+  bio?: string;
+  role: 'team' | 'alumni' | 'guest';
+  initials: string;
+  count: number;
+  url: string;
+}
+
+/** Authors with at least one of `posts`, most prolific first. */
+export async function getAuthorViews(posts: Post[]): Promise<AuthorView[]> {
+  return (await getAuthors(posts)).map(({ author, count, initials, url }) => ({
+    id: author.id,
+    name: author.data.name,
+    github: author.data.github,
+    bio: author.data.bio,
+    role: author.data.role,
+    initials,
+    count,
+    url,
+  }));
+}
 
 /** Image cards for client islands, with logos already optimised to small WebP files. */
 export async function toCards(images: Image[], size = 96): Promise<ImageCard[]> {

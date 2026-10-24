@@ -1,27 +1,12 @@
 ---
-import BlogList from '@design/pages/BlogList.astro';
-import { getAuthors, getPosts, paginate, postsByAuthor } from '@/lib/posts';
-import { toPostViews } from '@/lib/views';
-import type { AuthorView } from '@/designs/types';
+import BlogList from '@/components/BlogList.astro';
+import { getPosts, paginate, postsByAuthor } from '@/lib/posts';
+import { getAuthorViews, toPostViews, type AuthorView } from '@/lib/views';
 import { topTags } from '../_list';
 
 export async function getStaticPaths() {
-  const authors = await getAuthors(await getPosts());
-  return authors.map(({ author, count, initials, url }) => ({
-    params: { author: author.id },
-    props: {
-      author: {
-        id: author.id,
-        name: author.data.name,
-        github: author.data.github,
-        bio: author.data.bio,
-        role: author.data.role,
-        initials,
-        count,
-        url,
-      } satisfies AuthorView,
-    },
-  }));
+  const authors = await getAuthorViews(await getPosts());
+  return authors.map((author) => ({ params: { author: author.id }, props: { author } }));
 }
 
 const { author } = Astro.props as { author: AuthorView };

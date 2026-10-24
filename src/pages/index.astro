@@ -1,21 +1,353 @@
 ---
-import Home from '@design/pages/Home.astro';
-import { getCategories, getSpotlight, mostPulled, mostStarred, newest, recentlyUpdated, SNAPSHOT_DATE } from '@/lib/images';
+import Layout from '@/layouts/Layout.astro';
+import BarList from '@/components/BarList.astro';
+import ImageRow from '@/components/ImageRow.astro';
+import Panel from '@/components/Panel.astro';
+import PostCard from '@/components/PostCard.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import StatTile from '@/components/StatTile.astro';
+import RankTabs from '@/components/islands/RankTabs';
+import ImageLogo from '@/components/ImageLogo.astro';
+import Otter from '@/components/Otter.astro';
+import CopyButton from '@/components/islands/CopyButton';
+import { Kbd } from '@/components/ui/kbd';
+import { withBase } from '@/lib/base';
+import { compact, formatDate, relative } from '@/lib/format';
+import { composeSnippet, getSpotlight, mostPulled, mostStarred, recentlyUpdated, SNAPSHOT_DATE, type Image } from '@/lib/images';
 import { getLatestPosts } from '@/lib/posts';
+import { DONATE_URL, LINKS, PILLARS, SITE } from '@/lib/site';
 import { stat } from '@/lib/stats';
-import { toPostViews } from '@/lib/views';
+import { toCards, toPostViews } from '@/lib/views';
+import { ArrowRight, ArrowUpRight, BookOpen, Heart, Layers, LifeBuoy, RefreshCw } from 'lucide-react';
 
-const props = {
-  stats: stat,
-  spotlight: await getSpotlight(),
-  mostStarred: mostStarred(8),
-  mostPulled: mostPulled(8),
-  newest: newest(8),
-  recentlyUpdated: recentlyUpdated(8),
-  posts: await toPostViews(await getLatestPosts(6)),
-  categories: getCategories(),
-  snapshotDate: SNAPSHOT_DATE,
+const spotlight = await getSpotlight();
+const posts = await toPostViews(await getLatestPosts(3));
+const popular = mostPulled(8);
+const s = spotlight.image;
+
+// The hero terminal shows the spotlight image's minimal compose file: real, copyable, and different every week.
+const compose = composeSnippet(s, { optional: false });
+const composeLines = compose.split('\n');
+const pull = `docker pull ${SITE.registry}/${s.name}:latest`;
+
+const toRows = async (images: Image[], metric: (i: Image) => [string, string]) =>
+  (await toCards(images, 56)).map((c, idx) => {
+    const [value, label] = metric(images[idx]);
+    return { name: c.name, url: withBase(c.url), logo: c.logo, summary: c.summary, metric: value, metricLabel: label };
+  });
+const lists = [
+  { key: 'pulled', label: 'Most pulled', rows: await toRows(popular, (i) => [compact(i.monthly_pulls), 'pulls / mo']) },
+  { key: 'starred', label: 'Most starred', rows: await toRows(mostStarred(8), (i) => [compact(i.stars), 'stars']) },
+  { key: 'updated', label: 'Just rebuilt', rows: await toRows(recentlyUpdated(8), (i) => [relative(i.version_timestamp.replace(' ', 'T'), SNAPSHOT_DATE), i.version.split('-ls')[0].slice(0, 14)]) },
+];
+
+const armPct = Math.round((stat.arm64.raw / stat.images.raw) * 100);
+const pillarIcons = { standardised: Layers, updates: RefreshCw, docs: BookOpen, support: LifeBuoy } as const;
+const sources = [stat.hubPulls, stat.monthlyPulls, stat.images, stat.stars, stat.backers, stat.years, stat.updatedThisWeek, stat.arm64];
+const changelog = (s.changelog ?? []).slice(0, 3);
+const hl = (line: string) => {
+  // Tiny YAML highlighter for the hero: keys, values and comments get token colours.
+  const esc = line.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  if (/^\s*#/.test(esc) || esc === '---') return `<span class="text-muted-foreground">${esc}</span>`;
+  return esc
+    .replace(/^(\s*image: )(.*)$/, '$1<span class="text-primary">$2</span>')
+    .replace(/^(\s*)([\w-]+):/, '$1<span class="text-[var(--raft-violet)]">$2</span>:');
 };
 ---
 
-<Home {...props} />
+<Layout section="home" description={SITE.description}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden border-b border-[var(--raft-hair)]" aria-labelledby="hero-title">
+    <div class="raft-aurora pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="raft-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="raft-container relative grid grid-cols-1 items-center gap-14 py-16 md:py-24 lg:grid-cols-[1.05fr_1fr]">
+      <div>
+        <a
+          href={withBase(s.url)}
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--raft-hair-strong)] bg-background/60 py-1 pr-3 pl-1 text-xs backdrop-blur hover:border-primary"
+        >
+          <span class="rounded-full bg-primary px-2 py-0.5 font-mono text-[0.6875rem] font-semibold text-primary-foreground">{spotlight.week}</span>
+          <span class="text-muted-foreground">Spotlight: <span class="text-foreground">{s.name}</span></span>
+          <ArrowRight className="size-3.5 text-muted-foreground" aria-hidden="true" />
+        </a>
+        <h1 id="hero-title" class="mt-6 text-[2.3rem] leading-[1.05] font-semibold tracking-[-0.04em] sm:text-6xl lg:text-[4.25rem]">
+          Docker images, maintained like <span class="raft-gradient-text">infrastructure</span>.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+          {stat.images.value} community images on one curated base, rebuilt automatically when upstream moves, documented properly and supported by real
+          people. Free and open source, always.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href={withBase('/images/')}
+            class="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 font-medium text-primary-foreground shadow-[0_0_0_1px_rgb(255_255_255/0.1)_inset,0_8px_24px_-8px_var(--raft-glow-a)] transition hover:brightness-110"
+          >
+            Browse {stat.images.value} images <ArrowRight className="size-4" aria-hidden="true" />
+          </a>
+          <a
+            href={LINKS.docs}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex h-11 items-center gap-2 rounded-md border border-[var(--raft-hair-strong)] bg-background/60 px-5 font-medium backdrop-blur transition-colors hover:bg-muted"
+          >
+            Read the docs <ArrowUpRight className="size-4 opacity-70" aria-hidden="true" /><span class="sr-only">(opens in a new tab)</span>
+          </a>
+          <p class="hidden items-center gap-1.5 text-sm text-muted-foreground sm:flex">
+            or press <Kbd>/</Kbd> to search
+          </p>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="pointer-events-none absolute -top-[3.35rem] right-8 z-10 w-24" aria-hidden="true">
+          <Otter pose="peek" class="w-full" />
+        </div>
+        <Panel title={`~/${s.name}/docker-compose.yml`} class="relative" bodyClass="relative">
+          <CopyButton slot="actions" client:visible text={compose} label="Copy compose file" className="size-7" />
+          <pre
+            class="raft-type max-h-[22rem] overflow-auto bg-[var(--raft-code-bg)] p-5 font-mono text-[0.8125rem] leading-6"
+            tabindex="0"
+            aria-label={`Docker Compose file for ${s.name}`}><code>{composeLines.map((l, i) => <span class="block" style={`--i:${i}`} set:html={hl(l) || ' '} />)}</code></pre>
+          <div class="border-t border-[var(--raft-hair)] bg-[var(--raft-surface)] px-5 py-3 font-mono text-[0.8125rem]">
+            <span class="text-primary" aria-hidden="true">$</span> docker compose up -d<span class="raft-caret ml-0.5 inline-block h-4 w-2 translate-y-0.5 bg-foreground/70" aria-hidden="true"></span>
+          </div>
+        </Panel>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="raft-container pt-20 md:pt-28" aria-labelledby="fleet-title">
+    <SectionHead
+      eyebrow="Fleet telemetry"
+      title="The numbers behind the images"
+      id="fleet-title"
+      description="Collected from Docker Hub, our own API, GitHub and Open Collective when this site was built."
+    />
+
+    <div class="mt-10 grid grid-cols-1 gap-3 lg:grid-cols-12">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:col-span-7 lg:grid-cols-3">
+        <StatTile stat={stat.hubPulls} hero note="src-hub-pulls" class="sm:col-span-2 lg:col-span-3">
+          <p class="mt-2 text-sm text-muted-foreground">Pulls from Docker Hub alone since 2015. GHCR and lscr.io come on top.</p>
+          <div class="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-[var(--raft-hair)] bg-[var(--raft-hair)]">
+            {
+              [stat.monthlyPulls, stat.stars, stat.backers].map((x) => (
+                <div class="bg-[var(--raft-raised)] p-3">
+                  <p class="text-lg font-semibold tracking-tight sm:text-xl" aria-describedby={`src-${x.id}`}>
+                    <span aria-hidden="true">{x.value}</span>
+                    <span class="sr-only">{x.long}</span>
+                  </p>
+                  <p class="mt-0.5 text-xs text-muted-foreground" aria-hidden="true">
+                    {x.label}
+                  </p>
+                </div>
+              ))
+            }
+          </div>
+        </StatTile>
+        <StatTile stat={stat.images} note="src-images" />
+        <StatTile stat={stat.years} note="src-years" />
+        <div class="raft-panel flex flex-col p-5 sm:col-span-2 lg:col-span-1" aria-describedby="src-updated-week">
+          <p class="raft-eyebrow flex items-center gap-2"><span class="raft-pulse" aria-hidden="true"></span> This week</p>
+          <p class="mt-3 text-3xl font-semibold tracking-[-0.045em] md:text-4xl">
+            <span aria-hidden="true">{stat.updatedThisWeek.value}</span><span class="sr-only">{stat.updatedThisWeek.long}</span>
+          </p>
+          <p class="mt-1 text-sm text-muted-foreground" aria-hidden="true">images rebuilt</p>
+        </div>
+        <div class="raft-panel p-5 sm:col-span-2 lg:col-span-3" aria-describedby="src-arm64">
+          <div class="flex items-baseline justify-between gap-4">
+            <p class="raft-eyebrow">arm64 coverage</p>
+            <p class="font-mono text-sm tabular-nums">
+              <span class="text-foreground">{stat.arm64.value}</span><span class="text-muted-foreground"> / {stat.images.value} images · {armPct}%</span>
+            </p>
+          </div>
+          <div
+            class="mt-3 h-2.5 overflow-hidden rounded-full bg-[var(--raft-bar-track)]"
+            role="meter"
+            aria-label="Images with arm64 builds"
+            aria-valuemin="0"
+            aria-valuemax={stat.images.raw}
+            aria-valuenow={stat.arm64.raw}
+            aria-valuetext={`${stat.arm64.raw} of ${stat.images.raw} images (${armPct}%)`}
+          >
+            <div class="h-full rounded-full bg-gradient-to-r from-otter-magenta via-otter-violet to-otter-blue" style={`width:${armPct}%`}></div>
+          </div>
+          <p class="mt-3 text-sm text-muted-foreground">Every image builds for x86-64; most also ship native arm64 for Raspberry Pi, Apple silicon hosts and ARM servers.</p>
+        </div>
+      </div>
+
+      <Panel as="figure" title="top images · pulls in the last month" class="lg:col-span-5" bodyClass="p-5 pt-6">
+        <BarList
+          title="Most pulled images in the last month"
+          unit="pulls in the last month"
+          items={popular.map((i) => ({ label: i.name, value: i.monthly_pulls, href: i.url }))}
+        />
+        <p class="mt-5 border-t border-[var(--raft-hair)] pt-4 text-sm text-muted-foreground">
+          <span class="font-mono text-foreground">{stat.monthlyPulls.value}</span> pulls across the whole fleet last month.
+          <a href={withBase('/images/?sort=popular')} class="ml-1 font-medium text-foreground underline-offset-4 hover:underline">Full ranking</a>
+        </p>
+      </Panel>
+    </div>
+
+    <details class="mt-4 text-xs text-muted-foreground">
+      <summary class="cursor-pointer font-mono hover:text-foreground">Sources and method</summary>
+      <ul class="mt-3 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+        {sources.map((x) => <li id={`src-${x.id}`}><span class="text-foreground">{x.label}</span>: {x.source}</li>)}
+        <li>Data snapshot: <time datetime={SNAPSHOT_DATE.toISOString()}>{formatDate(SNAPSHOT_DATE)}</time></li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- Spotlight -->
+  <section class="raft-container pt-24" aria-labelledby="spotlight-title">
+    <SectionHead eyebrow={`Spotlight · ${spotlight.week}`} title="This week in the fleet" id="spotlight-title" link={{ label: 'All new images', href: withBase('/images/?sort=newest') }} />
+    <div class="mt-10 grid grid-cols-1 gap-3 lg:grid-cols-[1.5fr_1fr]">
+      <article class="raft-panel raft-glow-edge relative overflow-hidden p-6 md:p-8">
+        <div class="raft-aurora pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+        <div class="relative">
+          <div class="flex items-start gap-5">
+            <span class="grid size-16 shrink-0 place-items-center rounded-lg border border-[var(--raft-hair)] bg-[var(--raft-surface)] p-2.5 md:size-20">
+              <ImageLogo image={s} size={56} class="size-11 md:size-14" />
+            </span>
+            <div class="min-w-0">
+              <h3 class="text-2xl font-semibold tracking-tight md:text-3xl">
+                <a href={withBase(s.url)} class="hover:text-primary">{s.name}</a>
+              </h3>
+              <p class="mt-1 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-muted-foreground">
+                <span>{s.version}</span>
+                {s.initial_date && <span>added <time datetime={s.initial_date}>{formatDate(s.initial_date)}</time></span>}
+                <span>{s.architectures.map((a) => a.arch).join(' · ')}</span>
+              </p>
+            </div>
+          </div>
+          <p class="mt-6 max-w-2xl text-[1.0625rem] leading-relaxed">{s.summary}</p>
+          {
+            spotlight.note && (
+              <blockquote class="mt-6 border-l-2 border-primary pl-4 text-muted-foreground">
+                <p>{spotlight.note}</p>
+                {spotlight.by && <footer class="mt-1 font-mono text-xs">— {spotlight.by}</footer>}
+              </blockquote>
+            )
+          }
+          {
+            changelog.length > 0 && (
+              <div class="mt-6">
+                <h4 class="raft-eyebrow">Recent changes</h4>
+                <ul class="mt-2 space-y-1.5 text-sm">
+                  {changelog.map((c) => (
+                    <li class="flex gap-3">
+                      <time datetime={c.date} class="shrink-0 font-mono text-xs leading-5 text-muted-foreground tabular-nums">
+                        {c.date}
+                      </time>
+                      <span>{c.desc}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+          <div class="mt-7 flex flex-wrap items-center gap-3">
+            <a href={withBase(s.url)} class="inline-flex h-10 items-center gap-2 rounded-md bg-foreground px-4 text-sm font-medium text-background hover:opacity-90">
+              Set up {s.name} <ArrowRight className="size-4" aria-hidden="true" />
+            </a>
+            <div class="flex h-10 min-w-0 items-center gap-2 rounded-md border border-[var(--raft-hair)] bg-[var(--raft-code-bg)] pr-1 pl-3 font-mono text-xs">
+              <span class="truncate"><span class="text-primary" aria-hidden="true">$ </span>{pull}</span>
+              <CopyButton client:visible text={pull} label="Copy docker pull command" />
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <Panel title="recently added" as="aside" labelledby="also-new" bodyClass="p-2">
+        <h3 id="also-new" class="sr-only">Also new</h3>
+        <ul>
+          {
+            spotlight.alsoNew.map((i) => (
+              <li>
+                <ImageRow image={i} metric={i.initial_date ? formatDate(i.initial_date) : undefined} metricLabel="added" />
+              </li>
+            ))
+          }
+        </ul>
+      </Panel>
+    </div>
+  </section>
+
+  <!-- Rankings -->
+  <section class="raft-container pt-24" aria-labelledby="rank-title">
+    <SectionHead eyebrow="Leaderboard" title="What people run" id="rank-title" link={{ label: 'Open the catalogue', href: withBase('/images/') }} />
+    <div class="raft-panel mt-10">
+      <RankTabs client:visible lists={lists} />
+    </div>
+  </section>
+
+  <!-- Pillars -->
+  <section class="raft-container pt-24" aria-labelledby="pillars-title">
+    <SectionHead eyebrow="How we build" title="One standard for every image" id="pillars-title" />
+    <ul class="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-[var(--radius)] border border-[var(--raft-hair)] bg-[var(--raft-hair)] sm:grid-cols-2 lg:grid-cols-4">
+      {
+        PILLARS.map((p, i) => {
+          const IconC = pillarIcons[p.id];
+          const external = p.link.href.startsWith('http');
+          return (
+            <li class="flex flex-col bg-[var(--raft-raised)] p-6">
+              <div class="flex items-center justify-between">
+                <span class="grid size-9 place-items-center rounded-md border border-[var(--raft-hair)] bg-[var(--raft-surface)] text-primary">
+                  <IconC className="size-[1.1rem]" aria-hidden="true" />
+                </span>
+                <span class="font-mono text-xs text-muted-foreground" aria-hidden="true">
+                  0{i + 1}
+                </span>
+              </div>
+              <h3 class="mt-5 font-semibold">{p.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+              <a
+                href={external ? p.link.href : withBase(p.link.href)}
+                {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+                class="mt-auto inline-flex items-center gap-1 pt-5 text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline"
+              >
+                {p.link.label}
+                {external ? <ArrowUpRight className="size-3.5" aria-hidden="true" /> : <ArrowRight className="size-3.5" aria-hidden="true" />}
+                {external && <span class="sr-only">(opens in a new tab)</span>}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+
+  <!-- Blog -->
+  <section class="raft-container pt-24" aria-labelledby="blog-title">
+    <SectionHead eyebrow="Changelog & writing" title="From the blog" id="blog-title" link={{ label: 'All posts', href: withBase('/blog/') }} />
+    <div class="mt-10 grid grid-cols-1 gap-3 md:grid-cols-3">
+      {posts.map((p) => <PostCard post={p} />)}
+    </div>
+  </section>
+
+  <!-- Support CTA -->
+  <section class="raft-container pt-24" aria-labelledby="cta-title">
+    <div class="raft-panel relative overflow-hidden p-8 md:p-12">
+      <div class="raft-aurora pointer-events-none absolute inset-0" aria-hidden="true"></div>
+      <div class="raft-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+      <div class="relative grid grid-cols-1 items-center gap-8 md:grid-cols-[1fr_auto]">
+        <div>
+          <p class="raft-eyebrow"><span class="text-primary" aria-hidden="true">//</span> Run by volunteers</p>
+          <h2 id="cta-title" class="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">Everyone here does this in their free time.</h2>
+          <p class="mt-4 max-w-2xl text-muted-foreground">
+            No one at LinuxServer.io is paid. {stat.backers.value} backers on Open Collective help keep the build servers running. If our images save you time,
+            consider joining them.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a href={DONATE_URL} class="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 font-medium text-primary-foreground hover:brightness-110">
+            <Heart className="size-4" aria-hidden="true" /> Donate
+          </a>
+          <a href={withBase('/support/')} class="inline-flex h-11 items-center gap-2 rounded-md border border-[var(--raft-hair-strong)] bg-background/60 px-5 font-medium hover:bg-muted">
+            Get support
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

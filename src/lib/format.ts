@@ -1,4 +1,4 @@
-/** Number and date formatting shared by every design. Dates render in UTC so builds are deterministic. */
+/** Number and date formatting. Dates render in UTC so builds are deterministic. */
 
 const UNITS: [number, string, string][] = [
   [1e9, 'B', 'billion'],

@@ -10,7 +10,7 @@ interface Props {
   run: string;
   runRequired: string;
   className?: string;
-  /** Extra classes for the <pre>, so each design can style the code surface. */
+  /** Extra classes for the <pre>. */
   preClassName?: string;
 }
 

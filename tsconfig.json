@@ -7,8 +7,7 @@
     "jsxImportSource": "react",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@design/*": ["./src/designs/raft/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

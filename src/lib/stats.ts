@@ -1,7 +1,7 @@
 /**
  * Headline numbers, from src/data/stats.json (written by `npm run data`).
- * Each stat carries its own label, long-form text for screen readers and a source note, so every design
- * presents the same facts the same honest way, whatever it looks like.
+ * Each stat carries its own label, long-form text for screen readers and a source note, so every page
+ * presents the same facts the same honest way.
  */
 import raw from '@/data/stats.json';
 import { compact, compactLong, grouped } from './format';

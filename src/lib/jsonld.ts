@@ -1,5 +1,5 @@
 /**
- * Structured data builders, so every design emits the same schema.org markup.
+ * Structured data builders for schema.org markup.
  * Pass the result to <Layout jsonLd={[...]}>. Organization and WebSite are added on the home page by BaseHead.
  */
 import type { Image } from './images';

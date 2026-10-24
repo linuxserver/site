@@ -28,7 +28,6 @@ export default defineConfig({
     plugins: [tailwindcss()],
     resolve: {
       alias: {
-        '@design': fileURLToPath(new URL('./src/designs/raft', import.meta.url)),
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
