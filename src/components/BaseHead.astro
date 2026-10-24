@@ -90,7 +90,8 @@ const ld = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@g
 <link rel="icon" href={withBase('/favicon-32.png')} type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
 <link rel="manifest" href={withBase('/manifest.webmanifest')} />
-<meta name="theme-color" content="#0b0913" />
+{/* Light without JS (no .dark class); the theme script below sets the real value before paint */}
+<meta name="theme-color" content="#ffffff" />
 
 <link rel="alternate" type="application/rss+xml" title={`${SITE.name} Blog (RSS)`} href={withBase('/blog/rss.xml')} />
 <link rel="alternate" type="application/atom+xml" title={`${SITE.name} Blog (Atom)`} href={withBase('/blog/atom.xml')} />

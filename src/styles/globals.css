@@ -20,6 +20,8 @@
 @theme {
   --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  /* Used by the shadcn dialog and sheet titles */
+  --font-heading: var(--font-sans);
 
   /* Logo colours: bg-otter-pink, text-otter-violet, from-otter-plum … */
   --color-otter-pink: #ff4f97;
@@ -419,7 +421,6 @@
 }
 .post-body :where(pre):not(:where(.not-prose *)) {
   border-radius: var(--radius);
-  background-color: var(--raft-code-bg);
   font-size: 0.85em;
   line-height: 1.65;
   border: 1px solid var(--border);
@@ -446,6 +447,10 @@
 .dark .astro-code span {
   color: var(--shiki-dark);
   background-color: var(--shiki-dark-bg);
+}
+/* Raft's code surface. After the Shiki rules so it beats .astro-code (same specificity) in light mode. */
+.post-body :where(pre):not(:where(.not-prose *)) {
+  background-color: var(--raft-code-bg);
 }
 
 /* Pagefind result highlights */
