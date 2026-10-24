@@ -24,10 +24,11 @@ let total = 0;
 const growth = [...years]
   .sort((a, b) => a[0] - b[0])
   .map(([year, added]) => ({ year, added, total: (total += added) }));
+const crumbs = [{ name: 'About', href: '/about/' }];
 ---
 
-<Layout section="about" title="About" description="Who LinuxServer.io are: volunteers building standardised, regularly updated, well documented Docker images since 2015." breadcrumbs={[{ name: 'About', href: '/about/' }]}>
-  <PageHeader eyebrow="About" title="Volunteers, building the boring parts properly" crumbs={[{ name: 'About', href: '/about/' }]}>
+<Layout section="about" title="About" description="Who LinuxServer.io are: volunteers building standardised, regularly updated, well documented Docker images since 2015." breadcrumbs={crumbs}>
+  <PageHeader eyebrow="About" title="Volunteers, building the boring parts properly" crumbs={crumbs}>
     <p class="mt-5 max-w-3xl text-lg leading-relaxed text-muted-foreground">{MISSION}</p>
   </PageHeader>
 
@@ -120,7 +121,7 @@ const growth = [...years]
     <ul class="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-[var(--radius)] border border-[var(--raft-hair)] bg-[var(--raft-hair)] sm:grid-cols-2 lg:grid-cols-5">
       {
         SUPPORTERS.map((s) => (
-          <li class="bg-[var(--raft-raised)] p-5">
+          <li class="bg-card p-5">
             <a href={s.href} target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-semibold hover:text-primary">
               {s.name} <ArrowUpRight className="size-3.5 text-muted-foreground" aria-hidden="true" /><span class="sr-only">(opens in a new tab)</span>
             </a>

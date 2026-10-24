@@ -8,9 +8,8 @@ import { Download, Star } from 'lucide-react';
 
 interface Props {
   image: Image;
-  headingLevel?: 'h3' | 'h4';
 }
-const { image, headingLevel: H = 'h3' } = Astro.props;
+const { image } = Astro.props;
 ---
 
 <article class="raft-panel raft-glow-edge relative flex flex-col p-4 transition-colors hover:bg-muted/40">
@@ -19,9 +18,9 @@ const { image, headingLevel: H = 'h3' } = Astro.props;
       <ImageLogo image={image} size={32} class="size-8" />
     </span>
     <div class="min-w-0">
-      <H class="truncate font-semibold">
+      <h3 class="truncate font-semibold">
         <a href={withBase(image.url)} class="after:absolute after:inset-0 after:rounded-[inherit] after:content-['']">{image.name}</a>
-      </H>
+      </h3>
       <p class="truncate font-mono text-xs text-muted-foreground">{image.version}</p>
     </div>
   </div>

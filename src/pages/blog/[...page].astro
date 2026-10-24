@@ -1,0 +1,15 @@
+---
+import BlogList from '@/components/BlogList.astro';
+import { getPosts } from '@/lib/posts';
+import { listing, pageCount } from './_list';
+
+// /blog/ and /blog/page/<n>/
+export async function getStaticPaths() {
+  const n = pageCount((await getPosts()).length);
+  return Array.from({ length: n }, (_, i) => ({ params: { page: i === 0 ? undefined : `page/${i + 1}` }, props: { n: i + 1 } }));
+}
+
+const { n } = Astro.props as { n: number };
+---
+
+<BlogList page={await listing(await getPosts(), n, '/blog/')} />

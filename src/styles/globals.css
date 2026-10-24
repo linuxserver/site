@@ -78,16 +78,16 @@
   --input: #dcd8e6;
   --ring: #c42a7c;
   --link: #8f1457;
+  --callout-note-color-light: var(--color-otter-violet);
+  --callout-note-color-dark: #b89cf0;
   --radius: 0.625rem;
 
   /* Raft's own */
   --raft-surface: #f6f5f9;
-  --raft-raised: #ffffff;
   --raft-hair: rgb(20 10 40 / 0.09);
   --raft-hair-strong: rgb(20 10 40 / 0.16);
   --raft-grid: rgb(30 10 60 / 0.07);
   --raft-violet: #52309a;
-  --raft-blue: #2353a8;
   --raft-ok: #17603d;
   --raft-ok-dot: #1f9d5c;
   --raft-glow-a: rgb(255 79 151 / 0.16);
@@ -121,12 +121,10 @@
   --link: #ff8cc0;
 
   --raft-surface: #100e1a;
-  --raft-raised: #13111e;
   --raft-hair: rgb(255 255 255 / 0.08);
   --raft-hair-strong: rgb(255 255 255 / 0.14);
   --raft-grid: rgb(255 255 255 / 0.055);
   --raft-violet: #c7b3f7;
-  --raft-blue: #9cc0ff;
   --raft-ok: #5fd39a;
   --raft-ok-dot: #3fcf8a;
   --raft-glow-a: rgb(255 79 151 / 0.22);
@@ -144,6 +142,9 @@
   }
   html {
     @apply font-sans;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
   }
   body {
     @apply bg-background text-foreground;
@@ -184,16 +185,12 @@
       min-width: 44px;
     }
   }
-  html {
-    scroll-padding-top: 5.5rem;
-    -webkit-text-size-adjust: 100%;
-    text-rendering: optimizeLegibility;
-  }
   ::selection {
     background-color: color-mix(in oklab, var(--primary) 28%, transparent);
   }
 }
 
+/* Catch-all for third-party animations and every transition. Our own animations also sit behind no-preference. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -234,7 +231,7 @@
 
 /* A hairline panel; the building block of the whole design. */
 @utility raft-panel {
-  background: var(--raft-raised);
+  background: var(--card);
   border: 1px solid var(--raft-hair);
   border-radius: var(--radius);
   box-shadow: var(--raft-shadow);
@@ -274,12 +271,6 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted-foreground);
-}
-
-@utility raft-num {
-  font-family: var(--font-mono);
-  font-feature-settings: 'zero', 'ss01';
-  letter-spacing: -0.03em;
 }
 
 @utility raft-gradient-text {
@@ -364,7 +355,7 @@
   overflow-wrap: break-word;
   --tw-prose-body: var(--foreground);
   --tw-prose-headings: var(--foreground);
-  --tw-prose-links: var(--link, var(--primary));
+  --tw-prose-links: var(--link);
   --tw-prose-bold: var(--foreground);
   --tw-prose-quotes: var(--foreground);
   --tw-prose-quote-borders: var(--border);
@@ -377,7 +368,7 @@
   --tw-prose-captions: var(--muted-foreground);
   --tw-prose-invert-body: var(--foreground);
   --tw-prose-invert-headings: var(--foreground);
-  --tw-prose-invert-links: var(--link, var(--primary));
+  --tw-prose-invert-links: var(--link);
   --tw-prose-invert-bold: var(--foreground);
   --tw-prose-invert-code: var(--foreground);
   --tw-prose-invert-quotes: var(--foreground);
@@ -443,10 +434,6 @@
 }
 .post-body .callout p {
   margin-block: 0.5em;
-}
-:root {
-  --callout-note-color-light: var(--color-otter-violet);
-  --callout-note-color-dark: #b89cf0;
 }
 
 /* Shiki dual theme: light values are inline, dark values come from CSS variables */

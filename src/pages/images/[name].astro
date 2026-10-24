@@ -23,7 +23,7 @@ export function getStaticPaths() {
 
 const { image } = Astro.props as { image: Image };
 const related = relatedImages(image, 4);
-const posts = await toPostViews(postsForImage(image.name, await getPosts()).slice(0, 3));
+const posts = await toPostViews(postsForImage(image.name, await getPosts(), 3));
 const snippets = {
   compose: composeSnippet(image),
   composeRequired: composeSnippet(image, { optional: false }),
@@ -31,6 +31,10 @@ const snippets = {
   runRequired: dockerRunSnippet(image, { optional: false }),
 };
 const c = image.config ?? {};
+const crumbs = [
+  { name: 'Images', href: '/images/' },
+  { name: image.name, href: image.url },
+];
 const pull = `docker pull ${SITE.registry}/${image.name}:latest`;
 const built = new Date(image.version_timestamp.replace(' ', 'T'));
 const description = image.summary.length > 155 ? image.summary.slice(0, 152).replace(/\s+\S*$/, '') + '…' : image.summary;
@@ -86,19 +90,16 @@ const changelog = image.changelog ?? [];
   section="images"
   title={`${image.name} Docker image`}
   description={description}
-  breadcrumbs={[
-    { name: 'Images', href: '/images/' },
-    { name: image.name, href: image.url },
-  ]}
+  breadcrumbs={crumbs}
   jsonLd={[imageJsonLd(image, Astro.site)]}
 >
   <header class="relative overflow-hidden border-b border-[var(--raft-hair)]" data-pagefind-body>
     <div class="raft-aurora pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
     <div class="raft-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
     <div class="raft-container relative py-10 md:py-14">
-      <Breadcrumbs crumbs={[{ name: 'Images', href: '/images/' }, { name: image.name, href: image.url }]} />
+      <Breadcrumbs crumbs={crumbs} />
       <div class="mt-8 flex flex-col gap-6 md:flex-row md:items-center">
-        <span class="grid size-20 shrink-0 place-items-center rounded-xl border border-[var(--raft-hair-strong)] bg-[var(--raft-raised)] p-3 shadow-[var(--raft-shadow)]">
+        <span class="grid size-20 shrink-0 place-items-center rounded-xl border border-[var(--raft-hair-strong)] bg-card p-3 shadow-[var(--raft-shadow)]">
           <ImageLogo image={image} size={56} class="size-14" loading="eager" />
         </span>
         <div class="min-w-0">
@@ -156,7 +157,7 @@ const changelog = image.changelog ?? [];
           Generated from the image's own configuration. Replace the <code class="font-mono text-foreground">/path/to</code> folders with real paths on your host.
         </p>
         <Panel class="mt-4" bodyClass="bg-[var(--raft-code-bg)]">
-          <QuickStart client:visible name={image.name} {...snippets} preClassName="max-h-[28rem]" />
+          <QuickStart client:visible name={image.name} {...snippets} />
         </Panel>
       </section>
 

@@ -1,26 +1,17 @@
 ---
 import BlogList from '@/components/BlogList.astro';
-import { getPosts, paginate, postsByAuthor } from '@/lib/posts';
-import { getAuthorViews, toPostViews, type AuthorView } from '@/lib/views';
-import { topTags } from '../_list';
+import { getAuthors, getPosts, postsByAuthor, type AuthorView } from '@/lib/posts';
+import { listing } from '../_list';
 
 export async function getStaticPaths() {
-  const authors = await getAuthorViews(await getPosts());
+  const authors = await getAuthors(await getPosts());
   return authors.map((author) => ({ params: { author: author.id }, props: { author } }));
 }
 
 const { author } = Astro.props as { author: AuthorView };
 const posts = await postsByAuthor(await getPosts(), author.id);
 // Author pages list everything on one page
-const p = paginate(posts, 1, Math.max(1, posts.length), `/blog/authors/${author.id}/`);
-const props = {
-  kind: 'author' as const,
-  heading: author.name,
-  description: `${posts.length} post${posts.length === 1 ? '' : 's'} by ${author.name} on the LinuxServer.io blog.`,
-  page: { ...p, data: await toPostViews(p.data) },
-  topTags: await topTags(),
-  author,
-};
+const page = await listing(posts, 1, `/blog/authors/${author.id}/`, Math.max(1, posts.length));
 ---
 
-<BlogList {...props} />
+<BlogList page={page} author={author} />

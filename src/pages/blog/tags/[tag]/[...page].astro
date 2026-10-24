@@ -1,7 +1,7 @@
 ---
 import BlogList from '@/components/BlogList.astro';
 import { collectTags, getPosts, postsWithTag, type TagInfo } from '@/lib/posts';
-import { listing, pageCount, topTags } from '../../_list';
+import { listing, pageCount } from '../../_list';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -15,14 +15,6 @@ export async function getStaticPaths() {
 }
 
 const { tag, n } = Astro.props as { tag: TagInfo; n: number };
-const props = {
-  kind: 'tag' as const,
-  heading: tag.name,
-  description: `${tag.count} post${tag.count === 1 ? '' : 's'} tagged “${tag.name}” on the LinuxServer.io blog.`,
-  page: await listing(postsWithTag(await getPosts(), tag.slug), n, `/blog/tags/${tag.slug}/`),
-  topTags: await topTags(),
-  tag,
-};
 ---
 
-<BlogList {...props} />
+<BlogList page={await listing(postsWithTag(await getPosts(), tag.slug), n, `/blog/tags/${tag.slug}/`)} tag={tag} />

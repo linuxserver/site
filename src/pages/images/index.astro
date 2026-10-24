@@ -11,20 +11,21 @@ import { toCards } from '@/lib/views';
 
 const cards = await toCards(getAllImages());
 const active = cards.filter((c) => !c.deprecated);
+const crumbs = [{ name: 'Images', href: '/images/' }];
 ---
 
 <Layout
   section="images"
   title="Docker images"
   description={`Browse all ${stat.images.value} LinuxServer.io Docker images: search, filter by category and architecture, and get a compose file for each.`}
-  breadcrumbs={[{ name: 'Images', href: '/images/' }]}
+  breadcrumbs={crumbs}
   jsonLd={[itemListJsonLd('LinuxServer.io Docker images', active.map((c) => ({ name: c.name, url: c.url })), Astro.site)]}
 >
   <PageHeader
     eyebrow="Catalogue"
     title={`${stat.images.value} images, one standard`}
     lede="Every image shares the same base, the same PUID/PGID conventions and the same documentation format. Find yours, then copy a compose file."
-    crumbs={[{ name: 'Images', href: '/images/' }]}
+    crumbs={crumbs}
   >
     <dl class="mt-8 flex flex-wrap gap-x-8 gap-y-3 font-mono text-sm">
       {

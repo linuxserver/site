@@ -9,7 +9,7 @@ export function GET() {
       description: SITE.description,
       start_url: withBase('/'),
       display: 'standalone',
-      background_color: '#ffffff',
+      background_color: '#0b0913',
       theme_color: '#d93b92',
       icons: [
         { src: withBase('/icon-192.png'), sizes: '192x192', type: 'image/png' },

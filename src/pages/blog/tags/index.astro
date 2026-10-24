@@ -2,23 +2,23 @@
 import Layout from '@/layouts/Layout.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import { withBase } from '@/lib/base';
-import { collectTags, getPosts } from '@/lib/posts';
-import { getAuthorViews } from '@/lib/views';
+import { collectTags, getAuthors, getPosts } from '@/lib/posts';
 
 const posts = await getPosts();
 const tags = collectTags(posts);
-const authors = await getAuthorViews(posts);
+const authors = await getAuthors(posts);
 const totalPosts = posts.length;
 const max = Math.max(...tags.map((t) => t.count));
 const roleLabel = { team: 'team', alumni: 'alumni', guest: 'guest' } as const;
+const crumbs = [{ name: 'Blog', href: '/blog/' }, { name: 'Topics', href: '/blog/tags/' }];
 ---
 
-<Layout section="blog" title="Topics and authors" description={`Every topic and author across ${totalPosts} posts on the LinuxServer.io blog.`} breadcrumbs={[{ name: 'Blog', href: '/blog/' }, { name: 'Topics', href: '/blog/tags/' }]}>
+<Layout section="blog" title="Topics and authors" description={`Every topic and author across ${totalPosts} posts on the LinuxServer.io blog.`} breadcrumbs={crumbs}>
   <PageHeader
     eyebrow="Index"
     title="Topics and authors"
     lede={`${tags.length} topics and ${authors.length} authors across ${totalPosts} posts since 2013.`}
-    crumbs={[{ name: 'Blog', href: '/blog/' }, { name: 'Topics', href: '/blog/tags/' }]}
+    crumbs={crumbs}
   />
   <div class="raft-container grid grid-cols-1 gap-12 pt-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
     <section aria-labelledby="topics">

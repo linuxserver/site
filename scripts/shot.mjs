@@ -2,7 +2,7 @@
 /**
  * Screenshots for visual checks.
  *
- *   node scripts/shot.mjs <url> <out.png> [--dark] [--mobile] [--full] [--width=1440] [--height=900] [--theme=light|dark|system]
+ *   node scripts/shot.mjs <url> <out.png> [--light|--dark] [--mobile] [--full] [--width=1440] [--height=900] [--theme=light|dark|system]
  *
  * e.g. node scripts/shot.mjs http://localhost:4321/images/ /tmp/images.png --full --dark
  */
@@ -10,7 +10,7 @@ import { chromium } from 'playwright';
 
 const [url, out, ...flags] = process.argv.slice(2);
 if (!url || !out) {
-  console.error('usage: node scripts/shot.mjs <url> <out.png> [--dark] [--mobile] [--full]');
+  console.error('usage: node scripts/shot.mjs <url> <out.png> [--light|--dark] [--mobile] [--full]');
   process.exit(1);
 }
 const flag = (n) => flags.includes(`--${n}`);
@@ -25,10 +25,10 @@ const page = await browser.newPage({
   isMobile: mobile,
   hasTouch: mobile,
 });
-// The site defaults to dark whatever the OS says, so store the theme choice before load: --dark, or
-// --theme=light|dark|system. Light otherwise.
-const theme = flags.find((f) => f.startsWith('--theme='))?.split('=')[1] ?? (flag('dark') ? 'dark' : 'light');
-await page.addInitScript((t) => localStorage.setItem('theme', t), theme);
+// Without a stored choice the site is dark whatever the OS says, which is what a first visit sees.
+// --light / --dark (or --theme=light|dark|system) store a choice before load.
+const theme = flags.find((f) => f.startsWith('--theme='))?.split('=')[1] ?? (flag('light') ? 'light' : flag('dark') ? 'dark' : undefined);
+if (theme) await page.addInitScript((t) => localStorage.setItem('theme', t), theme);
 const errors = [];
 page.on('pageerror', (e) => errors.push(e.message));
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));

@@ -114,8 +114,18 @@ export async function postsByAuthor(posts: Post[], id: string): Promise<Post[]> 
   return posts.filter((p) => p.data.author && index.get(slugify(p.data.author))?.id === id);
 }
 
-/** Authors with at least one published post, most prolific first. */
-export async function getAuthors(posts: Post[]) {
+export interface AuthorView {
+  id: string;
+  name: string;
+  github?: string;
+  role: 'team' | 'alumni' | 'guest';
+  initials: string;
+  count: number;
+  url: string;
+}
+
+/** Authors with at least one of `posts`, most prolific first. */
+export async function getAuthors(posts: Post[]): Promise<AuthorView[]> {
   const all = await getCollection('authors');
   const index = await authorsByKey();
   const counts = new Map<string, number>();
@@ -125,7 +135,15 @@ export async function getAuthors(posts: Post[]) {
   }
   return all
     .filter((a) => counts.has(a.id))
-    .map((a) => ({ author: a, count: counts.get(a.id)!, initials: initials(a.data.name), url: withBase(`/blog/authors/${a.id}/`) }))
+    .map(({ id, data }) => ({
+      id,
+      name: data.name,
+      github: data.github,
+      role: data.role,
+      initials: initials(data.name),
+      count: counts.get(id)!,
+      url: withBase(`/blog/authors/${id}/`),
+    }))
     .sort((a, b) => b.count - a.count);
 }
 

@@ -132,7 +132,7 @@ const hl = (line: string) => {
           <div class="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-[var(--raft-hair)] bg-[var(--raft-hair)]">
             {
               [stat.monthlyPulls, stat.stars, stat.backers].map((x) => (
-                <div class="bg-[var(--raft-raised)] p-3">
+                <div class="bg-card p-3">
                   <p class="text-lg font-semibold tracking-tight sm:text-xl" aria-describedby={`src-${x.id}`}>
                     <span aria-hidden="true">{x.value}</span>
                     <span class="sr-only">{x.long}</span>
@@ -290,7 +290,7 @@ const hl = (line: string) => {
           const IconC = pillarIcons[p.id];
           const external = p.link.href.startsWith('http');
           return (
-            <li class="flex flex-col bg-[var(--raft-raised)] p-6">
+            <li class="flex flex-col bg-card p-6">
               <div class="flex items-center justify-between">
                 <span class="grid size-9 place-items-center rounded-md border border-[var(--raft-hair)] bg-[var(--raft-surface)] text-primary">
                   <IconC className="size-[1.1rem]" aria-hidden="true" />

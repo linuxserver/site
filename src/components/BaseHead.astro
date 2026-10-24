@@ -90,8 +90,7 @@ const ld = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@g
 <link rel="icon" href={withBase('/favicon-32.png')} type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
 <link rel="manifest" href={withBase('/manifest.webmanifest')} />
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#0b0913" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#0b0913" />
 
 <link rel="alternate" type="application/rss+xml" title={`${SITE.name} Blog (RSS)`} href={withBase('/blog/rss.xml')} />
 <link rel="alternate" type="application/atom+xml" title={`${SITE.name} Blog (Atom)`} href={withBase('/blog/atom.xml')} />
@@ -118,14 +117,15 @@ const ld = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@g
 
 <script is:inline>
   // Runs before first paint so the page never flashes the wrong theme. Dark unless the visitor chose otherwise.
-  (function () {
-    var stored = null;
-    try { stored = localStorage.getItem('theme'); } catch (e) {}
-    var pref = stored || 'dark';
+  // ThemeToggle calls applyTheme too, so this is the one place a theme is applied.
+  window.applyTheme = function (pref) {
     var dark = pref === 'dark' || (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
     var root = document.documentElement;
     root.classList.toggle('dark', dark);
     root.style.colorScheme = dark ? 'dark' : 'light';
     root.dataset.themePref = pref;
-  })();
+    // Browser chrome follows the page: the --background tokens in globals.css
+    document.querySelector('meta[name="theme-color"]').content = dark ? '#0b0913' : '#ffffff';
+  };
+  applyTheme((function () { try { return localStorage.getItem('theme'); } catch (e) {} })() || 'dark');
 </script>

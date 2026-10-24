@@ -24,8 +24,8 @@ interface Props {
   indexUrl: string;
   /** URL of the full-text search page, base path included. */
   searchUrl: string;
-  /** What the visible trigger looks like. 'none' renders no trigger; open it with the shortcut or the `lsio:search` event. */
-  trigger?: 'input' | 'button' | 'icon' | 'none';
+  /** What the visible trigger looks like: a search field, or an icon button for small screens. */
+  trigger?: 'input' | 'icon';
   placeholder?: string;
   className?: string;
 }
@@ -172,20 +172,6 @@ export default function CommandSearch({ indexUrl, searchUrl, trigger = 'input', 
             {shortcut}
           </Kbd>
           <span className="sr-only">(shortcut {shortcut})</span>
-        </button>
-      )}
-      {trigger === 'button' && (
-        <button
-          type="button"
-          onClick={show}
-          className={cn('inline-flex items-center gap-2 text-sm', className)}
-          aria-haspopup="dialog"
-        >
-          <Search className="size-4" aria-hidden="true" />
-          <span>Search</span>
-          <Kbd className="hidden sm:inline-flex" aria-hidden="true">
-            {shortcut}
-          </Kbd>
         </button>
       )}
       {trigger === 'icon' && (

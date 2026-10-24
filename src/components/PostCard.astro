@@ -6,10 +6,9 @@ import { formatDate, isoDate } from '@/lib/format';
 
 interface Props {
   post: PostView;
-  headingLevel?: 'h2' | 'h3';
   eager?: boolean;
 }
-const { post, headingLevel: H = 'h3', eager = false } = Astro.props;
+const { post, eager = false } = Astro.props;
 ---
 
 <article class="raft-panel raft-glow-edge group relative flex flex-col overflow-hidden">
@@ -29,9 +28,9 @@ const { post, headingLevel: H = 'h3', eager = false } = Astro.props;
       <span aria-hidden="true">·</span>
       <span>{post.readingTime} min read</span>
     </p>
-    <H class="mt-2 text-lg leading-snug font-semibold tracking-tight">
+    <h3 class="mt-2 text-lg leading-snug font-semibold tracking-tight">
       <a href={post.url} class="after:absolute after:inset-0 after:content-[''] group-hover:text-primary">{post.title}</a>
-    </H>
+    </h3>
     <p class="mt-2 line-clamp-3 text-sm text-muted-foreground">{post.excerpt}</p>
     {
       post.tags.length > 0 && (

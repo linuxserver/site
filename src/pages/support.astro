@@ -11,14 +11,15 @@ const checklist = [
   'What you expected to happen, and what happened instead',
   'Your host: OS, architecture, and Docker version',
 ];
+const crumbs = [{ name: 'Support', href: '/support/' }];
 ---
 
-<Layout section="support" title="Support" description="Where to get help with LinuxServer.io images: documentation, Discord, our Discussions forum and GitHub." breadcrumbs={[{ name: 'Support', href: '/support/' }]}>
+<Layout section="support" title="Support" description="Where to get help with LinuxServer.io images: documentation, Discord, our Discussions forum and GitHub." breadcrumbs={crumbs}>
   <PageHeader
     eyebrow="Support"
     title="Get help from people who build the images"
     lede="We make easy-to-use, well documented images. Start with the docs; if you are still stuck, the team and the community are on Discord and our forum."
-    crumbs={[{ name: 'Support', href: '/support/' }]}
+    crumbs={crumbs}
   />
   <div class="raft-container pt-12">
     <ol class="grid grid-cols-1 gap-3 md:grid-cols-2">

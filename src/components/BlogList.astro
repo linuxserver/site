@@ -6,39 +6,45 @@ import Pagination from '@/components/Pagination.astro';
 import PostCard from '@/components/PostCard.astro';
 import Icon from '@/components/Icon.astro';
 import { withBase } from '@/lib/base';
-import { formatDate, isoDate } from '@/lib/format';
-import type { Page, TagInfo } from '@/lib/posts';
+import { formatDate, isoDate, plural } from '@/lib/format';
+import { collectTags, getPosts, type AuthorView, type Page, type TagInfo } from '@/lib/posts';
 import type { Crumb } from '@/lib/seo';
-import type { AuthorView, PostView } from '@/lib/views';
+import type { PostView } from '@/lib/views';
 
-/** The blog index, pages 2+, and the tag and author listings. */
+/** A page of the blog: the index and its pages 2+, or every post with a tag or by an author. */
 interface Props {
-  kind: 'all' | 'tag' | 'author';
-  /** The tag or author name for those listings. */
-  heading: string;
-  description: string;
   page: Page<PostView>;
-  /** Most used tags, for filter chips. */
-  topTags: TagInfo[];
   tag?: TagInfo;
   author?: AuthorView;
 }
-const { kind, heading, description, page, topTags, tag, author } = Astro.props;
+const { page, tag, author } = Astro.props;
 
 const crumbs: Crumb[] = [{ name: 'Blog', href: '/blog/' }];
-if (kind === 'tag' && tag) crumbs.push({ name: 'Topics', href: '/blog/tags/' }, { name: tag.name, href: `/blog/tags/${tag.slug}/` });
-if (kind === 'author' && author) crumbs.push({ name: author.name, href: `/blog/authors/${author.id}/` });
+let title: string, eyebrow: string, h1: string, description: string, lede: string;
+if (tag) {
+  crumbs.push({ name: 'Topics', href: '/blog/tags/' }, { name: tag.name, href: `/blog/tags/${tag.slug}/` });
+  [title, eyebrow, h1] = [`Posts tagged ${tag.name}`, 'Topic', `#${tag.slug}`];
+  description = lede = `${plural(tag.count, 'post')} tagged “${tag.name}” on the LinuxServer.io blog.`;
+} else if (author) {
+  crumbs.push({ name: author.name, href: `/blog/authors/${author.id}/` });
+  [title, eyebrow, h1] = [`Posts by ${author.name}`, 'Author', author.name];
+  description = lede = `${plural(page.total, 'post')} by ${author.name} on the LinuxServer.io blog.`;
+} else {
+  const n = page.currentPage;
+  [title, eyebrow, h1] = [n > 1 ? `Blog, page ${n}` : 'Blog', 'Blog', 'News, guides and release notes'];
+  description = `News, guides and release notes from the LinuxServer.io team.${n > 1 ? ` Page ${n}.` : ''}`;
+  lede = 'From the people who build the images: release notes, deep dives, guides and the occasional opinion.';
+}
 
-const featured = kind === 'all' && page.currentPage === 1 ? page.data[0] : undefined;
+// Most used tags, for the filter chips
+const topTags = collectTags(await getPosts()).slice(0, 14);
+const featured = !tag && !author && page.currentPage === 1 ? page.data[0] : undefined;
 const rest = featured ? page.data.slice(1) : page.data;
-const title = kind === 'all' ? (page.currentPage > 1 ? `Blog, page ${page.currentPage}` : 'Blog') : kind === 'tag' ? `Posts tagged ${heading}` : `Posts by ${heading}`;
-const eyebrow = kind === 'all' ? 'Blog' : kind === 'tag' ? 'Topic' : 'Author';
-const h1 = kind === 'all' ? 'News, guides and release notes' : kind === 'tag' ? `#${tag?.slug ?? heading}` : heading;
 const roleLabel = { team: 'Team member', alumni: 'Former team member', guest: 'Guest author' } as const;
 ---
 
 <Layout section="blog" title={title} description={description} breadcrumbs={crumbs}>
-  <PageHeader eyebrow={eyebrow} title={h1} lede={kind === 'all' ? 'From the people who build the images: release notes, deep dives, guides and the occasional opinion.' : description} crumbs={crumbs}>
+  <PageHeader eyebrow={eyebrow} title={h1} lede={lede} crumbs={crumbs}>
     {
       author && (
         <div class="mt-6 flex items-center gap-3">
@@ -60,7 +66,7 @@ const roleLabel = { team: 'Team member', alumni: 'Former team member', guest: 'G
       <nav aria-label="Topics" class="contents">
         <a
           href={withBase('/blog/')}
-          aria-current={kind === 'all' ? 'page' : undefined}
+          aria-current={!tag && !author ? 'page' : undefined}
           class="rounded-md border border-[var(--raft-hair)] bg-background/50 px-2.5 py-1 font-mono text-xs text-muted-foreground hover:text-foreground aria-[current=page]:border-primary aria-[current=page]:text-foreground"
           >all</a
         >

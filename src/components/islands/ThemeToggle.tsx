@@ -13,22 +13,21 @@ import {
 
 type Pref = 'light' | 'dark' | 'system';
 
-function apply(pref: Pref) {
-  const dark = pref === 'dark' || (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
-  const root = document.documentElement;
-  root.classList.toggle('dark', dark);
-  root.style.colorScheme = dark ? 'dark' : 'light';
-  root.dataset.themePref = pref;
+declare global {
+  interface Window {
+    /** Defined by the inline script in BaseHead, which applies the initial theme before paint. */
+    applyTheme(pref: Pref): void;
+  }
 }
 
-/** Light / dark / system switch. The initial theme is applied before paint by BaseHead. */
-export default function ThemeToggle({ className, variant = 'ghost' }: { className?: string; variant?: 'ghost' | 'outline' }) {
-  const [pref, setPref] = React.useState<Pref>('system');
+/** Light / dark / system switch. */
+export default function ThemeToggle() {
+  const [pref, setPref] = React.useState<Pref>('dark');
 
   React.useEffect(() => {
-    setPref((document.documentElement.dataset.themePref as Pref) ?? 'system');
+    setPref(document.documentElement.dataset.themePref as Pref);
     const mq = matchMedia('(prefers-color-scheme: dark)');
-    const onChange = () => document.documentElement.dataset.themePref === 'system' && apply('system');
+    const onChange = () => document.documentElement.dataset.themePref === 'system' && window.applyTheme('system');
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
   }, []);
@@ -39,13 +38,13 @@ export default function ThemeToggle({ className, variant = 'ghost' }: { classNam
     try {
       localStorage.setItem('theme', p);
     } catch {}
-    apply(p);
+    window.applyTheme(p);
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={variant} size="icon" className={className} aria-label="Colour theme">
+        <Button variant="ghost" size="icon" aria-label="Colour theme">
           <Sun className="size-[1.15rem] dark:hidden" aria-hidden="true" />
           <Moon className="hidden size-[1.15rem] dark:block" aria-hidden="true" />
         </Button>

@@ -95,7 +95,7 @@ their contrast ratios are at the top of `src/styles/globals.css`.
 
 ```bash
 node scripts/a11y.mjs http://localhost:4321                 # axe-core, WCAG 2.2 A/AA/AAA, light + dark
-node scripts/shot.mjs http://localhost:4321/ out.png --full  # screenshot (--dark, --mobile)
+node scripts/shot.mjs http://localhost:4321/ out.png --full  # screenshot (--light, --mobile)
 node scripts/overflow.mjs http://localhost:4321/             # finds horizontal overflow at 390px
 npm run check                                                # TypeScript / Astro diagnostics
 ```

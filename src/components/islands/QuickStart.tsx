@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { cn } from '@/lib/utils';
 import CopyButton from './CopyButton';
 
 interface Props {
@@ -9,23 +8,20 @@ interface Props {
   composeRequired: string;
   run: string;
   runRequired: string;
-  className?: string;
-  /** Extra classes for the <pre>. */
-  preClassName?: string;
 }
 
 /**
  * Compose / docker run tabs with a "show optional settings" switch and copy buttons.
  * Server-rendered with the full snippets, so it reads fine before (or without) hydration.
  */
-export default function QuickStart({ name, compose, composeRequired, run, runRequired, className, preClassName }: Props) {
+export default function QuickStart({ name, compose, composeRequired, run, runRequired }: Props) {
   const [optional, setOptional] = React.useState(true);
   const id = React.useId();
   const hasOptional = compose !== composeRequired;
   const snippets = { compose: optional ? compose : composeRequired, run: optional ? run : runRequired };
 
   return (
-    <Tabs defaultValue="compose" className={cn('gap-0', className)}>
+    <Tabs defaultValue="compose" className="gap-0">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-3 py-2">
         <TabsList aria-label={`Ways to run ${name}`}>
           <TabsTrigger value="compose">Docker Compose</TabsTrigger>
@@ -47,7 +43,7 @@ export default function QuickStart({ name, compose, composeRequired, run, runReq
       {(['compose', 'run'] as const).map((k) => (
         <TabsContent key={k} value={k} className="relative">
           <pre
-            className={cn('overflow-x-auto p-4 pr-14 font-mono text-[0.8125rem] leading-relaxed', preClassName)}
+            className="max-h-[28rem] overflow-x-auto p-4 pr-14 font-mono text-[0.8125rem] leading-relaxed"
             tabIndex={0}
             aria-label={k === 'compose' ? 'docker-compose.yml' : 'docker run command'}
           >

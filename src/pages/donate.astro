@@ -15,14 +15,15 @@ const otherWays = [
   { title: 'Help other users', body: 'Answering a question on Discord or the forum frees up time for the team to build.', href: LINKS.discord, label: 'Discord' },
   { title: 'Spread the word', body: 'Write about your setup, star the repositories you use, and point people to the docs.', href: '/blog/', label: 'Our blog' },
 ];
+const crumbs = [{ name: 'Donate', href: '/donate/' }];
 ---
 
-<Layout section="donate" title="Donate" description="LinuxServer.io is run entirely by volunteers. Donations on Open Collective keep our build infrastructure running." breadcrumbs={[{ name: 'Donate', href: '/donate/' }]}>
+<Layout section="donate" title="Donate" description="LinuxServer.io is run entirely by volunteers. Donations on Open Collective keep our build infrastructure running." breadcrumbs={crumbs}>
   <PageHeader
     eyebrow="Donate"
     title="Keep the fleet afloat"
     lede="Everyone at LinuxServer.io is a volunteer. We don't get paid to do this; we make the most of our free time to keep improving what we do. Even the smallest donation helps keep everything up and running."
-    crumbs={[{ name: 'Donate', href: '/donate/' }]}
+    crumbs={crumbs}
   />
 
   <div class="raft-container grid grid-cols-1 gap-3 pt-12 lg:grid-cols-[1.3fr_1fr]">
@@ -78,7 +79,7 @@ const otherWays = [
     <ul class="mt-8 grid grid-cols-1 gap-px overflow-hidden rounded-[var(--radius)] border border-[var(--raft-hair)] bg-[var(--raft-hair)] sm:grid-cols-2 lg:grid-cols-5">
       {
         SUPPORTERS.map((s) => (
-          <li class="flex flex-col bg-[var(--raft-raised)] p-5">
+          <li class="flex flex-col bg-card p-5">
             <a href={s.href} target="_blank" rel="noopener" class="text-lg font-semibold hover:text-primary">
               {s.name}<span class="sr-only"> (opens in a new tab)</span>
             </a>

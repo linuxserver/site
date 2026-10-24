@@ -8,12 +8,11 @@ interface Props {
   title: string;
   lede?: string;
   crumbs?: Crumb[];
-  class?: string;
 }
-const { eyebrow, title, lede, crumbs, class: className } = Astro.props;
+const { eyebrow, title, lede, crumbs } = Astro.props;
 ---
 
-<div class:list={['relative overflow-hidden border-b border-[var(--raft-hair)]', className]}>
+<div class="relative overflow-hidden border-b border-[var(--raft-hair)]">
   <div class="raft-aurora pointer-events-none absolute inset-0 opacity-70" aria-hidden="true"></div>
   <div class="raft-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
   <div class="raft-container relative py-12 md:py-16">
