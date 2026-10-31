@@ -1,12 +1,12 @@
 {
- "generated": "2026-10-30T10:56:17.445Z",
+ "generated": "2026-10-31T10:26:26.646Z",
  "images": 203,
  "deprecated": 21,
- "monthly_pulls": 203161740,
- "hub_pulls": 19992371487,
- "stars": 43617,
+ "monthly_pulls": 202768671,
+ "hub_pulls": 19993820182,
+ "stars": 43626,
  "arm64": 161,
- "updated_this_week": 191,
+ "updated_this_week": 189,
  "since": "2015-06-29",
  "team": 17,
  "backers": 1013
