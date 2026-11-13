@@ -1,5 +1,5 @@
 {
- "last_updated": "2026-11-12 08:00:03+00:00",
+ "last_updated": "2026-11-13 08:23:33+00:00",
  "images": [
   {
    "name": "adguardhome-sync",
@@ -14,7 +14,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 64,
-   "monthly_pulls": 196740,
+   "monthly_pulls": 198676,
    "tags": [
     {
      "tag": "latest",
@@ -106,7 +106,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 49,
-   "monthly_pulls": 40521,
+   "monthly_pulls": 40657,
    "tags": [
     {
      "tag": "latest",
@@ -236,7 +236,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 8,
-   "monthly_pulls": 1561674,
+   "monthly_pulls": 1562763,
    "tags": [
     {
      "tag": "latest",
@@ -337,7 +337,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 49,
-   "monthly_pulls": 406332,
+   "monthly_pulls": 406685,
    "tags": [
     {
      "tag": "latest",
@@ -428,13 +428,13 @@
    "project_url": "https://ardour.org/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/ardour-logo.png",
    "description": "[Ardour] is an open source, collaborative effort of a worldwide team including musicians, programmers, and professional recording engineers.",
-   "version": "2026-11-06-ls118",
-   "version_timestamp": "2026-11-07 01:44:54+00:00",
+   "version": "2026-11-12-ls119",
+   "version_timestamp": "2026-11-13 02:45:16+00:00",
    "category": "Audio Processing",
    "stable": true,
    "deprecated": false,
    "stars": 15,
-   "monthly_pulls": 2533,
+   "monthly_pulls": 2499,
    "tags": [
     {
      "tag": "latest",
@@ -533,7 +533,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 30,
-   "monthly_pulls": 8563,
+   "monthly_pulls": 8700,
    "tags": [
     {
      "tag": "latest",
@@ -628,7 +628,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 0,
-   "monthly_pulls": 1059,
+   "monthly_pulls": 1226,
    "tags": [
     {
      "tag": "latest",
@@ -712,7 +712,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 3,
-   "monthly_pulls": 4098,
+   "monthly_pulls": 4277,
    "tags": [
     {
      "tag": "latest",
@@ -807,7 +807,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 48,
-   "monthly_pulls": 113271,
+   "monthly_pulls": 112662,
    "tags": [
     {
      "tag": "latest",
@@ -897,7 +897,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 93,
-   "monthly_pulls": 82343,
+   "monthly_pulls": 82616,
    "tags": [
     {
      "tag": "latest",
@@ -998,7 +998,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 414,
-   "monthly_pulls": 10685929,
+   "monthly_pulls": 10638764,
    "tags": [
     {
      "tag": "latest",
@@ -1080,7 +1080,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 190,
-   "monthly_pulls": 429102,
+   "monthly_pulls": 428747,
    "tags": [
     {
      "tag": "latest",
@@ -1182,7 +1182,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 5,
-   "monthly_pulls": 248,
+   "monthly_pulls": 253,
    "tags": [
     {
      "tag": "latest",
@@ -1272,8 +1272,8 @@
    "project_url": "https://boa.realm667.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/boa-logo.png",
    "description": "[Wolfenstein: Blade of Agony] is a story-driven WWII shooter inspired by Wolfenstein and Doom.",
-   "version": "v3.1-ls28",
-   "version_timestamp": "2026-11-05 23:19:17+00:00",
+   "version": "v3.1-ls29",
+   "version_timestamp": "2026-11-12 23:20:58+00:00",
    "category": "Games",
    "stable": true,
    "deprecated": false,
@@ -1365,7 +1365,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 119,
-   "monthly_pulls": 213161,
+   "monthly_pulls": 212998,
    "tags": [
     {
      "tag": "latest",
@@ -1464,7 +1464,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 30,
-   "monthly_pulls": 13489,
+   "monthly_pulls": 13623,
    "tags": [
     {
      "tag": "latest",
@@ -1577,7 +1577,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 1015,
-   "monthly_pulls": 2008648,
+   "monthly_pulls": 2019853,
    "tags": [
     {
      "tag": "latest",
@@ -1686,13 +1686,13 @@
    "project_url": "https://brave.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/brave-logo.png",
    "description": "[The Brave browser] is a fast, private and secure web browser for PC, Mac and mobile.",
-   "version": "1.99.56-ls145",
-   "version_timestamp": "2026-11-10 18:54:19+00:00",
+   "version": "1.99.57-ls146",
+   "version_timestamp": "2026-11-12 21:13:36+00:00",
    "category": "Web Browser",
    "stable": true,
    "deprecated": false,
    "stars": 27,
-   "monthly_pulls": 120871,
+   "monthly_pulls": 122153,
    "tags": [
     {
      "tag": "latest",
@@ -1795,7 +1795,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 62,
-   "monthly_pulls": 4807,
+   "monthly_pulls": 4747,
    "tags": [
     {
      "tag": "latest",
@@ -1885,7 +1885,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 557,
-   "monthly_pulls": 1322786,
+   "monthly_pulls": 1330328,
    "tags": [
     {
      "tag": "latest",
@@ -2013,8 +2013,8 @@
    "category": "Books",
    "stable": true,
    "deprecated": false,
-   "stars": 1433,
-   "monthly_pulls": 1783342,
+   "stars": 1434,
+   "monthly_pulls": 1791495,
    "tags": [
     {
      "tag": "latest",
@@ -2126,7 +2126,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 3,
-   "monthly_pulls": 358,
+   "monthly_pulls": 378,
    "tags": [
     {
      "tag": "latest",
@@ -2225,7 +2225,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 91,
-   "monthly_pulls": 342071,
+   "monthly_pulls": 337637,
    "tags": [
     {
      "tag": "latest",
@@ -2323,7 +2323,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 92,
-   "monthly_pulls": 136613,
+   "monthly_pulls": 138254,
    "tags": [
     {
      "tag": "latest",
@@ -2428,7 +2428,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 413,
-   "monthly_pulls": 1886020,
+   "monthly_pulls": 1906937,
    "tags": [
     {
      "tag": "latest",
@@ -2624,7 +2624,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 2009,
-   "monthly_pulls": 2230078,
+   "monthly_pulls": 2238294,
    "tags": [
     {
      "tag": "latest",
@@ -2752,7 +2752,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 51,
-   "monthly_pulls": 31784,
+   "monthly_pulls": 31835,
    "tags": [
     {
      "tag": "latest",
@@ -2842,13 +2842,13 @@
    "project_url": "https://getartcraft.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/artcraft-logo.png",
    "description": "[ArtCraft] is a suite of open source creative applications written in Rust. This image bundles PhotoCraft (image editor), VectorCraft (vector illustration), FilmCraft (video editor), LightCraft (photo library and raw developer), PdfCraft (PDF workbench), EffectCraft (motion graphics and VFX compositor), DesignCraft (page layout and publishing), FigCraft (interface design and prototyping), TextureCraft (3D texture painting) and MaterialCraft (node-based material design) in a single desktop.",
-   "version": "v0.23.0-ls18",
-   "version_timestamp": "2026-11-12 02:36:26+00:00",
+   "version": "v0.23.1-ls19",
+   "version_timestamp": "2026-11-12 10:47:42+00:00",
    "category": "Image Editor,Video Editor, Media Tools",
    "stable": true,
    "deprecated": false,
    "stars": 9,
-   "monthly_pulls": 29099,
+   "monthly_pulls": 30635,
    "tags": [
     {
      "tag": "latest",
@@ -2947,7 +2947,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 42,
-   "monthly_pulls": 28248,
+   "monthly_pulls": 28699,
    "tags": [
     {
      "tag": "latest",
@@ -3042,7 +3042,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 109,
-   "monthly_pulls": 10269,
+   "monthly_pulls": 10113,
    "tags": [
     {
      "tag": "latest",
@@ -3125,7 +3125,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 38,
-   "monthly_pulls": 15795,
+   "monthly_pulls": 15745,
    "tags": [
     {
      "tag": "latest",
@@ -3224,7 +3224,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 14,
-   "monthly_pulls": 47,
+   "monthly_pulls": 48,
    "tags": [
     {
      "tag": "latest",
@@ -3296,7 +3296,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 181,
-   "monthly_pulls": 411733,
+   "monthly_pulls": 420820,
    "tags": [
     {
      "tag": "latest",
@@ -3374,7 +3374,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 295,
-   "monthly_pulls": 728924,
+   "monthly_pulls": 730703,
    "tags": [
     {
      "tag": "latest",
@@ -3476,7 +3476,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 79,
-   "monthly_pulls": 43536,
+   "monthly_pulls": 44681,
    "tags": [
     {
      "tag": "latest",
@@ -3571,7 +3571,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 110,
-   "monthly_pulls": 29320,
+   "monthly_pulls": 29301,
    "tags": [
     {
      "tag": "latest",
@@ -3673,7 +3673,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 0,
-   "monthly_pulls": 1419,
+   "monthly_pulls": 1416,
    "tags": [
     {
      "tag": "latest",
@@ -3768,7 +3768,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 125,
-   "monthly_pulls": 150322,
+   "monthly_pulls": 152386,
    "tags": [
     {
      "tag": "latest",
@@ -3863,8 +3863,8 @@
    "category": "Games",
    "stable": true,
    "deprecated": false,
-   "stars": 16,
-   "monthly_pulls": 1130122,
+   "stars": 15,
+   "monthly_pulls": 1131719,
    "tags": [
     {
      "tag": "latest",
@@ -3959,7 +3959,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 25,
-   "monthly_pulls": 16617,
+   "monthly_pulls": 16608,
    "tags": [
     {
      "tag": "latest",
@@ -4139,13 +4139,13 @@
    "project_url": "https://github.com/activexray/doplarr_rs",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/doplarr_rs-logo.png",
    "description": "doplarr_rs is a Discord bot for requesting media through *arr backends, written in Rust.",
-   "version": "v4.6.0-ls3",
-   "version_timestamp": "2026-10-15 19:12:50+00:00",
+   "version": "v4.6.0-ls7",
+   "version_timestamp": "2026-11-12 21:57:19+00:00",
    "category": "Media Requesters",
    "stable": true,
    "deprecated": false,
    "stars": 1,
-   "monthly_pulls": 3133,
+   "monthly_pulls": 3221,
    "tags": [
     {
      "tag": "latest",
@@ -4215,7 +4215,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 2,
-   "monthly_pulls": 3284,
+   "monthly_pulls": 3537,
    "tags": [
     {
      "tag": "latest",
@@ -4310,7 +4310,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 51,
-   "monthly_pulls": 65399,
+   "monthly_pulls": 65083,
    "tags": [
     {
      "tag": "latest",
@@ -4415,7 +4415,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 376,
-   "monthly_pulls": 897352,
+   "monthly_pulls": 896396,
    "tags": [
     {
      "tag": "latest",
@@ -4518,7 +4518,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 3,
-   "monthly_pulls": 2447,
+   "monthly_pulls": 2407,
    "tags": [
     {
      "tag": "latest",
@@ -4617,7 +4617,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 447,
-   "monthly_pulls": 1785266,
+   "monthly_pulls": 1766558,
    "tags": [
     {
      "tag": "latest",
@@ -4729,13 +4729,13 @@
    "project_url": "https://eden-emu.dev/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/eden-logo.png",
    "description": "[Eden] is an experimental open-source emulator for the Nintendo Switch, built with performance and stability in mind.",
-   "version": "v0.2.1-ls35",
-   "version_timestamp": "2026-11-05 12:48:22+00:00",
+   "version": "v0.2.1-ls36",
+   "version_timestamp": "2026-11-12 13:10:52+00:00",
    "category": "Games",
    "stable": true,
    "deprecated": false,
    "stars": 11,
-   "monthly_pulls": 2519,
+   "monthly_pulls": 2477,
    "tags": [
     {
      "tag": "latest",
@@ -4824,13 +4824,13 @@
    "project_url": "https://emby.media/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/emby-logo.png",
    "description": "emby organizes video, music, live TV, and photos from personal media libraries and streams them to smart TVs, streaming boxes and mobile devices. This container is packaged as a standalone emby Media Server.",
-   "version": "4.10.2.0-ls306",
-   "version_timestamp": "2026-11-06 01:56:11+00:00",
+   "version": "4.10.2.0-ls307",
+   "version_timestamp": "2026-11-13 02:11:07+00:00",
    "category": "Media Servers,Music,Audiobooks",
    "stable": true,
    "deprecated": false,
    "stars": 152,
-   "monthly_pulls": 564724,
+   "monthly_pulls": 573859,
    "tags": [
     {
      "tag": "latest",
@@ -4968,7 +4968,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 621,
-   "monthly_pulls": 1196252,
+   "monthly_pulls": 1210042,
    "tags": [
     {
      "tag": "latest",
@@ -5064,7 +5064,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 104,
-   "monthly_pulls": 204163,
+   "monthly_pulls": 205079,
    "tags": [
     {
      "tag": "latest",
@@ -5273,7 +5273,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 235,
-   "monthly_pulls": 327096,
+   "monthly_pulls": 327909,
    "tags": [
     {
      "tag": "latest",
@@ -5396,7 +5396,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 5,
-   "monthly_pulls": 371,
+   "monthly_pulls": 372,
    "tags": [
     {
      "tag": "latest",
@@ -5484,7 +5484,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 13,
-   "monthly_pulls": 4862,
+   "monthly_pulls": 4702,
    "tags": [
     {
      "tag": "latest",
@@ -5581,7 +5581,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 209,
-   "monthly_pulls": 342575,
+   "monthly_pulls": 343806,
    "tags": [
     {
      "tag": "latest",
@@ -5609,7 +5609,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 41,
-   "monthly_pulls": 1075189,
+   "monthly_pulls": 1058683,
    "tags": [
     {
      "tag": "latest",
@@ -5708,7 +5708,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 328,
-   "monthly_pulls": 1529934,
+   "monthly_pulls": 1552599,
    "tags": [
     {
      "tag": "latest",
@@ -5923,13 +5923,13 @@
    "project_url": "http://flexget.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/flexget-banner.png",
    "description": "flexget is a multipurpose automation tool for all of your media.",
-   "version": "v3.22.12-ls396",
-   "version_timestamp": "2026-11-10 02:11:15+00:00",
+   "version": "v3.22.12-ls397",
+   "version_timestamp": "2026-11-13 00:33:08+00:00",
    "category": "Downloaders",
    "stable": true,
    "deprecated": false,
    "stars": 14,
-   "monthly_pulls": 24459,
+   "monthly_pulls": 24571,
    "tags": [
     {
      "tag": "latest",
@@ -6044,7 +6044,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 4,
-   "monthly_pulls": 2819,
+   "monthly_pulls": 2803,
    "tags": [
     {
      "tag": "latest",
@@ -6139,7 +6139,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 53,
-   "monthly_pulls": 27958,
+   "monthly_pulls": 28321,
    "tags": [
     {
      "tag": "latest",
@@ -6249,8 +6249,8 @@
    "category": "3D Modeling",
    "stable": true,
    "deprecated": false,
-   "stars": 66,
-   "monthly_pulls": 36473,
+   "stars": 67,
+   "monthly_pulls": 36847,
    "tags": [
     {
      "tag": "latest",
@@ -6355,7 +6355,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 34,
-   "monthly_pulls": 486272,
+   "monthly_pulls": 476395,
    "tags": [
     {
      "tag": "latest",
@@ -6460,7 +6460,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 236,
-   "monthly_pulls": 656525,
+   "monthly_pulls": 658223,
    "tags": [
     {
      "tag": "latest",
@@ -6544,7 +6544,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 29,
-   "monthly_pulls": 15380,
+   "monthly_pulls": 15319,
    "tags": [
     {
      "tag": "latest",
@@ -6643,7 +6643,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 31,
-   "monthly_pulls": 5672453,
+   "monthly_pulls": 5674553,
    "tags": [
     {
      "tag": "latest",
@@ -6749,7 +6749,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 2,
-   "monthly_pulls": 377,
+   "monthly_pulls": 391,
    "tags": [
     {
      "tag": "latest",
@@ -6848,7 +6848,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 38,
-   "monthly_pulls": 55168,
+   "monthly_pulls": 55509,
    "tags": [
     {
      "tag": "latest",
@@ -6932,7 +6932,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 445,
-   "monthly_pulls": 1782141,
+   "monthly_pulls": 1782358,
    "tags": [
     {
      "tag": "latest",
@@ -6996,7 +6996,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 6,
-   "monthly_pulls": 1230,
+   "monthly_pulls": 1269,
    "tags": [
     {
      "tag": "latest",
@@ -7095,7 +7095,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 18,
-   "monthly_pulls": 3358,
+   "monthly_pulls": 3374,
    "tags": [
     {
      "tag": "latest",
@@ -7186,13 +7186,13 @@
    "project_url": "https://handbrake.fr/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/handbrake-logo.png",
    "description": "[HandBrake] is an open-source tool, built by volunteers, for converting video from nearly any format to a selection of modern, widely supported codecs.",
-   "version": "1.11.2-ls51",
-   "version_timestamp": "2026-11-05 18:28:52+00:00",
+   "version": "1.11.2-ls52",
+   "version_timestamp": "2026-11-12 18:43:22+00:00",
    "category": "Media Management",
    "stable": true,
    "deprecated": false,
    "stars": 11,
-   "monthly_pulls": 23690,
+   "monthly_pulls": 23369,
    "tags": [
     {
      "tag": "latest",
@@ -7287,7 +7287,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 204,
-   "monthly_pulls": 131778,
+   "monthly_pulls": 131854,
    "tags": [
     {
      "tag": "latest",
@@ -7473,7 +7473,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 49,
-   "monthly_pulls": 13083,
+   "monthly_pulls": 13054,
    "tags": [
     {
      "tag": "latest",
@@ -7623,7 +7623,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 365,
-   "monthly_pulls": 1732493,
+   "monthly_pulls": 1738270,
    "tags": [
     {
      "tag": "latest",
@@ -7723,7 +7723,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 5,
-   "monthly_pulls": 13844,
+   "monthly_pulls": 14286,
    "tags": [
     {
      "tag": "latest",
@@ -7820,7 +7820,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 30,
-   "monthly_pulls": 28350,
+   "monthly_pulls": 28088,
    "tags": [
     {
      "tag": "latest",
@@ -7892,7 +7892,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 284,
-   "monthly_pulls": 1323863,
+   "monthly_pulls": 1328822,
    "tags": [
     {
      "tag": "latest",
@@ -7965,7 +7965,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 30,
-   "monthly_pulls": 165,
+   "monthly_pulls": 167,
    "tags": [
     {
      "tag": "latest",
@@ -8049,7 +8049,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 19,
-   "monthly_pulls": 52585,
+   "monthly_pulls": 49514,
    "tags": [
     {
      "tag": "latest",
@@ -8142,13 +8142,13 @@
    "project_url": "https://www.jetbrains.com/idea/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/intellij-idea-logo.png",
    "description": "[IntelliJ IDEA] helps you write code faster with tools that eliminate tedious tasks and let you focus on what matters – building great software.",
-   "version": "2026.3-ls40",
-   "version_timestamp": "2026-11-12 03:58:17+00:00",
+   "version": "2026.3-ls42",
+   "version_timestamp": "2026-11-13 02:07:50+00:00",
    "category": "Programming",
    "stable": true,
    "deprecated": false,
    "stars": 7,
-   "monthly_pulls": 296,
+   "monthly_pulls": 305,
    "tags": [
     {
      "tag": "latest",
@@ -8237,13 +8237,13 @@
    "project_url": "https://github.com/Jackett/Jackett",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/jackett-banner.png",
    "description": "jackett works as a proxy server: it translates queries from apps (Sonarr, SickRage, CouchPotato, Mylar, etc) into tracker-site-specific http queries, parses the html response, then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps.",
-   "version": "v0.24.3047-ls33",
-   "version_timestamp": "2026-11-11 08:18:36+00:00",
+   "version": "v0.24.3053-ls34",
+   "version_timestamp": "2026-11-12 13:21:14+00:00",
    "category": "Indexers",
    "stable": true,
    "deprecated": false,
    "stars": 482,
-   "monthly_pulls": 2528219,
+   "monthly_pulls": 2526932,
    "tags": [
     {
      "tag": "latest",
@@ -8346,8 +8346,8 @@
    "category": "Media Servers,Music,Audiobooks",
    "stable": true,
    "deprecated": false,
-   "stars": 908,
-   "monthly_pulls": 8300528,
+   "stars": 909,
+   "monthly_pulls": 8257496,
    "tags": [
     {
      "tag": "latest",
@@ -8471,7 +8471,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 9,
-   "monthly_pulls": 17899,
+   "monthly_pulls": 18043,
    "tags": [
     {
      "tag": "latest",
@@ -8566,7 +8566,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 65,
-   "monthly_pulls": 30481,
+   "monthly_pulls": 30912,
    "tags": [
     {
      "tag": "latest",
@@ -8645,7 +8645,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 495,
-   "monthly_pulls": 209190,
+   "monthly_pulls": 207561,
    "tags": [
     {
      "tag": "latest",
@@ -8777,7 +8777,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 52,
-   "monthly_pulls": 1230004,
+   "monthly_pulls": 1245337,
    "tags": [
     {
      "tag": "latest",
@@ -8867,7 +8867,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 45,
-   "monthly_pulls": 8320,
+   "monthly_pulls": 8642,
    "tags": [
     {
      "tag": "latest",
@@ -8960,13 +8960,13 @@
    "project_url": "https://keepassxc.org/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/keepassxc-logo.png",
    "description": "[KeePassXC] is a free and open-source password manager. It started as a community fork of KeePassX (itself a cross-platform port of KeePass).",
-   "version": "2.7.12-r1-ls135",
-   "version_timestamp": "2026-11-05 15:23:05+00:00",
+   "version": "2.7.12-r1-ls136",
+   "version_timestamp": "2026-11-12 16:11:54+00:00",
    "category": "Password Manager",
    "stable": true,
    "deprecated": false,
    "stars": 40,
-   "monthly_pulls": 37716,
+   "monthly_pulls": 37829,
    "tags": [
     {
      "tag": "latest",
@@ -9065,7 +9065,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 31,
-   "monthly_pulls": 9952,
+   "monthly_pulls": 10110,
    "tags": [
     {
      "tag": "latest",
@@ -9164,7 +9164,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 28,
-   "monthly_pulls": 6014,
+   "monthly_pulls": 6181,
    "tags": [
     {
      "tag": "latest",
@@ -9278,7 +9278,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 27,
-   "monthly_pulls": 338316,
+   "monthly_pulls": 337508,
    "tags": [
     {
      "tag": "latest",
@@ -9394,7 +9394,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 34,
-   "monthly_pulls": 6184,
+   "monthly_pulls": 6342,
    "tags": [
     {
      "tag": "latest",
@@ -9483,13 +9483,13 @@
    "project_url": "https://lazylibrarian.gitlab.io/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/lazylibrarian-icon.png",
    "description": "lazylibrarian is a program to follow authors and grab metadata for all your digital reading needs. It uses a combination of HardCover, OpenLibrary, Librarything, GoodReads, and optionally GoogleBooks as sources for author info and book info.",
-   "version": "7d1914b5-ls396",
-   "version_timestamp": "2026-11-11 10:24:06+00:00",
+   "version": "ef0ed4d8-ls397",
+   "version_timestamp": "2026-11-12 23:25:19+00:00",
    "category": "Books",
    "stable": true,
    "deprecated": false,
    "stars": 120,
-   "monthly_pulls": 16148889,
+   "monthly_pulls": 16167625,
    "tags": [
     {
      "tag": "latest",
@@ -9573,7 +9573,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 75,
-   "monthly_pulls": 1821,
+   "monthly_pulls": 1884,
    "tags": [
     {
      "tag": "latest",
@@ -9657,7 +9657,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 149,
-   "monthly_pulls": 64854,
+   "monthly_pulls": 64279,
    "tags": [
     {
      "tag": "latest",
@@ -9756,7 +9756,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 107,
-   "monthly_pulls": 450921,
+   "monthly_pulls": 456697,
    "tags": [
     {
      "tag": "latest",
@@ -9893,8 +9893,8 @@
    "category": "Web Browser",
    "stable": true,
    "deprecated": false,
-   "stars": 30,
-   "monthly_pulls": 32865,
+   "stars": 31,
+   "monthly_pulls": 32980,
    "tags": [
     {
      "tag": "latest",
@@ -9999,7 +9999,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 318,
-   "monthly_pulls": 5833415,
+   "monthly_pulls": 5836095,
    "tags": [
     {
      "tag": "latest",
@@ -10105,7 +10105,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 10,
-   "monthly_pulls": 3584,
+   "monthly_pulls": 3689,
    "tags": [
     {
      "tag": "latest",
@@ -10185,13 +10185,13 @@
    "project_url": "https://lmstudio.ai/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/lmstudio-logo.png",
    "description": "[LM Studio] can run local AI models like gpt-oss, Llama, Gemma, Qwen, and DeepSeek privately on your computer.",
-   "version": "2026-11-06-ls49",
-   "version_timestamp": "2026-11-08 20:42:50+00:00",
+   "version": "2026-11-12-ls50",
+   "version_timestamp": "2026-11-13 04:13:43+00:00",
    "category": "Remote Desktop,AI",
    "stable": true,
    "deprecated": false,
    "stars": 9,
-   "monthly_pulls": 5867,
+   "monthly_pulls": 6076,
    "tags": [
     {
      "tag": "latest",
@@ -10282,7 +10282,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 4,
-   "monthly_pulls": 734,
+   "monthly_pulls": 735,
    "tags": [
     {
      "tag": "latest",
@@ -10381,7 +10381,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 13,
-   "monthly_pulls": 81212,
+   "monthly_pulls": 81133,
    "tags": [
     {
      "tag": "latest",
@@ -10465,13 +10465,13 @@
    "project_url": "https://lycheeorg.github.io/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/lychee-icon.png",
    "description": "lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely.",
-   "version": "v7.13.0-ls85",
-   "version_timestamp": "2026-11-09 17:47:10+00:00",
+   "version": "v7.13.0-ls86",
+   "version_timestamp": "2026-11-12 09:49:17+00:00",
    "category": "Photos",
    "stable": true,
    "deprecated": false,
    "stars": 52,
-   "monthly_pulls": 13395,
+   "monthly_pulls": 13446,
    "tags": [
     {
      "tag": "latest",
@@ -10615,7 +10615,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 6,
-   "monthly_pulls": 3317,
+   "monthly_pulls": 3321,
    "tags": [
     {
      "tag": "latest",
@@ -10720,7 +10720,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 9,
-   "monthly_pulls": 46330,
+   "monthly_pulls": 46538,
    "tags": [
     {
      "tag": "latest",
@@ -10830,7 +10830,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 272,
-   "monthly_pulls": 2937575,
+   "monthly_pulls": 2945783,
    "tags": [
     {
      "tag": "latest",
@@ -10946,13 +10946,13 @@
    "project_url": "https://github.com/mastodon/mastodon/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/mastodon-banner.png",
    "description": "mastodon is a free, open-source social network server based on ActivityPub where users can follow friends and discover new ones..",
-   "version": "v4.7.5-ls221",
-   "version_timestamp": "2026-11-05 18:43:14+00:00",
+   "version": "v4.7.5-ls222",
+   "version_timestamp": "2026-11-12 19:02:28+00:00",
    "category": "Social",
    "stable": true,
    "deprecated": false,
    "stars": 117,
-   "monthly_pulls": 18213,
+   "monthly_pulls": 17954,
    "tags": [
     {
      "tag": "latest",
@@ -11284,7 +11284,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 12,
-   "monthly_pulls": 5179,
+   "monthly_pulls": 5282,
    "tags": [
     {
      "tag": "latest",
@@ -11373,13 +11373,13 @@
    "project_url": "https://pymedusa.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/medusa-icon.png",
    "description": "medusa is an automatic Video Library Manager for TV Shows. It watches for new episodes of your favorite shows, and when they are posted it does its magic.",
-   "version": "v1.0.27-ls297",
-   "version_timestamp": "2026-11-05 21:35:59+00:00",
+   "version": "v1.0.27-ls298",
+   "version_timestamp": "2026-11-12 21:59:34+00:00",
    "category": "Media Management",
    "stable": true,
    "deprecated": false,
    "stars": 49,
-   "monthly_pulls": 28079,
+   "monthly_pulls": 28061,
    "tags": [
     {
      "tag": "latest",
@@ -11457,7 +11457,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 3,
-   "monthly_pulls": 2102,
+   "monthly_pulls": 2078,
    "tags": [
     {
      "tag": "latest",
@@ -11556,7 +11556,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 51,
-   "monthly_pulls": 479,
+   "monthly_pulls": 522,
    "tags": [
     {
      "tag": "latest",
@@ -11646,7 +11646,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 19,
-   "monthly_pulls": 650,
+   "monthly_pulls": 633,
    "tags": [
     {
      "tag": "latest",
@@ -11754,7 +11754,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 16,
-   "monthly_pulls": 37287,
+   "monthly_pulls": 37129,
    "tags": [
     {
      "tag": "latest",
@@ -11776,13 +11776,13 @@
    "project_url": "https://modrinth.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/modrinth-logo.png",
    "description": "[Modrinth App] is a unique, open source launcher that allows you to play your favorite mods, and keep them up to date, all in one neat little package.",
-   "version": "v0.23.1-ls123",
-   "version_timestamp": "2026-11-11 19:21:42+00:00",
+   "version": "v0.23.3-ls125",
+   "version_timestamp": "2026-11-13 00:33:41+00:00",
    "category": "Games",
    "stable": true,
    "deprecated": false,
    "stars": 1,
-   "monthly_pulls": 2020,
+   "monthly_pulls": 2027,
    "tags": [
     {
      "tag": "latest",
@@ -11877,7 +11877,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 22,
-   "monthly_pulls": 13779,
+   "monthly_pulls": 13674,
    "tags": [
     {
      "tag": "latest",
@@ -12017,13 +12017,13 @@
    "project_url": "https://www.microsoft.com/edge",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/edge-logo.png",
    "description": "[Microsoft Edge] is a cross-platform web browser developed by Microsoft and based on Chromium.",
-   "version": "157.0.4341.46-1-ls215",
-   "version_timestamp": "2026-11-10 03:20:47+00:00",
+   "version": "157.0.4341.57-1-ls216",
+   "version_timestamp": "2026-11-13 02:32:10+00:00",
    "category": "Web Browser",
    "stable": true,
    "deprecated": false,
    "stars": 66,
-   "monthly_pulls": 27524,
+   "monthly_pulls": 27423,
    "tags": [
     {
      "tag": "latest",
@@ -12124,7 +12124,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 88,
-   "monthly_pulls": 19400,
+   "monthly_pulls": 19123,
    "tags": [
     {
      "tag": "latest",
@@ -12194,7 +12194,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 36,
-   "monthly_pulls": 32706,
+   "monthly_pulls": 32925,
    "tags": [
     {
      "tag": "latest",
@@ -12302,7 +12302,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 54,
-   "monthly_pulls": 742733,
+   "monthly_pulls": 730081,
    "tags": [
     {
      "tag": "latest",
@@ -12382,7 +12382,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 45,
-   "monthly_pulls": 6809,
+   "monthly_pulls": 6799,
    "tags": [
     {
      "tag": "latest",
@@ -12484,7 +12484,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 285,
-   "monthly_pulls": 1299183,
+   "monthly_pulls": 1298885,
    "tags": [
     {
      "tag": "latest",
@@ -12614,13 +12614,13 @@
    "project_url": "https://github.com/netbox-community/netbox",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/netbox-logo.png",
    "description": "netbox is an IP address management (IPAM) and data center infrastructure management (DCIM) tool. Initially conceived by the network engineering team at DigitalOcean, NetBox was developed specifically to address the needs of network and infrastructure engineers. It is intended to function as a domain-specific source of truth for network operations.",
-   "version": "v4.7.5-ls391",
-   "version_timestamp": "2026-11-10 18:46:22+00:00",
+   "version": "v4.7.5-ls392",
+   "version_timestamp": "2026-11-12 22:13:34+00:00",
    "category": "Administration,Business",
    "stable": true,
    "deprecated": false,
    "stars": 130,
-   "monthly_pulls": 93381,
+   "monthly_pulls": 93684,
    "tags": [
     {
      "tag": "latest",
@@ -12812,13 +12812,13 @@
    "project_url": "https://nextcloud.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/nextcloud-icon.png",
    "description": "nextcloud gives you access to all your files wherever you are.  Where are your photos and documents? With Nextcloud you pick a server of your choice, at home, in a data center or at a provider. And that is where your files will be. Nextcloud runs on that server, protecting your data and giving you access from your desktop or mobile devices. Through Nextcloud you also access, sync and share your existing data on that FTP drive at the office, a Dropbox or a NAS you have at home.",
-   "version": "35.0.2-ls462",
-   "version_timestamp": "2026-11-10 19:27:08+00:00",
+   "version": "35.0.3-ls1",
+   "version_timestamp": "2026-11-12 20:40:41+00:00",
    "category": "Cloud,Documents",
    "stable": true,
    "deprecated": false,
    "stars": 896,
-   "monthly_pulls": 1067426,
+   "monthly_pulls": 1079457,
    "tags": [
     {
      "tag": "latest",
@@ -12912,13 +12912,13 @@
    "project_url": "https://nginx.org/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/nginx-banner.png",
    "description": "nginx is an HTTP web server, reverse proxy, content cache, load balancer, TCP/UDP proxy server, and mail proxy server.",
-   "version": "1.30.6-r0-ls383",
-   "version_timestamp": "2026-11-05 12:11:32+00:00",
+   "version": "1.30.6-r0-ls384",
+   "version_timestamp": "2026-11-12 12:33:18+00:00",
    "category": "Reverse Proxy",
    "stable": true,
    "deprecated": false,
    "stars": 162,
-   "monthly_pulls": 313996,
+   "monthly_pulls": 314537,
    "tags": [
     {
      "tag": "latest",
@@ -13021,7 +13021,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 14,
-   "monthly_pulls": 6430,
+   "monthly_pulls": 6113,
    "tags": [
     {
      "tag": "latest",
@@ -13085,7 +13085,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 0,
-   "monthly_pulls": 14,
+   "monthly_pulls": 15,
    "tags": [
     {
      "tag": "latest",
@@ -13176,7 +13176,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 191,
-   "monthly_pulls": 1184964,
+   "monthly_pulls": 1187481,
    "tags": [
     {
      "tag": "latest",
@@ -13284,7 +13284,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 90,
-   "monthly_pulls": 511500,
+   "monthly_pulls": 517623,
    "tags": [
     {
      "tag": "latest",
@@ -13378,7 +13378,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 922,
-   "monthly_pulls": 2682612,
+   "monthly_pulls": 2723993,
    "tags": [
     {
      "tag": "latest",
@@ -13477,7 +13477,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 163,
-   "monthly_pulls": 399323,
+   "monthly_pulls": 396267,
    "tags": [
     {
      "tag": "latest",
@@ -13572,7 +13572,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 22,
-   "monthly_pulls": 16675,
+   "monthly_pulls": 16291,
    "tags": [
     {
      "tag": "latest",
@@ -13667,7 +13667,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 8,
-   "monthly_pulls": 1970,
+   "monthly_pulls": 1907,
    "tags": [
     {
      "tag": "latest",
@@ -13762,7 +13762,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 615,
-   "monthly_pulls": 548022,
+   "monthly_pulls": 549631,
    "tags": [
     {
      "tag": "latest",
@@ -13913,7 +13913,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 151,
-   "monthly_pulls": 54630,
+   "monthly_pulls": 54627,
    "tags": [
     {
      "tag": "latest",
@@ -14025,7 +14025,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 5,
-   "monthly_pulls": 193528,
+   "monthly_pulls": 193513,
    "tags": [
     {
      "tag": "latest",
@@ -14126,7 +14126,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 192,
-   "monthly_pulls": 116347,
+   "monthly_pulls": 117351,
    "tags": [
     {
      "tag": "latest",
@@ -14225,7 +14225,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 54,
-   "monthly_pulls": 21465,
+   "monthly_pulls": 20975,
    "tags": [
     {
      "tag": "latest",
@@ -14317,7 +14317,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 148,
-   "monthly_pulls": 1166361,
+   "monthly_pulls": 1172359,
    "tags": [
     {
      "tag": "latest",
@@ -14407,7 +14407,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 119,
-   "monthly_pulls": 435195,
+   "monthly_pulls": 436044,
    "tags": [
     {
      "tag": "latest",
@@ -14509,7 +14509,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 16,
-   "monthly_pulls": 15372,
+   "monthly_pulls": 15563,
    "tags": [
     {
      "tag": "latest",
@@ -14604,7 +14604,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 3,
-   "monthly_pulls": 43,
+   "monthly_pulls": 52,
    "tags": [
     {
      "tag": "latest",
@@ -14689,7 +14689,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 31,
-   "monthly_pulls": 110517,
+   "monthly_pulls": 110751,
    "tags": [
     {
      "tag": "latest",
@@ -14787,7 +14787,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 13,
-   "monthly_pulls": 1244,
+   "monthly_pulls": 1261,
    "tags": [
     {
      "tag": "latest",
@@ -14880,13 +14880,13 @@
    "project_url": "https://github.com/rhasspy/wyoming-piper",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/piper-logo.png",
    "description": "piper is a fast, local neural text to speech system that sounds great and is optimized for the Raspberry Pi 4. This container provides a Wyoming protocol server for Piper.",
-   "version": "2.5.2-ls137",
-   "version_timestamp": "2026-11-09 19:22:35+00:00",
+   "version": "2.5.3-ls138",
+   "version_timestamp": "2026-11-12 21:22:33+00:00",
    "category": "Machine Learning",
    "stable": true,
    "deprecated": false,
    "stars": 71,
-   "monthly_pulls": 218397,
+   "monthly_pulls": 218206,
    "tags": [
     {
      "tag": "latest",
@@ -15017,7 +15017,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 148,
-   "monthly_pulls": 114919,
+   "monthly_pulls": 115979,
    "tags": [
     {
      "tag": "latest",
@@ -15101,13 +15101,13 @@
    "project_url": "https://github.com/plankanban/planka/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/planka-logo.png",
    "description": "planka is an elegant open source project tracking tool.",
-   "version": "v2.3.1-ls83",
-   "version_timestamp": "2026-11-05 21:45:10+00:00",
+   "version": "v2.3.1-ls84",
+   "version_timestamp": "2026-11-12 22:08:37+00:00",
    "category": "Content Management,Business",
    "stable": true,
    "deprecated": false,
    "stars": 10,
-   "monthly_pulls": 10898,
+   "monthly_pulls": 10644,
    "tags": [
     {
      "tag": "latest",
@@ -15247,7 +15247,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 1447,
-   "monthly_pulls": 6668054,
+   "monthly_pulls": 6619207,
    "tags": [
     {
      "tag": "latest",
@@ -15350,7 +15350,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 2,
-   "monthly_pulls": 1673,
+   "monthly_pulls": 1658,
    "tags": [
     {
      "tag": "latest",
@@ -15437,7 +15437,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 97,
-   "monthly_pulls": 84988,
+   "monthly_pulls": 86931,
    "tags": [
     {
      "tag": "latest",
@@ -15526,8 +15526,8 @@
    "category": "Indexers",
    "stable": true,
    "deprecated": false,
-   "stars": 562,
-   "monthly_pulls": 17506514,
+   "stars": 563,
+   "monthly_pulls": 17554350,
    "tags": [
     {
      "tag": "latest",
@@ -15601,7 +15601,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 49,
-   "monthly_pulls": 10157,
+   "monthly_pulls": 10520,
    "tags": [
     {
      "tag": "latest",
@@ -15691,7 +15691,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 6,
-   "monthly_pulls": 481,
+   "monthly_pulls": 493,
    "tags": [
     {
      "tag": "latest",
@@ -15780,13 +15780,13 @@
    "project_url": "https://pydio.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/pydio-cells-icon.png",
    "description": "pydio-cells is the nextgen file sharing platform for organizations. It is a full rewrite of the Pydio project using the Go language following a micro-service architecture.",
-   "version": "v5.1.1-ls217",
-   "version_timestamp": "2026-11-02 18:24:05+00:00",
+   "version": "v5.1.1-ls218",
+   "version_timestamp": "2026-11-12 11:24:14+00:00",
    "category": "File Sharing",
    "stable": true,
    "deprecated": false,
    "stars": 21,
-   "monthly_pulls": 1680,
+   "monthly_pulls": 1557,
    "tags": [
     {
      "tag": "latest",
@@ -15887,7 +15887,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 135,
-   "monthly_pulls": 264291,
+   "monthly_pulls": 264185,
    "tags": [
     {
      "tag": "latest",
@@ -15967,7 +15967,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 9,
-   "monthly_pulls": 20718,
+   "monthly_pulls": 19263,
    "tags": [
     {
      "tag": "latest",
@@ -16050,8 +16050,8 @@
    "category": "Downloaders",
    "stable": true,
    "deprecated": false,
-   "stars": 1772,
-   "monthly_pulls": 14968900,
+   "stars": 1773,
+   "monthly_pulls": 15037661,
    "tags": [
     {
      "tag": "latest",
@@ -16180,7 +16180,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 35,
-   "monthly_pulls": 109134,
+   "monthly_pulls": 109316,
    "tags": [
     {
      "tag": "latest",
@@ -16283,7 +16283,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 13,
-   "monthly_pulls": 805623,
+   "monthly_pulls": 774220,
    "tags": [
     {
      "tag": "latest",
@@ -16310,8 +16310,8 @@
    "category": "Media Management",
    "stable": true,
    "deprecated": false,
-   "stars": 982,
-   "monthly_pulls": 18812426,
+   "stars": 983,
+   "monthly_pulls": 18750917,
    "tags": [
     {
      "tag": "latest",
@@ -16397,7 +16397,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 18,
-   "monthly_pulls": 2062,
+   "monthly_pulls": 1961,
    "tags": [
     {
      "tag": "latest",
@@ -16463,7 +16463,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 6,
-   "monthly_pulls": 1540,
+   "monthly_pulls": 1569,
    "tags": [
     {
      "tag": "latest",
@@ -16559,7 +16559,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 318,
-   "monthly_pulls": 26200,
+   "monthly_pulls": 26144,
    "tags": [
     {
      "tag": "latest",
@@ -16587,7 +16587,7 @@
    "stable": false,
    "deprecated": true,
    "stars": 127,
-   "monthly_pulls": 8849190,
+   "monthly_pulls": 8792704,
    "tags": [
     {
      "tag": "develop",
@@ -16669,7 +16669,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 78,
-   "monthly_pulls": 119888,
+   "monthly_pulls": 123805,
    "tags": [
     {
      "tag": "latest",
@@ -16768,7 +16768,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 204,
-   "monthly_pulls": 257941,
+   "monthly_pulls": 256973,
    "tags": [
     {
      "tag": "latest",
@@ -16870,7 +16870,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 19,
-   "monthly_pulls": 12669,
+   "monthly_pulls": 12414,
    "tags": [
     {
      "tag": "latest",
@@ -16969,7 +16969,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 7,
-   "monthly_pulls": 1242,
+   "monthly_pulls": 1228,
    "tags": [
     {
      "tag": "latest",
@@ -17062,13 +17062,13 @@
    "project_url": "http://www.rsnapshot.org/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/rsnapshot.png",
    "description": "rsnapshot is a filesystem snapshot utility based on rsync. rsnapshot makes it easy to make periodic snapshots of local machines, and remote machines over ssh. The code makes extensive use of hard links whenever possible, to greatly reduce the disk space required.",
-   "version": "1.4.5-r0-ls168",
-   "version_timestamp": "2026-11-05 12:47:53+00:00",
+   "version": "1.4.5-r0-ls169",
+   "version_timestamp": "2026-11-12 13:15:30+00:00",
    "category": "Backup",
    "stable": true,
    "deprecated": false,
    "stars": 41,
-   "monthly_pulls": 4690,
+   "monthly_pulls": 4752,
    "tags": [
     {
      "tag": "latest",
@@ -17158,7 +17158,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 67,
-   "monthly_pulls": 906770,
+   "monthly_pulls": 925835,
    "tags": [
     {
      "tag": "latest",
@@ -17257,7 +17257,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 369,
-   "monthly_pulls": 6849657,
+   "monthly_pulls": 6854650,
    "tags": [
     {
      "tag": "latest",
@@ -17363,7 +17363,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 13,
-   "monthly_pulls": 1335,
+   "monthly_pulls": 1352,
    "tags": [
     {
      "tag": "latest",
@@ -17463,7 +17463,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 136,
-   "monthly_pulls": 32408,
+   "monthly_pulls": 32487,
    "tags": [
     {
      "tag": "latest",
@@ -17559,7 +17559,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 8,
-   "monthly_pulls": 1627,
+   "monthly_pulls": 1560,
    "tags": [
     {
      "tag": "latest",
@@ -17656,7 +17656,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 2,
-   "monthly_pulls": 774,
+   "monthly_pulls": 756,
    "tags": [
     {
      "tag": "latest",
@@ -17743,7 +17743,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 13,
-   "monthly_pulls": 3751,
+   "monthly_pulls": 3767,
    "tags": [
     {
      "tag": "latest",
@@ -17838,7 +17838,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 35,
-   "monthly_pulls": 9691,
+   "monthly_pulls": 9491,
    "tags": [
     {
      "tag": "latest",
@@ -17914,7 +17914,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 12,
-   "monthly_pulls": 5004,
+   "monthly_pulls": 4990,
    "tags": [
     {
      "tag": "latest",
@@ -17994,7 +17994,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 5,
-   "monthly_pulls": 15709,
+   "monthly_pulls": 15525,
    "tags": [
     {
      "tag": "latest",
@@ -18088,8 +18088,8 @@
    "category": "Monitoring",
    "stable": true,
    "deprecated": false,
-   "stars": 433,
-   "monthly_pulls": 681214,
+   "stars": 432,
+   "monthly_pulls": 684719,
    "tags": [
     {
      "tag": "latest",
@@ -18184,7 +18184,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 72,
-   "monthly_pulls": 19737,
+   "monthly_pulls": 19426,
    "tags": [
     {
      "tag": "latest",
@@ -18274,7 +18274,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 131,
-   "monthly_pulls": 558693,
+   "monthly_pulls": 558534,
    "tags": [
     {
      "tag": "latest",
@@ -18466,7 +18466,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 336,
-   "monthly_pulls": 5659535,
+   "monthly_pulls": 5613539,
    "tags": [
     {
      "tag": "latest",
@@ -18494,7 +18494,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 1149,
-   "monthly_pulls": 18199459,
+   "monthly_pulls": 18092683,
    "tags": [
     {
      "tag": "latest",
@@ -18576,7 +18576,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 191,
-   "monthly_pulls": 3031611,
+   "monthly_pulls": 3048529,
    "tags": [
     {
      "tag": "latest",
@@ -18732,7 +18732,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 39,
-   "monthly_pulls": 2867,
+   "monthly_pulls": 2801,
    "tags": [
     {
      "tag": "latest",
@@ -18831,7 +18831,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 37,
-   "monthly_pulls": 50598,
+   "monthly_pulls": 52084,
    "tags": [
     {
      "tag": "latest",
@@ -18930,7 +18930,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 38,
-   "monthly_pulls": 25591,
+   "monthly_pulls": 24973,
    "tags": [
     {
      "tag": "latest",
@@ -19039,7 +19039,7 @@
    "stable": true,
    "deprecated": true,
    "stars": 198,
-   "monthly_pulls": 2674,
+   "monthly_pulls": 2617,
    "tags": [
     {
      "tag": "latest",
@@ -19240,7 +19240,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 3755,
-   "monthly_pulls": 728165,
+   "monthly_pulls": 733134,
    "tags": [
     {
      "tag": "latest",
@@ -19428,7 +19428,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 14,
-   "monthly_pulls": 4278,
+   "monthly_pulls": 4112,
    "tags": [
     {
      "tag": "latest",
@@ -19494,7 +19494,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 376,
-   "monthly_pulls": 2346102,
+   "monthly_pulls": 2364187,
    "tags": [
     {
      "tag": "latest",
@@ -19607,13 +19607,13 @@
    "project_url": "https://www.syslog-ng.com/products/open-source-log-management/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/syslog-ng-logo.png",
    "description": "[syslog-ng] allows you to flexibly collect, parse, classify, rewrite and correlate logs from across your infrastructure and store or route them to log analysis tools.",
-   "version": "4.11.0-r0-ls214",
-   "version_timestamp": "2026-11-06 00:03:11+00:00",
+   "version": "4.11.0-r0-ls215",
+   "version_timestamp": "2026-11-13 00:07:21+00:00",
    "category": "Monitoring",
    "stable": true,
    "deprecated": false,
    "stars": 86,
-   "monthly_pulls": 184012,
+   "monthly_pulls": 185163,
    "tags": [
     {
      "tag": "latest",
@@ -19723,7 +19723,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 246,
-   "monthly_pulls": 2236681,
+   "monthly_pulls": 2243681,
    "tags": [
     {
      "tag": "latest",
@@ -19807,13 +19807,13 @@
    "project_url": "https://telegram.org/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/telegram-logo.png",
    "description": "[Telegram] is a cloud-based mobile and desktop messaging app.",
-   "version": "7.4.2-ls88",
-   "version_timestamp": "2026-11-12 02:09:15+00:00",
+   "version": "7.4.3-ls91",
+   "version_timestamp": "2026-11-13 05:43:07+00:00",
    "category": "Chat",
    "stable": true,
    "deprecated": false,
    "stars": 9,
-   "monthly_pulls": 21844,
+   "monthly_pulls": 22006,
    "tags": [
     {
      "tag": "latest",
@@ -19912,7 +19912,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 37,
-   "monthly_pulls": 100882,
+   "monthly_pulls": 102109,
    "tags": [
     {
      "tag": "latest",
@@ -20005,7 +20005,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 12,
-   "monthly_pulls": 46690,
+   "monthly_pulls": 47634,
    "tags": [
     {
      "tag": "latest",
@@ -20104,7 +20104,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 742,
-   "monthly_pulls": 2253227,
+   "monthly_pulls": 2254097,
    "tags": [
     {
      "tag": "latest",
@@ -20250,7 +20250,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 214,
-   "monthly_pulls": 242795,
+   "monthly_pulls": 245502,
    "tags": [
     {
      "tag": "latest",
@@ -20366,7 +20366,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 116,
-   "monthly_pulls": 42205,
+   "monthly_pulls": 42495,
    "tags": [
     {
      "tag": "latest",
@@ -20480,7 +20480,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 28,
-   "monthly_pulls": 14256,
+   "monthly_pulls": 14284,
    "tags": [
     {
      "tag": "latest",
@@ -20585,7 +20585,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 1186,
-   "monthly_pulls": 1022776,
+   "monthly_pulls": 1028249,
    "tags": [
     {
      "tag": "latest",
@@ -20755,7 +20755,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 8,
-   "monthly_pulls": 12388,
+   "monthly_pulls": 12532,
    "tags": [
     {
      "tag": "latest",
@@ -20860,7 +20860,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 5,
-   "monthly_pulls": 6807,
+   "monthly_pulls": 7006,
    "tags": [
     {
      "tag": "latest",
@@ -20965,7 +20965,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 5,
-   "monthly_pulls": 26028,
+   "monthly_pulls": 26478,
    "tags": [
     {
      "tag": "latest",
@@ -21067,7 +21067,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 77,
-   "monthly_pulls": 21280,
+   "monthly_pulls": 20484,
    "tags": [
     {
      "tag": "latest",
@@ -21167,13 +21167,13 @@
    "project_url": "https://vscodium.com/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/vscodium-icon.png",
    "description": "vscodium-web is a community-driven, freely-licensed binary distribution of the remote host web component of Microsoft's editor VS Code.",
-   "version": "1.143.17232-ls47",
-   "version_timestamp": "2026-11-06 03:59:29+00:00",
+   "version": "1.143.17232-ls48",
+   "version_timestamp": "2026-11-13 03:55:24+00:00",
    "category": "Programming",
    "stable": true,
    "deprecated": false,
    "stars": 32,
-   "monthly_pulls": 25595,
+   "monthly_pulls": 25830,
    "tags": [
     {
      "tag": "latest",
@@ -21281,13 +21281,13 @@
    "project_url": "https://github.com/SpacingBat3/WebCord",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/webcord-icon.png",
    "description": "[WebCord] can be summarized as a pack of security and privacy hardenings, Discord features reimplementations, Electron / Chromium / Discord bugs workarounds, stylesheets, internal pages and wrapped https://discord.com page, designed to conform with ToS as much as it is possible (or hide the changes that might violate it from Discord's eyes).",
-   "version": "v4.14.0-ls209",
-   "version_timestamp": "2026-11-05 11:32:58+00:00",
+   "version": "v4.14.0-ls210",
+   "version_timestamp": "2026-11-12 11:39:08+00:00",
    "category": "Chat",
    "stable": true,
    "deprecated": false,
    "stars": 13,
-   "monthly_pulls": 8393,
+   "monthly_pulls": 8529,
    "tags": [
     {
      "tag": "latest",
@@ -21380,13 +21380,13 @@
    "project_url": "https://www.webgrabplus.com",
    "project_logo": "https://www.webgrabplus.com/sites/default/themes/WgTheme/images/slideshows/EPG_fading.jpg",
    "description": "webgrabplus is a multi-site incremental xmltv epg grabber. It collects tv-program guide data from selected tvguide sites for your favourite channels.",
-   "version": "5.6.1-ls308",
-   "version_timestamp": "2026-10-29 15:32:13+00:00",
+   "version": "5.6.1-ls309",
+   "version_timestamp": "2026-11-12 17:07:15+00:00",
    "category": "Media Tools",
    "stable": true,
    "deprecated": false,
    "stars": 32,
-   "monthly_pulls": 13867,
+   "monthly_pulls": 13618,
    "tags": [
     {
      "tag": "latest",
@@ -21480,7 +21480,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 17,
-   "monthly_pulls": 141781,
+   "monthly_pulls": 140899,
    "tags": [
     {
      "tag": "latest",
@@ -21574,8 +21574,8 @@
    "category": "Remote Desktop",
    "stable": true,
    "deprecated": false,
-   "stars": 4502,
-   "monthly_pulls": 1318600,
+   "stars": 4507,
+   "monthly_pulls": 1313099,
    "tags": [
     {
      "tag": "latest",
@@ -21738,7 +21738,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 74,
-   "monthly_pulls": 1545,
+   "monthly_pulls": 1546,
    "tags": [
     {
      "tag": "latest",
@@ -21837,7 +21837,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 101,
-   "monthly_pulls": 101376,
+   "monthly_pulls": 101686,
    "tags": [
     {
      "tag": "latest",
@@ -21965,7 +21965,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 4,
-   "monthly_pulls": 5568,
+   "monthly_pulls": 5451,
    "tags": [
     {
      "tag": "latest",
@@ -22046,13 +22046,13 @@
    "project_url": "https://www.wireguard.com/",
    "project_logo": "https://www.wireguard.com/img/wireguard.svg",
    "description": "[WireGuard®] is an extremely simple yet fast and modern VPN that utilizes state-of-the-art cryptography. It aims to be faster, simpler, leaner, and more useful than IPsec, while avoiding the massive headache. It intends to be considerably more performant than OpenVPN. WireGuard is designed as a general purpose VPN for running on embedded interfaces and super computers alike, fit for many different circumstances. Initially released for the Linux kernel, it is now cross-platform (Windows, macOS, BSD, iOS, Android) and widely deployable. It is currently under heavy development, but already it might be regarded as the most secure, easiest to use, and simplest VPN solution in the industry.",
-   "version": "1.0.20260223-r0-ls129",
-   "version_timestamp": "2026-11-01 18:12:32+00:00",
+   "version": "1.0.20260223-r0-ls130",
+   "version_timestamp": "2026-11-12 18:58:49+00:00",
    "category": "Network,VPN",
    "stable": true,
    "deprecated": false,
-   "stars": 3656,
-   "monthly_pulls": 1269081,
+   "stars": 3655,
+   "monthly_pulls": 1281947,
    "tags": [
     {
      "tag": "latest",
@@ -22214,7 +22214,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 168,
-   "monthly_pulls": 50584,
+   "monthly_pulls": 50569,
    "tags": [
     {
      "tag": "latest",
@@ -22321,7 +22321,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 195,
-   "monthly_pulls": 4036,
+   "monthly_pulls": 4181,
    "tags": [
     {
      "tag": "latest",
@@ -22416,7 +22416,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 36,
-   "monthly_pulls": 29845,
+   "monthly_pulls": 29628,
    "tags": [
     {
      "tag": "latest",
@@ -22486,7 +22486,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 6,
-   "monthly_pulls": 2520,
+   "monthly_pulls": 2594,
    "tags": [
     {
      "tag": "latest",
@@ -22585,7 +22585,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 11,
-   "monthly_pulls": 1291,
+   "monthly_pulls": 1257,
    "tags": [
     {
      "tag": "latest",
@@ -22680,7 +22680,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 52,
-   "monthly_pulls": 54749,
+   "monthly_pulls": 55533,
    "tags": [
     {
      "tag": "latest",
@@ -22774,13 +22774,13 @@
    "project_url": "https://zen-browser.app/",
    "project_logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/zen-logo.png",
    "description": "[Zen Browser] is a free and open-source fork of Mozilla Firefox with a focus on privacy, customizability and design.",
-   "version": "1.24.1b-ls88",
-   "version_timestamp": "2026-11-07 22:18:03+00:00",
+   "version": "1.24.2b-ls89",
+   "version_timestamp": "2026-11-12 18:18:07+00:00",
    "category": "Web Browser",
    "stable": true,
    "deprecated": false,
    "stars": 8,
-   "monthly_pulls": 12011,
+   "monthly_pulls": 11987,
    "tags": [
     {
      "tag": "latest",
@@ -22879,7 +22879,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 33,
-   "monthly_pulls": 44208,
+   "monthly_pulls": 44785,
    "tags": [
     {
      "tag": "latest",
@@ -22964,7 +22964,7 @@
    "stable": true,
    "deprecated": false,
    "stars": 164,
-   "monthly_pulls": 14670,
+   "monthly_pulls": 14751,
    "tags": [
     {
      "tag": "latest",
