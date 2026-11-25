@@ -1,6 +1,6 @@
 ---
 title: Webtop 2.0 - The year of the Linux desktop
-date: 2023-07-21T01:42:30.000Z
+date: 2023-07-21T01:42:30.00Z
 author: TheLamer
 description: Major updates to Webtop and all our GUI images
 tags:
